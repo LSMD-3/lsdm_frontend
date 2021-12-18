@@ -7,6 +7,7 @@ import { IS_DEV } from "../config";
 import Images from "../assets/img/Images";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router";
+import CardItem from "../components/CardItem";
 
 export default function Home() {
   const [open, setOpen] = React.useState(false);
@@ -51,32 +52,6 @@ export default function Home() {
     </SpringModal>
   );
 
-  const Item = ({
-    image,
-    text,
-    url,
-  }: {
-    image: any;
-    text: string;
-    url: string;
-  }) => (
-    <div
-      style={{ borderRadius: 20 }}
-      className="shadow clickable"
-      onClick={() => navigate(url)}
-    >
-      <img alt={text} src={image} width={"100%"} height={400}></img>
-      <Typography
-        id="spring-modal-title"
-        variant="h5"
-        component="h2"
-        style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
-      >
-        {text}
-      </Typography>
-    </div>
-  );
-
   const renderMenu = () => (
     <Box sx={{ flexGrow: 1 }} style={{ marginTop: 50 }}>
       <Grid
@@ -87,13 +62,13 @@ export default function Home() {
         justifyContent="center"
       >
         <Grid item xs={6} sm={6} md={3}>
-          <Item image={Images.image1} text={"EXAMPLES"} url={"/examples"} />
+          <CardItem image={Images.image1} text={"EXAMPLES"} url={"/examples"} />
         </Grid>
         <Grid item xs={6} sm={6} md={3}>
-          <Item image={Images.image2} text={"ABOUT US"} url={"/about"} />
+          <CardItem image={Images.image2} text={"ABOUT US"} url={"/about"} />
         </Grid>
         <Grid item xs={6} sm={6} md={3}>
-          <Item image={Images.image3} text={"STORE"} url={"/store"} />
+          <CardItem image={Images.image3} text={"STORE"} url={"/store"} />
         </Grid>
       </Grid>
     </Box>
