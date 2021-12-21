@@ -9,8 +9,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import Footer from "../components/Footer";
-import FlexBox from "../components/layout/FlexBox";
+import { Footer, FlexBox } from "components";
 
 export default function Contact() {
   const handleSubmit = () => {};

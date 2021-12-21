@@ -1,8 +1,6 @@
 import { Typography, Grid, Box } from "@mui/material";
-import FlexBox from "../components/layout/FlexBox";
-import Images from "../assets/img/Images";
-import Footer from "../components/Footer";
-import CardItem from "../components/CardItem";
+import { FlexBox, Footer, CardItem } from "components";
+import Images from "assets/img/Images";
 
 export default function StoreCategorized() {
   const renderMenu = () => (

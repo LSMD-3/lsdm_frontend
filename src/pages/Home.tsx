@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { TextField, Typography, Grid, Box, Button } from "@mui/material";
-import SpringModal from "../components/SpringModal";
-import FlexBox from "../components/layout/FlexBox";
+import { SpringModal, FlexBox, Footer, CardItem } from "components";
+
 import { IS_DEV } from "../config";
 
-import Images from "../assets/img/Images";
-import Footer from "../components/Footer";
+import Images from "assets/img/Images";
+
 import { useNavigate } from "react-router";
-import CardItem from "../components/CardItem";
 
 export default function Home() {
   const [open, setOpen] = React.useState(false);

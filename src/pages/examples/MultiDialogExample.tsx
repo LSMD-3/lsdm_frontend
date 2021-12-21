@@ -3,8 +3,8 @@ import { useState } from "react";
 import {
   DialogManagerProps,
   DialogManagerType,
-} from "../../components/dialogs/DialogManager";
-import DialogManagerFactory from "../../components/dialogs/DialogManagerFactory";
+} from "components/dialogs/DialogManager";
+import DialogManagerFactory from "components/dialogs/DialogManagerFactory";
 
 type DialogsVisible = Record<DialogManagerType, boolean>;
 const OFF_VISIBILITIES: DialogsVisible = {

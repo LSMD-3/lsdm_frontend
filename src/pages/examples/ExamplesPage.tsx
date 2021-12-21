@@ -1,12 +1,8 @@
 import { Typography, Grid, Box, Button } from "@mui/material";
-import FlexBox from "../../components/layout/FlexBox";
-import Images from "../../assets/img/Images";
-import Footer from "../../components/Footer";
-import CardItem from "../../components/CardItem";
-
+import { FlexBox, Footer, CardItem, DialogManager } from "components";
 import MultiDialogExample from "./MultiDialogExample";
-import DialogManager from "../../components/dialogs/DialogManager";
 import { useState } from "react";
+import Images from "assets/img/Images";
 
 export default function ExamplesPage() {
   // IF YOU NEED ONLY A MODAL IN THE PAGE

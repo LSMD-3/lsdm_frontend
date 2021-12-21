@@ -2,11 +2,18 @@ import * as React from "react";
 import { ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 
-import { About, Contact, ExamplesPage, Home, NotFound, Store } from "./pages";
-import TopNavigation from "./navigation/components/TopNavigation";
+import {
+  About,
+  Contact,
+  ExamplesPage,
+  Home,
+  NotFound,
+  Store,
+  StoreCategorized,
+} from "pages";
+import { TopNavigation } from "navigation";
 
 import { createTheme } from "@mui/material/styles";
-import StoreCategorized from "./pages/StoreCategorized";
 
 function App() {
   const theme = createTheme({

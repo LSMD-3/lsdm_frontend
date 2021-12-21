@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
-import SvgIcons from "../assets/svg/SvgIcons";
-import FlexBox from "../components/layout/FlexBox";
+import SvgIcons from "assets/svg/SvgIcons";
+import { FlexBox } from "components";
 
 export default function NotFound() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
-import SvgIcons from "../assets/svg/SvgIcons";
-import FlexBox from "./layout/FlexBox";
+import SvgIcons from "assets/svg/SvgIcons";
+import { FlexBox } from "components";
 
 export default function Footer() {
   return (

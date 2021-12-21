@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
-import Footer from "../components/Footer";
-import FlexBox from "../components/layout/FlexBox";
+import { Footer, FlexBox } from "components";
 
 export default function About() {
   return (
