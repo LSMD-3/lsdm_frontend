@@ -9,10 +9,12 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { BaseDialogProps } from "./DialogManager";
 
-export default function ResponsiveDialog({
-  open,
-  handleClose,
-}: BaseDialogProps) {
+export interface ResponsiveDialogProps {}
+
+interface Props extends BaseDialogProps {
+  dialogProps: ResponsiveDialogProps;
+}
+export default function ResponsiveDialog({ open, handleClose }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 

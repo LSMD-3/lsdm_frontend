@@ -7,7 +7,21 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { BaseDialogProps } from "./DialogManager";
 
-export default function AlertDialog({ open, handleClose }: BaseDialogProps) {
+export interface AlertDialogProps {
+  title?: string;
+  description?: string;
+  onConfirm?: () => void;
+  confirmText?: string;
+  cancelText?: string;
+}
+
+interface Props extends BaseDialogProps {
+  dialogProps: AlertDialogProps;
+}
+
+export default function AlertDialog({ open, handleClose, dialogProps }: Props) {
+  const { title, description, onConfirm, confirmText, cancelText } =
+    dialogProps;
   return (
     <Dialog
       open={open}
@@ -16,18 +30,19 @@ export default function AlertDialog({ open, handleClose }: BaseDialogProps) {
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        {"Use Google's location service?"}
+        {title ?? "Missing title in this modal"}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
-        </DialogContentText>
-      </DialogContent>
+      {description && (
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {description}
+          </DialogContentText>
+        </DialogContent>
+      )}
       <DialogActions>
-        <Button onClick={handleClose}>Disagree</Button>
-        <Button onClick={handleClose} autoFocus>
-          Agree
+        <Button onClick={handleClose}>{cancelText ?? "Disagree"}</Button>
+        <Button onClick={onConfirm} autoFocus>
+          {confirmText ?? "Agree"}
         </Button>
       </DialogActions>
     </Dialog>

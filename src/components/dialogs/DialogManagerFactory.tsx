@@ -10,6 +10,7 @@ export default function DialogManagerFactory({
   dialogs.forEach((dialog) => {
     renderers.push(() => (
       <DialogManager
+        dialogProps={dialog.dialogProps}
         type={dialog.type}
         open={dialog.open}
         handleClose={dialog.handleClose}

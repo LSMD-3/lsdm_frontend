@@ -1,5 +1,11 @@
 import { Typography, Grid, Box, Button } from "@mui/material";
-import { FlexBox, Footer, CardItem, DialogManager } from "components";
+import {
+  FlexBox,
+  Footer,
+  CardItem,
+  DialogManager,
+  AlertDialog,
+} from "components";
 import MultiDialogExample from "./MultiDialogExample";
 import { useState } from "react";
 import Images from "assets/img/Images";
@@ -29,6 +35,15 @@ export default function ExamplesPage() {
             type="confirm"
             open={modalOpen}
             handleClose={() => set_modalOpen(false)}
+            dialogProps={{
+              title: "Lo sapevi che 2+2 fa 4?",
+              description:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              onConfirm: () => {
+                set_modalOpen(false);
+                console.log("CONFERMATO");
+              },
+            }}
           />
           <MultiDialogExample />
         </Grid>

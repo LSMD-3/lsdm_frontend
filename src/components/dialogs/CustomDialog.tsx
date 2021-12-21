@@ -49,7 +49,12 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-export default function CustomDialog({ open, handleClose }: BaseDialogProps) {
+export interface CustomDialogProps {}
+
+interface Props extends BaseDialogProps {
+  dialogProps: CustomDialogProps;
+}
+export default function CustomDialog({ open, handleClose }: Props) {
   return (
     <div>
       <BootstrapDialog

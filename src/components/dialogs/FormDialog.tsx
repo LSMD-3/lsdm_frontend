@@ -8,7 +8,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { BaseDialogProps } from "./DialogManager";
 
-export default function FormDialog({ open, handleClose }: BaseDialogProps) {
+export interface FormDialogProps {}
+interface Props extends BaseDialogProps {
+  dialogProps: FormDialogProps;
+}
+export default function FormDialog({ open, handleClose }: Props) {
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>

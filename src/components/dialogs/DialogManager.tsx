@@ -1,19 +1,51 @@
-import AlertDialog from "./AlertDialog";
-import CustomizedDialogs from "./CustomDialog";
-import FormDialog from "./FormDialog";
-import FullScreenDialog from "./FullScreenDialog";
-import ResponsiveDialog from "./ResponsiveDialog";
+import AlertDialog, { AlertDialogProps } from "./AlertDialog";
+import CustomDialog, { CustomDialogProps } from "./CustomDialog";
+import FormDialog, { FormDialogProps } from "./FormDialog";
+import FullScreenDialog, { FullScreenDialogProps } from "./FullScreenDialog";
+import ResponsiveDialog, { ResponsiveDialogProps } from "./ResponsiveDialog";
 export type DialogManagerType =
   | "confirm"
   | "form"
   | "custom"
   | "responsive"
   | "fullscreen";
-export interface DialogManagerProps {
+
+export interface BaseDialogManagerProps {
   type: DialogManagerType;
   open: boolean;
   handleClose: () => void;
 }
+
+interface ConfirmDialogManagerProps extends BaseDialogManagerProps {
+  type: "confirm";
+  dialogProps: AlertDialogProps;
+}
+interface FormDialogManagerProps extends BaseDialogManagerProps {
+  type: "form";
+  dialogProps: FormDialogProps;
+}
+
+interface CustomDialogManagerProps extends BaseDialogManagerProps {
+  type: "custom";
+  dialogProps: CustomDialogProps;
+}
+
+interface ResponsiveDialogManagerProps extends BaseDialogManagerProps {
+  type: "responsive";
+  dialogProps: FormDialogProps;
+}
+
+interface FullscreenDialogManagerProps extends BaseDialogManagerProps {
+  type: "fullscreen";
+  dialogProps: FormDialogProps;
+}
+
+export type DialogManagerProps =
+  | ConfirmDialogManagerProps
+  | FormDialogManagerProps
+  | CustomDialogManagerProps
+  | ResponsiveDialogManagerProps
+  | FullscreenDialogManagerProps;
 
 export interface BaseDialogProps {
   open: boolean;
@@ -24,18 +56,49 @@ export default function DialogManager({
   type,
   open,
   handleClose,
+  dialogProps,
 }: DialogManagerProps) {
   switch (type) {
     case "confirm":
-      return <AlertDialog open={open} handleClose={handleClose} />;
+      return (
+        <AlertDialog
+          dialogProps={dialogProps as AlertDialogProps}
+          open={open}
+          handleClose={handleClose}
+        />
+      );
     case "form":
-      return <FormDialog open={open} handleClose={handleClose} />;
+      return (
+        <FormDialog
+          dialogProps={dialogProps as FormDialogProps}
+          open={open}
+          handleClose={handleClose}
+        />
+      );
     case "custom":
-      return <CustomizedDialogs open={open} handleClose={handleClose} />;
+      return (
+        <CustomDialog
+          dialogProps={dialogProps as CustomDialogProps}
+          open={open}
+          handleClose={handleClose}
+        />
+      );
     case "responsive":
-      return <ResponsiveDialog open={open} handleClose={handleClose} />;
+      return (
+        <ResponsiveDialog
+          dialogProps={dialogProps as ResponsiveDialogProps}
+          open={open}
+          handleClose={handleClose}
+        />
+      );
     case "fullscreen":
-      return <FullScreenDialog open={open} handleClose={handleClose} />;
+      return (
+        <FullScreenDialog
+          dialogProps={dialogProps as FullScreenDialogProps}
+          open={open}
+          handleClose={handleClose}
+        />
+      );
     default:
       return <></>;
   }

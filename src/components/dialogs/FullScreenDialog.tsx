@@ -23,10 +23,13 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({
-  open,
-  handleClose,
-}: BaseDialogProps) {
+export interface FullScreenDialogProps {}
+
+interface Props extends BaseDialogProps {
+  dialogProps: FullScreenDialogProps;
+}
+
+export default function FullScreenDialog({ open, handleClose }: Props) {
   return (
     <div>
       <Dialog
