@@ -1,0 +1,10 @@
+/* Layouting styles */
+.m12 {
+  margin: 10px !important;
+}
+
+.flexrow {
+  display: "flex" !important;
+  flex-direction: "row" !important;
+  flex-wrap: "wrap" !important;
+}
