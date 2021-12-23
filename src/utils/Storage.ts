@@ -7,7 +7,7 @@ class Storage {
     key: string,
     defaultValue: any = undefined
   ): Promise<any | undefined> {
-    const data = await localStorage.getItem(key);
+    const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : defaultValue;
   }
 

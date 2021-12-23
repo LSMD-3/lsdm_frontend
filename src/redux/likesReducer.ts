@@ -1,3 +1,6 @@
+import AppStore from "stores/AppStore";
+import sleep from "utils/helper";
+
 type actionType = "item/toggleLike" | "item/initLikes";
 
 interface State {
@@ -9,21 +12,30 @@ const likeState: State = {
 };
 
 // This method must not raise an exception
-async function toggleItemLike(itemLikes: string[], itemId: string) {
-  // TODO put here api calls
+function toggleItemLike(itemLikes: string[], itemId: string) {
+  if (!itemLikes) return { itemLikes: [] };
 
   if (itemLikes.includes(itemId)) {
-    return itemLikes.filter(function (el) {
-      return el !== itemId;
+    const filtered = itemLikes.filter(function (el) {
+      return el.localeCompare(itemId);
     });
+    AppStore.setLikes([...filtered]);
+    return { itemLikes: [...filtered] };
   }
 
+  // TODO put here api calls
+  sleep(100).then(() => {
+    //  se va tutto bene apposto
+    // altrimenti devo revertare lo stato
+  });
+
+  AppStore.setLikes([...itemLikes, itemId]);
   return {
     itemLikes: [...itemLikes, itemId],
   };
 }
 
-export default async function likesReducer(
+export default function likesReducer(
   state = likeState,
   action: { payload: any; type: actionType }
 ) {
@@ -31,12 +43,13 @@ export default async function likesReducer(
     case "item/toggleLike": {
       const itemId = action.payload;
       if (!itemId) return state;
-      return await toggleItemLike(state.itemLikes, itemId);
+      return toggleItemLike(state.itemLikes, itemId);
     }
 
     case "item/initLikes": {
       const itemLikes = action.payload;
-      if (Array.isArray(itemLikes)) return { itemLikes };
+      if (Array.isArray(itemLikes)) return { itemLikes: [...itemLikes] };
+      AppStore.setLikes([]);
       return { itemLikes: [] };
     }
 

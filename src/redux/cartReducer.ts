@@ -1,4 +1,5 @@
 import { Cart, Item } from "stores";
+import AppStore from "stores/AppStore";
 import sleep from "utils/helper";
 
 type actionType =
@@ -21,11 +22,7 @@ function checkItem(item: Item) {
   return true;
 }
 
-async function updateItemQuantity(
-  cartState: State,
-  item: Item,
-  increment: number
-) {
+function updateItemQuantity(cartState: State, item: Item, increment: number) {
   let newCart = { ...cartState.cart };
   // update quantity
   if (Object.keys(cartState.cart).includes(item.id)) {
@@ -33,17 +30,25 @@ async function updateItemQuantity(
     if (quantity > 0) newCart[item.id] = newCart[item.id] + increment;
     if (quantity <= 0) delete newCart[item.id];
     // TODO API CALL HERE
-    await sleep(100);
+    sleep(100).then(() => {
+      //  se va tutto bene apposto
+      // altrimenti devo revertare lo stato
+    });
+    AppStore.setCart(newCart).then(() => console.log(AppStore.cart));
     return { ...cartState, cart: newCart };
   }
 
   // new item added
-  await sleep(100);
-  if (increment > 0) newCart[item.id] = increment;
+  sleep(100).then(() => {
+    //  se va tutto bene apposto
+    // altrimenti devo revertare lo stato
+  });
+  if (increment > 0) newCart[item.id] = (newCart[item.id] ?? 0) + increment;
+  AppStore.setCart(newCart).then(() => console.log(AppStore.cart));
   return { ...cartState, cart: newCart };
 }
 
-export default async function cartReducer(
+export default function cartReducer(
   state = cartState,
   action: { payload: any; type: actionType }
 ) {
@@ -52,25 +57,24 @@ export default async function cartReducer(
     case "cart/increaseItemQuantity": {
       const item = action.payload;
       if (!checkItem(item)) return state;
-      return await updateItemQuantity(cartState, item, 1);
+      return updateItemQuantity(state, item, 1);
     }
 
     case "cart/removeItem": {
       const item = action.payload;
       if (!checkItem(item)) return state;
-      return await updateItemQuantity(cartState, item, -1000000);
+      return updateItemQuantity(state, item, -1000000);
     }
 
     case "cart/initCart": {
       const cart = action.payload;
-      if (Array.isArray(cart)) return { cart };
-      return { cart: [] };
+      return { cart };
     }
 
     case "cart/decreaseItemQuantity": {
       const item = action.payload;
       if (!checkItem(item)) return state;
-      return await updateItemQuantity(cartState, item, -1);
+      return updateItemQuantity(state, item, -1);
     }
     default:
       return state;

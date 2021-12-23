@@ -18,6 +18,7 @@ import useWindowsWidth from "hooks/useWindowWidth";
 
 import { useState } from "react";
 import sleep from "utils/helper";
+import AppStore from "stores/AppStore";
 
 // interface UserMethods {
 
@@ -58,7 +59,7 @@ function App() {
   const loadInitialData = async () => {
     // Load cached datas if UUID exist ok otherwhise generate a new one
     // this method is responsible to identify user and assign him a token to make requests
-    await sleep(1000);
+    await AppStore.loadInitialData();
     setloading(false);
   };
 
