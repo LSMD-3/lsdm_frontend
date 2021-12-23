@@ -6,7 +6,9 @@
       "@api": ["api/*"],
       "@components": ["components"],
       "@navigation": ["navigation"],
-      "@pages": ["pages"]
+      "@pages": ["pages"],
+      "@hooks": ["hooks"],
+      "@utils": ["utils"]
     }
   }
 }
