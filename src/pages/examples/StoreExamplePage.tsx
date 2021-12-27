@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import store from "redux/store";
 import { Cart, Item } from "stores";
-import sleep from "utils/helper";
+import { sleep } from "utils/helper";
 import ITEMS from "../../generators/items.json";
 
 export default function StoreExamplePage() {

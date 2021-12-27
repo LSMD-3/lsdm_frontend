@@ -1,7 +1,7 @@
 import { Cart } from "./CartStore";
 import Storage from "utils/Storage";
 import store from "redux/store";
-import sleep from "utils/helper";
+import { sleep } from "utils/helper";
 
 class AppStore {
   cart: Cart = {};

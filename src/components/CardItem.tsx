@@ -1,9 +1,8 @@
-import { Button, Skeleton, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
-import { useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
-import sleep from "utils/helper";
-import LoadingImage from "./LoadingImage";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 interface CardItemProps {
   text: string;
@@ -36,7 +35,10 @@ export default function CardItem({
       className="shadow clickable"
       onClick={() => url && navigate(url)}
     >
-      {image && <LoadingImage image={image} />}
+      {image && (
+        <LazyLoadImage effect="blur" height={300} src={image} width={"100%"} />
+      )}
+
       <Typography
         id="spring-modal-title"
         variant="h5"

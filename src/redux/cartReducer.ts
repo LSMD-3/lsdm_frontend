@@ -1,6 +1,6 @@
 import { Cart, Item } from "stores";
 import AppStore from "stores/AppStore";
-import sleep from "utils/helper";
+import { sleep } from "utils/helper";
 
 type actionType =
   | "cart/addItem"

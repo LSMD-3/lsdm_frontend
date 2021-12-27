@@ -1,5 +1,5 @@
 import AppStore from "stores/AppStore";
-import sleep from "utils/helper";
+import { sleep } from "utils/helper";
 
 type actionType = "item/toggleLike" | "item/initLikes";
 
