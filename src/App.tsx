@@ -14,10 +14,6 @@ import {
 import { TopNavigation } from "navigation";
 
 import { createTheme } from "@mui/material/styles";
-import useWindowsWidth from "hooks/useWindowWidth";
-
-import { useState } from "react";
-import sleep from "utils/helper";
 import AppStore from "stores/AppStore";
 
 // interface UserMethods {

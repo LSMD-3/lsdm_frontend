@@ -6,11 +6,8 @@ import { IS_DEV } from "../config";
 
 import Images from "assets/img/Images";
 
-import { useNavigate } from "react-router";
-
 export default function Home() {
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate();
 
   let email = "";
 

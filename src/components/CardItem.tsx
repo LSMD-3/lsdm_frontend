@@ -1,7 +1,9 @@
-import { Button, Typography } from "@mui/material";
-import Images from "assets/img/Images";
+import { Button, Skeleton, Typography } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import sleep from "utils/helper";
+import LoadingImage from "./LoadingImage";
 
 interface CardItemProps {
   text: string;
@@ -26,14 +28,15 @@ export default function CardItem({
   decrement,
 }: CardItemProps) {
   const navigate = useNavigate();
+  const showButtons = toggleLike || increment || decrement;
 
   return (
     <div
-      style={{ borderRadius: 20 }}
+      style={{ borderRadius: 20, position: "relative" }}
       className="shadow clickable"
       onClick={() => url && navigate(url)}
     >
-      {image && <img alt="ExamplesPage" src={image} width={"100%"}></img>}
+      {image && <LoadingImage image={image} />}
       <Typography
         id="spring-modal-title"
         variant="h5"
@@ -42,48 +45,50 @@ export default function CardItem({
       >
         {text}
       </Typography>
-      <div
-        style={{
-          flexDirection: "row",
-          display: "flex",
-          justifyContent: "space-between",
-          margin: 20,
-          paddingBottom: 20,
-        }}
-      >
-        <Button onClick={toggleLike}>
-          {liked && <SvgIcons icon="Heart" />}
-          {!liked && <SvgIcons icon="HeartEmpty" />}
-        </Button>
+      {showButtons && (
         <div
           style={{
             flexDirection: "row",
             display: "flex",
             justifyContent: "space-between",
+            margin: 20,
+            paddingBottom: 20,
           }}
         >
-          {quantity && (
-            <div>
-              <Button onClick={decrement}>
-                <SvgIcons icon="Minus" />
-              </Button>
-              <span
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 30,
-                  marginRight: 10,
-                  marginLeft: 10,
-                }}
-              >
-                {quantity}
-              </span>
-            </div>
-          )}
-          <Button onClick={increment}>
-            <SvgIcons icon="Plus" />
+          <Button onClick={toggleLike}>
+            {liked && <SvgIcons icon="Heart" />}
+            {!liked && <SvgIcons icon="HeartEmpty" />}
           </Button>
+          <div
+            style={{
+              flexDirection: "row",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            {quantity && (
+              <div>
+                <Button onClick={decrement}>
+                  <SvgIcons icon="Minus" />
+                </Button>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 30,
+                    marginRight: 10,
+                    marginLeft: 10,
+                  }}
+                >
+                  {quantity}
+                </span>
+              </div>
+            )}
+            <Button onClick={increment}>
+              <SvgIcons icon="Plus" />
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

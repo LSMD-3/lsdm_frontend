@@ -1,5 +1,4 @@
 import { createStore } from "redux";
-import { Cart } from "stores";
 import rootReducer from "./reducer";
 
 // let preloadedState: { cart: Cart; likes: string[] };
