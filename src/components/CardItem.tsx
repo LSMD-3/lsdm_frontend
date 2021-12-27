@@ -3,6 +3,8 @@ import SvgIcons from "assets/svg/SvgIcons";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { useSpring, animated, config } from "react-spring";
+import LazyLoad from "react-lazyload";
 
 interface CardItemProps {
   text: string;
@@ -16,6 +18,8 @@ interface CardItemProps {
   decrement?: () => void;
 }
 
+const BORDER_RADIUS = 16;
+
 export default function CardItem({
   image,
   text,
@@ -28,15 +32,29 @@ export default function CardItem({
 }: CardItemProps) {
   const navigate = useNavigate();
   const showButtons = toggleLike || increment || decrement;
+  const props = useSpring({
+    to: { opacity: 1, y: 0 },
+    from: { opacity: 0, y: 100 },
+    config: config.molasses,
+  });
 
   return (
-    <div
-      style={{ borderRadius: 20, position: "relative" }}
+    <animated.div
+      style={{ borderRadius: BORDER_RADIUS, position: "relative", ...props }}
       className="shadow clickable"
       onClick={() => url && navigate(url)}
     >
       {image && (
-        <LazyLoadImage effect="blur" height={300} src={image} width={"100%"} />
+        <LazyLoadImage
+          effect="blur"
+          height={300}
+          src={image}
+          width={"100%"}
+          style={{
+            borderTopLeftRadius: BORDER_RADIUS,
+            borderTopRightRadius: BORDER_RADIUS,
+          }}
+        />
       )}
 
       <Typography
@@ -91,6 +109,6 @@ export default function CardItem({
           </div>
         </div>
       )}
-    </div>
+    </animated.div>
   );
 }

@@ -3,13 +3,13 @@ import { CircularProgress, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 
 import {
-  About,
   Contact,
   ExamplesPage,
   Home,
   NotFound,
   Store,
   StoreCategorized,
+  Profile,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -72,10 +72,10 @@ function App() {
         <TopNavigation />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="about" element={<About />} />
           <Route path="store/:category" element={<StoreCategorized />} />
           <Route path="store" element={<Store />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="profile" element={<Profile />} />
           <Route path="examples" element={<ExamplesPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

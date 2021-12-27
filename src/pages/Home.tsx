@@ -61,7 +61,7 @@ export default function Home() {
           <CardItem image={Images.image1} text={"EXAMPLES"} url={"/examples"} />
         </Grid>
         <Grid item xs={6} sm={6} md={3}>
-          <CardItem image={Images.image2} text={"ABOUT US"} url={"/about"} />
+          <CardItem image={Images.image2} text={"PROFILE"} url={"/profile"} />
         </Grid>
         <Grid item xs={6} sm={6} md={3}>
           <CardItem image={Images.image3} text={"STORE"} url={"/store"} />

@@ -3,6 +3,7 @@ import { FlexBox, Footer, DialogManager } from "components";
 import MultiDialogExample from "./MultiDialogExample";
 import { useState } from "react";
 import HooksExample from "./HooksExample";
+import SpringAnimationsExample from "./SpringAnimationsExample";
 
 export default function ExamplesPage() {
   // IF YOU NEED ONLY A MODAL IN THE PAGE
@@ -83,6 +84,7 @@ export default function ExamplesPage() {
         </Typography>
       </FlexBox>
       <Menu />
+      <SpringAnimationsExample />
       <Footer />
     </div>
   );

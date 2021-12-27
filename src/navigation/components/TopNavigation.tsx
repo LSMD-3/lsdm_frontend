@@ -15,12 +15,17 @@ import { useNavigate } from "react-router";
 
 const pages = [
   { title: "Store", url: "/store" },
-  { title: "About Us", url: "/about" },
   { title: "Exibithion", url: "/exibithion" },
   { title: "Contatti", url: "/contact" },
 ];
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { title: "Profile", url: "/profile" },
+  { title: "Account", url: "/account" },
+  { title: "Dashboard", url: "/" },
+  { title: "Logout", url: "/logout" },
+] as const;
+type Settings = typeof settings[number];
 
 const TopNavigation = () => {
   const navigate = useNavigate();
@@ -31,6 +36,11 @@ const TopNavigation = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const navigateToSetting = (setting: Settings) => {
+    handleCloseUserMenu();
+    navigate(setting.url);
+  };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -150,8 +160,11 @@ const TopNavigation = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting.title}
+                  onClick={() => navigateToSetting(setting)}
+                >
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
