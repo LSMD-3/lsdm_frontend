@@ -4,21 +4,14 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-import store from "redux/store";
-import { Cart, Item } from "stores";
+import store, { cartState, likeState } from "redux/store";
+import { Item } from "stores";
 import { sleep } from "utils/helper";
 import ITEMS from "../../generators/items1.json";
 import ITEMS2 from "../../generators/items2.json";
 import ITEMS3 from "../../generators/items3.json";
 
 export default function StoreExamplePage() {
-  const cartState = (state: any) => {
-    return state.cartState.cart as Cart;
-  };
-  const likeState = (state: any) => {
-    return state.likesState.itemLikes as string[];
-  };
-
   const cart = useSelector(cartState);
   const likes = useSelector(likeState);
   const [items, setitems] = useState<Item[]>([]);
@@ -68,7 +61,7 @@ export default function StoreExamplePage() {
   };
 
   const fetchNextItems = async () => {
-    await sleep(1000);
+    await sleep(500);
     if (page === 2) {
       console.log("end reached");
       return setendReached(true);
@@ -102,6 +95,13 @@ export default function StoreExamplePage() {
         endMessage={
           <p style={{ textAlign: "center" }}>
             <b>Yay! You have seen it all</b>
+            <button
+              onClick={() => {
+                window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+              }}
+            >
+              Back To Top
+            </button>
           </p>
         }
         // below props only if you need pull down functionality

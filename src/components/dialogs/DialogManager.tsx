@@ -14,6 +14,11 @@ export interface BaseDialogManagerProps {
   type: DialogManagerType;
   open: boolean;
   handleClose: () => void;
+  title?: string;
+  description?: string;
+  onConfirm?: () => void;
+  confirmText?: string;
+  cancelText?: string;
 }
 
 interface ConfirmDialogManagerProps extends BaseDialogManagerProps {

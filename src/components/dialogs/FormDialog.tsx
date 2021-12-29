@@ -8,20 +8,25 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { BaseDialogProps } from "./DialogManager";
 
-export interface FormDialogProps {}
+export interface FormDialogProps {
+  title?: string;
+  description?: string;
+  onConfirm?: () => void;
+  confirmText?: string;
+  cancelText?: string;
+}
 interface Props extends BaseDialogProps {
   dialogProps: FormDialogProps;
 }
-export default function FormDialog({ open, handleClose }: Props) {
+export default function FormDialog({ open, handleClose, dialogProps }: Props) {
+  const { title, description, onConfirm, confirmText, cancelText } =
+    dialogProps;
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
+          <DialogContentText>{description}</DialogContentText>
           <TextField
             autoFocus
             margin="dense"
@@ -33,8 +38,8 @@ export default function FormDialog({ open, handleClose }: Props) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>{cancelText ?? "Cancel"}</Button>
+          <Button onClick={onConfirm}>{confirmText ?? "Confirm"}</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -13,59 +11,52 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Copyright } from "components";
-import AuthenticationApi from "api/AuthenticationApi";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import AuthenticationApi from "api/AuthenticationApi";
 import { useSnackbar } from "notistack";
 import store from "redux/store";
 import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
-export default function Signup() {
+export default function Signin() {
   const { enqueueSnackbar } = useSnackbar();
+
+  const [hidePassword, sethidePassword] = React.useState(true);
+  const [emailError, setemailError] = React.useState<string>("");
+  const [passwordError, setpasswordError] = React.useState<string>("");
   const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    // eslint-disable-next-line no-console
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
+
     const email = data.get("email")?.toString();
     const password = data.get("password")?.toString();
-    const name = data.get("firstName")?.toString();
-    const surname = data.get("lastName")?.toString();
-    if (!name) return setnameError("Please provide your first name");
-    setnameError("");
-    if (!surname) return setsurnameError("Please provide your last name");
-    setsurnameError("");
+
     if (!email) return setemailError("Please provide valid email");
     setemailError("");
     if (!password) return setpasswordError("Please provide valid password");
     setpasswordError("");
 
-    console.log({ name, email, surname, password });
-
     try {
-      const user = await AuthenticationApi.signup(
-        email,
-        password,
-        name,
-        surname
-      );
+      const user = await AuthenticationApi.login(email, password);
       store.dispatch({
         type: "user/login",
         payload: user,
       });
+      enqueueSnackbar("Login effettuato", { variant: "success" });
       navigate("/");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
   };
-
-  const [hidePassword, sethidePassword] = React.useState(true);
-  const [emailError, setemailError] = React.useState<string>("");
-  const [passwordError, setpasswordError] = React.useState<string>("");
-  const [nameError, setnameError] = React.useState<string>("");
-  const [surnameError, setsurnameError] = React.useState<string>("");
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -82,7 +73,7 @@ export default function Signup() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign in
           </Typography>
           <Box
             component="form"
@@ -91,31 +82,6 @@ export default function Signup() {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  helperText={nameError}
-                  error={nameError.length > 0}
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                  helperText={surnameError}
-                  error={surnameError.length > 0}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -136,7 +102,7 @@ export default function Signup() {
                   label="Password"
                   type={hidePassword ? "password" : "text"}
                   id="password"
-                  autoComplete="new-password"
+                  autoComplete="password"
                   helperText={passwordError}
                   error={passwordError.length > 0}
                   InputProps={{
@@ -154,14 +120,6 @@ export default function Signup() {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
             </Grid>
             <Button
               type="submit"
@@ -169,12 +127,12 @@ export default function Signup() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Sign In
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="signin" variant="body2">
-                  Already have an account? Sign in
+                <Link href="signup" variant="body2">
+                  Don't have an account? Sign up
                 </Link>
               </Grid>
             </Grid>

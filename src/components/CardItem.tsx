@@ -4,12 +4,12 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useNavigate } from "react-router-dom";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { useSpring, animated, config } from "react-spring";
-import LazyLoad from "react-lazyload";
 
 interface CardItemProps {
   text: string;
   image?: string;
   url?: string;
+  onClick?: () => void;
   liked?: boolean;
   quantity?: number;
   limit?: number;
@@ -26,6 +26,7 @@ export default function CardItem({
   url,
   liked,
   quantity,
+  onClick,
   toggleLike,
   increment,
   decrement,
@@ -42,7 +43,7 @@ export default function CardItem({
     <animated.div
       style={{ borderRadius: BORDER_RADIUS, position: "relative", ...props }}
       className="shadow clickable"
-      onClick={() => url && navigate(url)}
+      onClick={onClick ? onClick : () => url && navigate(url)}
     >
       {image && (
         <LazyLoadImage

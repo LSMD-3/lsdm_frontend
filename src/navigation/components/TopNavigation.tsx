@@ -12,6 +12,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
+import store, { userState } from "redux/store";
+import { useSelector } from "react-redux";
 
 const pages = [
   { title: "Store", url: "/store" },
@@ -19,15 +21,29 @@ const pages = [
   { title: "Contatti", url: "/contact" },
 ];
 
-const settings = [
-  { title: "Profile", url: "/profile" },
-  { title: "Account", url: "/account" },
-  { title: "Dashboard", url: "/" },
-  { title: "Logout", url: "/logout" },
-] as const;
-type Settings = typeof settings[number];
+interface Setting {
+  title: string;
+  url?: string;
+  onclick?: () => void;
+}
 
 const TopNavigation = () => {
+  const user = useSelector(userState);
+
+  const logout = () => {
+    store.dispatch({
+      type: "user/logout",
+      payload: undefined,
+    });
+    return;
+  };
+
+  const settings = [
+    { title: "Profile", url: "/profile" },
+    { title: "Dashboard", url: "/" },
+    { title: "Logout", onclick: logout },
+  ];
+
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -37,9 +53,10 @@ const TopNavigation = () => {
     null
   );
 
-  const navigateToSetting = (setting: Settings) => {
+  const navigateToSetting = (setting: Setting) => {
     handleCloseUserMenu();
-    navigate(setting.url);
+    if (setting.url) return navigate(setting.url);
+    setting.onclick && setting.onclick();
   };
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -138,11 +155,27 @@ const TopNavigation = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
+            {user.authenticated && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp">
+                    {user.user?.name.charAt(0) ??
+                      "" + user.user?.surname.charAt(0) ??
+                      ""}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+            )}
+
+            {!user.authenticated && (
+              <Button
+                onClick={() => navigate("/signin")}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Accedi
+              </Button>
+            )}
+
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"

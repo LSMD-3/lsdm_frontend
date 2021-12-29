@@ -1,6 +1,7 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { CircularProgress, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
+import { SnackbarProvider } from "notistack";
 
 import {
   Contact,
@@ -10,11 +11,15 @@ import {
   Store,
   StoreCategorized,
   Profile,
+  Signup,
+  Signin,
 } from "pages";
 import { TopNavigation } from "navigation";
 
 import { createTheme } from "@mui/material/styles";
 import AppStore from "stores/AppStore";
+import { useSelector } from "react-redux";
+import { userState } from "redux/store";
 
 // interface UserMethods {
 
@@ -43,9 +48,10 @@ const theme = createTheme({
 //  https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
 function App() {
-  const [loading, setloading] = React.useState(true);
+  const [loading, setloading] = useState(true);
+  const user = useSelector(userState);
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadInitialData();
     return () => {
       // component will unmount
@@ -69,16 +75,23 @@ function App() {
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <TopNavigation />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="store/:category" element={<StoreCategorized />} />
-          <Route path="store" element={<Store />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="examples" element={<ExamplesPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <SnackbarProvider maxSnack={5}>
+          <TopNavigation />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="store/:category" element={<StoreCategorized />} />
+            <Route path="store" element={<Store />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="signin" element={<Signin />} />
+            <Route
+              path="profile"
+              element={user.authenticated ? <Profile /> : <Signup />}
+            />
+            <Route path="examples" element={<ExamplesPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </SnackbarProvider>
       </ThemeProvider>
     </div>
   );

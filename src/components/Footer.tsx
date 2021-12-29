@@ -1,6 +1,6 @@
 import React from "react";
 import SvgIcons from "assets/svg/SvgIcons";
-import { FlexBox } from "components";
+import { FlexBox, Copyright } from "components";
 
 export default function Footer() {
   return (
@@ -15,9 +15,7 @@ export default function Footer() {
         <SvgIcons icon="Facebook" style={{ marginRight: 16 }} />
         <SvgIcons icon="Instagram" style={{ marginRight: 16 }} />
       </FlexBox>
-      <FlexBox flex={1} justifyContent="center" direction="row">
-        <span style={{ marginRight: 16 }}>© react-boilerplate 2020 by </span>
-      </FlexBox>
+      <Copyright />
     </div>
   );
 }

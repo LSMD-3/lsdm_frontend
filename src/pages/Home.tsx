@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, Typography, Grid, Box, Button } from "@mui/material";
 import { SpringModal, FlexBox, Footer, CardItem } from "components";
 
@@ -7,7 +7,7 @@ import { IS_DEV } from "../config";
 import Images from "assets/img/Images";
 
 export default function Home() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   let email = "";
 
