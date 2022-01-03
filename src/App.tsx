@@ -20,6 +20,7 @@ import { createTheme } from "@mui/material/styles";
 import AppStore from "stores/AppStore";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
+import CodiceFiscale from "pages/examples/CodiceFiscale";
 
 // interface UserMethods {
 
@@ -84,6 +85,7 @@ function App() {
             <Route path="contact" element={<Contact />} />
             <Route path="signup" element={<Signup />} />
             <Route path="signin" element={<Signin />} />
+            <Route path="cf" element={<CodiceFiscale />} />
             <Route
               path="profile"
               element={user.authenticated ? <Profile /> : <Signup />}
