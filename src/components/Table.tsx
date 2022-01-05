@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { Skeleton } from "@mui/material";
 
 export interface TableColumn {
   id: string;
@@ -23,6 +24,7 @@ interface TableProps {
   rowsPerPage: number;
   page: number;
   title?: string;
+  loading?: boolean;
   handleChangeRowsPerPage?: (pagesize: number) => void;
   handleChangePage: (newPage: number) => void;
   onRowClick?: (item: any) => void;
@@ -35,10 +37,53 @@ export default function ColumnGroupingTable({
   rowsPerPage,
   page,
   totalRows,
+  loading,
   handleChangeRowsPerPage,
   handleChangePage,
   onRowClick,
 }: TableProps) {
+  const renderLoading = () => {
+    const fakeRows = new Array(10).fill(0);
+    return fakeRows.map((row) => {
+      return (
+        <TableRow hover role="checkbox" tabIndex={-1}>
+          {columns.map((column) => {
+            return (
+              <TableCell align={column.align}>
+                <Skeleton variant="text" style={{ maxWidth: 100 }} />
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      );
+    });
+  };
+
+  const renderTable = () => {
+    return rows.map((row) => {
+      return (
+        <TableRow
+          hover
+          role="checkbox"
+          tabIndex={-1}
+          key={row.code}
+          onClick={() => onRowClick && onRowClick(row)}
+        >
+          {columns.map((column) => {
+            const value = row[column.id];
+            return (
+              <TableCell key={column.id} align={column.align}>
+                {column.format && typeof value === "number"
+                  ? column.format(value)
+                  : value}
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      );
+    });
+  };
+
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 700 }}>
@@ -64,28 +109,8 @@ export default function ColumnGroupingTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  key={row.code}
-                  onClick={() => onRowClick && onRowClick(row)}
-                >
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                        {column.format && typeof value === "number"
-                          ? column.format(value)
-                          : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+            {loading && renderLoading()}
+            {!loading && renderTable()}
           </TableBody>
         </Table>
       </TableContainer>

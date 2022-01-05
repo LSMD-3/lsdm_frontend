@@ -12,6 +12,7 @@ export default function RestaurantsHome() {
   const [pageSize, setpageSize] = useState(10);
   const [totalCount, settotalCount] = useState<number>(0);
   const navigate = useNavigate();
+  const [loading, setloading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
   const fetchRestaurant = async () => {
@@ -21,6 +22,7 @@ export default function RestaurantsHome() {
         offset: page * pageSize,
       });
       setitems(res);
+      setloading(false);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
@@ -62,6 +64,7 @@ export default function RestaurantsHome() {
   return (
     <div style={{ marginRight: 20, marginLeft: 20, marginTop: 20 }}>
       <Table
+        loading={loading}
         totalRows={totalCount}
         rows={items}
         columns={columns}
