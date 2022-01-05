@@ -68,12 +68,24 @@ export default function UserDetail() {
   // descrizione: string;
   // tipologia: string;
 
+  const deleteUser = () => {
+    if (!userId) return;
+    try {
+      UserApi.delete(userId);
+      enqueueSnackbar("Utente Cancellato", { variant: "success" });
+      navigate("/users");
+    } catch (error: any) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+  };
+
   return (
     <div style={{ margin: 100 }}>
       {!editable && (
         <div>
           <code>{JSON.stringify(user, null, 2)}</code>
           <Button onClick={() => seteditable(true)}>Edit</Button>
+          <Button onClick={deleteUser}>Delete</Button>
         </div>
       )}
       {editable && (

@@ -28,10 +28,10 @@ export default class RecipeApi {
   }
 
   static add(recipe: Recipe): Promise<Recipe> {
-    return axios.put(endpoint + `/add`, recipe).then(responseErrorCheck);
+    return axios.post(endpoint + `/add`, recipe).then(responseErrorCheck);
   }
 
-  static delete(recipe: Recipe): Promise<void> {
-    return axios.put(endpoint + `/${recipe._id}`).then(responseErrorCheck);
+  static delete(recipeId: string): Promise<void> {
+    return axios.delete(endpoint + `/${recipeId}`).then(responseErrorCheck);
   }
 }

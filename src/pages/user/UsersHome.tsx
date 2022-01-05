@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "types";
 import { useSnackbar } from "notistack";
+import { Button } from "@mui/material";
+import FakerFactory from "generators/faker";
 
 export default function UserHome() {
   const [items, setitems] = useState<User[]>([]);
@@ -63,8 +65,25 @@ export default function UserHome() {
     navigate("/user/" + user._id);
   };
 
+  const generateUsers = async (count: number) => {
+    const users = FakerFactory.createUsers(count);
+    const promises: any[] = [];
+    users.forEach((user) => {
+      promises.push(UserApi.add(user));
+    });
+    try {
+      await Promise.all(promises);
+      enqueueSnackbar(`${count} utenti creati`, { variant: "success" });
+    } catch (error: any) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+  };
+
   return (
     <div style={{ marginRight: 20, marginLeft: 20, marginTop: 20 }}>
+      <Button onClick={() => generateUsers(10)}>Generate Bulk 10</Button>
+      <Button onClick={() => generateUsers(100)}>Generate Bulk 100</Button>
+      <Button onClick={() => generateUsers(500)}>Generate Bulk 500</Button>
       <Table
         loading={loading}
         totalRows={totalCount}

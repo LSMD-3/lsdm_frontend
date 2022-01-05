@@ -25,11 +25,11 @@ export default class UserApi {
     return axios.put(endpoint + `/${user._id}`, user).then(responseErrorCheck);
   }
 
-  static add(user: User): Promise<User> {
-    return axios.put(endpoint + `/add`, user).then(responseErrorCheck);
+  static add(user: Partial<User>): Promise<User> {
+    return axios.post(endpoint + `/add`, user).then(responseErrorCheck);
   }
 
-  static delete(user: User): Promise<void> {
-    return axios.put(endpoint + `/${user._id}`).then(responseErrorCheck);
+  static delete(userId: string): Promise<void> {
+    return axios.delete(endpoint + `/${userId}`).then(responseErrorCheck);
   }
 }

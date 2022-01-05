@@ -28,10 +28,10 @@ export default class RestaurantApi {
   }
 
   static add(restaurant: Restaurant): Promise<Restaurant> {
-    return axios.put(endpoint + `/add`, restaurant).then(responseErrorCheck);
+    return axios.post(endpoint + `/add`, restaurant).then(responseErrorCheck);
   }
 
-  static delete(restaurant: Restaurant): Promise<void> {
-    return axios.put(endpoint + `/${restaurant._id}`).then(responseErrorCheck);
+  static delete(restaurantId: string): Promise<void> {
+    return axios.delete(endpoint + `/${restaurantId}`).then(responseErrorCheck);
   }
 }
