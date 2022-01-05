@@ -12,6 +12,7 @@ export { default as Store } from "./examples/StoreExamplePage";
 
 export { default as SimulatorHome } from "./simulator/SimulatorHome";
 
+export { default as RestaurantDetail } from "./restaurant/RestaurantDetail";
 export { default as RestaurantsHome } from "./restaurant/RestaurantsHome";
 
 export { default as UserHome } from "./user/UsersHome";

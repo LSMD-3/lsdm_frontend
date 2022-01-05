@@ -32,7 +32,7 @@ class AppStore {
     await Promise.all(this.inizializers);
     const accessToken = this.user?.accessToken;
     if (accessToken) {
-      axios.defaults.headers.common["accessToken"] = accessToken;
+      axios.defaults.headers.common["authorization"] = accessToken;
       store.dispatch({
         type: "user/init",
         payload: this.user,

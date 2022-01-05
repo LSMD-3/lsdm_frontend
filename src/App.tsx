@@ -15,6 +15,7 @@ import {
   SimulatorHome,
   RestaurantsHome,
   RecipesHome,
+  RestaurantDetail,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -88,6 +89,14 @@ function App() {
             <Route path="signin" element={<Signin />} />
             <Route path="simulator" element={<SimulatorHome />} />
             <Route path="restaurants" element={<RestaurantsHome />} />
+            <Route
+              path="restaurant/:restaurantId/update"
+              element={<RestaurantDetail />}
+            />
+            <Route
+              path="restaurant/:restaurantId"
+              element={<RestaurantDetail />}
+            />
             <Route path="users" element={<UsersHome />} />
             <Route path="recipes" element={<RecipesHome />} />
             <Route

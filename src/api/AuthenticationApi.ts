@@ -1,4 +1,4 @@
-import { responseErrorCheck } from "api";
+import { responseErrorCheck } from "./utils";
 import axios from "axios";
 import { User } from "types";
 

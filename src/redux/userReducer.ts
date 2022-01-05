@@ -22,12 +22,13 @@ export default function userReducer(
       const { email } = action.payload as User;
       if (!email) return state;
       AppStore.setUser(action.payload);
-      axios.defaults.headers.common["accessToken"] = action.payload.accessToken; // for all requests
+      axios.defaults.headers.common["authorization"] =
+        action.payload.accessToken; // for all requests
       return { authenticated: true, user: action.payload };
     }
 
     case "user/logout": {
-      axios.defaults.headers.common["accessToken"] = "null";
+      axios.defaults.headers.common["authorization"] = "null";
       AppStore.setUser(undefined);
       return { authenticated: false, user: undefined };
     }
