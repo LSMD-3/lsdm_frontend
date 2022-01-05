@@ -5,6 +5,7 @@ export interface User {
   surname: string;
   accessToken: string;
   refreshToken: string;
+  master: boolean;
 }
 
 export interface Restaurant {

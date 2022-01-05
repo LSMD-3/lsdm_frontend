@@ -17,6 +17,7 @@ import {
   RecipesHome,
   RestaurantDetail,
   RecipeDetail,
+  UserDetail,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -95,6 +96,8 @@ function App() {
               element={<RestaurantDetail />}
             />
             <Route path="users" element={<UsersHome />} />
+            <Route path="user/:userId" element={<UserDetail />} />
+
             <Route path="recipes" element={<RecipesHome />} />
             <Route path="recipe/:recipeId" element={<RecipeDetail />} />
             <Route

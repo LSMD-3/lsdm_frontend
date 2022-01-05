@@ -15,6 +15,7 @@ export interface TableColumn {
   minWidth?: number;
   align?: "right";
   format?: (value: number) => string;
+  render?: (value: any) => JSX.Element;
 }
 
 interface TableProps {
@@ -59,6 +60,11 @@ export default function ColumnGroupingTable({
     });
   };
 
+  const formatValue = (column: TableColumn, value: any) => {
+    if (column.format && typeof value === "number") return column.format(value);
+    return value;
+  };
+
   const renderTable = () => {
     return rows.map((row) => {
       return (
@@ -73,9 +79,9 @@ export default function ColumnGroupingTable({
             const value = row[column.id];
             return (
               <TableCell key={column.id} align={column.align}>
-                {column.format && typeof value === "number"
-                  ? column.format(value)
-                  : value}
+                {column.render
+                  ? column.render(value)
+                  : formatValue(column, value)}
               </TableCell>
             );
           })}
