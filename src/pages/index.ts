@@ -18,3 +18,4 @@ export { default as RestaurantsHome } from "./restaurant/RestaurantsHome";
 export { default as UserHome } from "./user/UsersHome";
 
 export { default as RecipesHome } from "./recipe/RecipesHome";
+export { default as RecipeDetail } from "./recipe/RecipeDetail";
