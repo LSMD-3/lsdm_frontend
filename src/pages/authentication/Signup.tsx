@@ -41,8 +41,6 @@ export default function Signup() {
     if (!password) return setpasswordError("Please provide valid password");
     setpasswordError("");
 
-    console.log({ name, email, surname, password });
-
     try {
       const user = await AuthenticationApi.signup(
         email,

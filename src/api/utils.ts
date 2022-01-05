@@ -5,8 +5,6 @@ export const responseErrorCheck = (res: any) => {
   if (res.status > 199 || res.status < 300) {
     return res.data;
   }
-  console.log("responseErrorCheck");
-
   throw new Error(res.status.toString());
 };
 
