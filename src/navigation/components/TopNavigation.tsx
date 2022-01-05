@@ -16,9 +16,11 @@ import store, { userState } from "redux/store";
 import { useSelector } from "react-redux";
 
 const pages = [
-  { title: "Store", url: "/store" },
-  { title: "Exibithion", url: "/exibithion" },
-  { title: "Contatti", url: "/contact" },
+  { title: "Menu", url: "/menu" },
+  { title: "Simulator", url: "/simulator" },
+  { title: "Restaurants", url: "/restaurants" },
+  { title: "Users", url: "/users" },
+  { title: "Recipes", url: "/recipes" },
 ];
 
 interface Setting {

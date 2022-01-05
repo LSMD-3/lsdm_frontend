@@ -4,7 +4,6 @@ import { Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
 import {
-  Contact,
   ExamplesPage,
   Home,
   NotFound,
@@ -13,6 +12,9 @@ import {
   Profile,
   Signup,
   Signin,
+  SimulatorHome,
+  RestaurantsHome,
+  RecipesHome,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -20,6 +22,7 @@ import { createTheme } from "@mui/material/styles";
 import AppStore from "stores/AppStore";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
+import UsersHome from "pages/user/UsersHome";
 
 // interface UserMethods {
 
@@ -79,11 +82,14 @@ function App() {
           <TopNavigation />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="store/:category" element={<StoreCategorized />} />
-            <Route path="store" element={<Store />} />
-            <Route path="contact" element={<Contact />} />
+            <Route path="menu/:category" element={<StoreCategorized />} />
+            <Route path="menu" element={<Store />} />
             <Route path="signup" element={<Signup />} />
             <Route path="signin" element={<Signin />} />
+            <Route path="simulator" element={<SimulatorHome />} />
+            <Route path="restaurants" element={<RestaurantsHome />} />
+            <Route path="users" element={<UsersHome />} />
+            <Route path="recipes" element={<RecipesHome />} />
             <Route
               path="profile"
               element={user.authenticated ? <Profile /> : <Signup />}
