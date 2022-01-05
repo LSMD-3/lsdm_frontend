@@ -12,7 +12,6 @@ class AppStore {
 
   loadCart = async () => {
     this.cart = await Storage.load("@AppStore:cart", this.cart);
-    console.log(this.cart);
   };
   loadLikes = async () => {
     this.likes = await Storage.load("@AppStore:likes", this.likes);
@@ -39,7 +38,6 @@ class AppStore {
       });
     }
 
-    console.log(this.cart, this.likes);
     sleep(1000).then(() => {
       this.initializeReducers();
     });

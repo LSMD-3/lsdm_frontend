@@ -31,7 +31,6 @@ export default function RestaurantsHome() {
   const fetchTotalCount = async () => {
     try {
       const res = await RestaurantApi.count();
-      console.log({ res });
       settotalCount(res);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });

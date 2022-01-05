@@ -63,7 +63,6 @@ export default function StoreExamplePage() {
   const fetchNextItems = async () => {
     await sleep(500);
     if (page === 2) {
-      console.log("end reached");
       return setendReached(true);
     }
     setpage(page + 1);
