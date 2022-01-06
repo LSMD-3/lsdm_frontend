@@ -9,46 +9,8 @@ import { Button, Container, CssBaseline } from "@mui/material";
 import FakerFactory from "generators/faker";
 
 export default function UserHome() {
-  const [items, setitems] = useState<User[]>([]);
-  const [page, setpage] = useState(0);
-  const [pageSize, setpageSize] = useState(10);
-  const [totalCount, settotalCount] = useState<number>(0);
   const navigate = useNavigate();
-  const [loading, setloading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
-
-  const fetchUser = async () => {
-    try {
-      const res = await UserApi.search({
-        limit: pageSize,
-        offset: page * pageSize,
-      });
-      setitems(res);
-      setloading(false);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  const fetchTotalCount = async () => {
-    try {
-      const res = await UserApi.count();
-      settotalCount(res);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-    return () => {};
-  }, [page, pageSize]);
-
-  useEffect(() => {
-    fetchUser();
-    fetchTotalCount();
-    return () => {};
-  }, []);
 
   const columns: TableColumn[] = [
     { id: "name", label: "Nome" },
@@ -86,16 +48,12 @@ export default function UserHome() {
       <Button onClick={() => generateUsers(100)}>Generate Bulk 100</Button>
       <Button onClick={() => generateUsers(500)}>Generate Bulk 500</Button>
       <Table
-        loading={loading}
-        totalRows={totalCount}
-        rows={items}
+        title="Users"
         columns={columns}
-        page={page}
-        title="Ristoranti"
-        rowsPerPage={pageSize}
-        handleChangeRowsPerPage={setpageSize}
-        handleChangePage={setpage}
         onRowClick={openUserDetails}
+        deleteApi={UserApi.delete}
+        searchApi={UserApi.search}
+        countApi={UserApi.count}
       />
     </Container>
   );

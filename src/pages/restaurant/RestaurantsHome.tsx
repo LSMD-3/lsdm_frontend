@@ -8,46 +8,7 @@ import { useSnackbar } from "notistack";
 import { Container, CssBaseline } from "@mui/material";
 
 export default function RestaurantsHome() {
-  const [items, setitems] = useState<Restaurant[]>([]);
-  const [page, setpage] = useState(0);
-  const [pageSize, setpageSize] = useState(10);
-  const [totalCount, settotalCount] = useState<number>(0);
   const navigate = useNavigate();
-  const [loading, setloading] = useState(true);
-  const { enqueueSnackbar } = useSnackbar();
-
-  const fetchRestaurant = async () => {
-    try {
-      const res = await RestaurantApi.search({
-        limit: pageSize,
-        offset: page * pageSize,
-      });
-      setitems(res);
-      setloading(false);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  const fetchTotalCount = async () => {
-    try {
-      const res = await RestaurantApi.count();
-      settotalCount(res);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  useEffect(() => {
-    fetchRestaurant();
-    return () => {};
-  }, [page, pageSize]);
-
-  useEffect(() => {
-    fetchRestaurant();
-    fetchTotalCount();
-    return () => {};
-  }, []);
 
   const columns: TableColumn[] = [
     { id: "nome", label: "Nome" },
@@ -65,16 +26,12 @@ export default function RestaurantsHome() {
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
       <Table
-        loading={loading}
-        totalRows={totalCount}
-        rows={items}
+        title="Restaurants"
         columns={columns}
-        page={page}
-        title="Ristoranti"
-        rowsPerPage={pageSize}
-        handleChangeRowsPerPage={setpageSize}
-        handleChangePage={setpage}
         onRowClick={openRestaurantDetails}
+        deleteApi={RestaurantApi.delete}
+        searchApi={RestaurantApi.search}
+        countApi={RestaurantApi.count}
       />
     </Container>
   );

@@ -6,10 +6,12 @@ import { Tooltip, Toolbar, Typography, IconButton } from "@mui/material";
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  title: string;
+  onDeletePress?: () => void;
 }
 
 export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected } = props;
+  const { numSelected, title, onDeletePress } = props;
 
   return (
     <Toolbar
@@ -41,12 +43,12 @@ export const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          {title}
         </Typography>
       )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton>
+          <IconButton onClick={onDeletePress}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>

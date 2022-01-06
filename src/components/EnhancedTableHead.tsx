@@ -14,7 +14,6 @@ interface EnhancedTableProps {
   orderBy: string;
   rowCount: number;
   columns: TableColumn[];
-  title?: string;
 }
 
 export function EnhancedTableHead(props: EnhancedTableProps) {
@@ -25,7 +24,6 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
     numSelected,
     rowCount,
     onRequestSort,
-    title,
     columns,
   } = props;
   const createSortHandler =
@@ -35,13 +33,6 @@ export function EnhancedTableHead(props: EnhancedTableProps) {
 
   return (
     <TableHead>
-      {title && (
-        <TableRow>
-          <TableCell align="center" colSpan={5}>
-            {title}
-          </TableCell>
-        </TableRow>
-      )}
       <TableRow>
         <TableCell padding="checkbox">
           <Checkbox
