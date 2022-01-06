@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "types";
 import { useSnackbar } from "notistack";
-import { Button } from "@mui/material";
+import { Button, Container, CssBaseline } from "@mui/material";
 import FakerFactory from "generators/faker";
 
 export default function UserHome() {
@@ -80,7 +80,8 @@ export default function UserHome() {
   };
 
   return (
-    <div style={{ marginRight: 20, marginLeft: 20, marginTop: 20 }}>
+    <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
+      <CssBaseline />
       <Button onClick={() => generateUsers(10)}>Generate Bulk 10</Button>
       <Button onClick={() => generateUsers(100)}>Generate Bulk 100</Button>
       <Button onClick={() => generateUsers(500)}>Generate Bulk 500</Button>
@@ -96,6 +97,6 @@ export default function UserHome() {
         handleChangePage={setpage}
         onRowClick={openUserDetails}
       />
-    </div>
+    </Container>
   );
 }

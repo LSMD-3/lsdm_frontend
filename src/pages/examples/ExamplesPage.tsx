@@ -1,4 +1,4 @@
-import { Typography, Grid, Box, Button } from "@mui/material";
+import { Typography, Grid, Box, Button, Container } from "@mui/material";
 import { FlexBox, Footer, DialogManager } from "components";
 import MultiDialogExample from "./MultiDialogExample";
 import { useState } from "react";
@@ -77,7 +77,7 @@ export default function ExamplesPage() {
   );
 
   return (
-    <div style={{ marginTop: 40 }}>
+    <Container component="main" maxWidth="xs" style={{ marginTop: 40 }}>
       <FlexBox direction="column">
         <Typography variant="h2" component="h2">
           EXAMPLES
@@ -86,6 +86,6 @@ export default function ExamplesPage() {
       <Menu />
       <SpringAnimationsExample />
       <Footer />
-    </div>
+    </Container>
   );
 }

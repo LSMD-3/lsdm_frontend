@@ -1,4 +1,4 @@
-import { CircularProgress, Grid } from "@mui/material";
+import { CircularProgress, CssBaseline, Grid } from "@mui/material";
 import { CardItem } from "components";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -82,6 +82,7 @@ export default function StoreExamplePage() {
 
   return (
     <div>
+      <CssBaseline />
       <InfiniteScroll
         dataLength={items.length} //This is important field to render the next data
         next={fetchNextItems}

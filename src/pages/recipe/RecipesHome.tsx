@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "types";
 import { useSnackbar } from "notistack";
+import { Container, CssBaseline } from "@mui/material";
 
 export default function RecipesHome() {
   const [items, setitems] = useState<Recipe[]>([]);
@@ -58,7 +59,8 @@ export default function RecipesHome() {
   };
 
   return (
-    <div style={{ marginRight: 20, marginLeft: 20, marginTop: 20 }}>
+    <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
+      <CssBaseline />
       <Table
         loading={loading}
         totalRows={totalCount}
@@ -71,6 +73,6 @@ export default function RecipesHome() {
         handleChangePage={setpage}
         onRowClick={openRecipeDetails}
       />
-    </div>
+    </Container>
   );
 }

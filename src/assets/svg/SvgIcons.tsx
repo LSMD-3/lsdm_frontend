@@ -7,6 +7,8 @@ import Heart from "./heart.svg";
 import HeartEmpty from "./heart_empty.svg";
 import Minus from "./minus-sign.svg";
 import Plus from "./plus.svg";
+import DarkMode from "./night-mode.svg";
+import LightMode from "./brightness.svg";
 
 // add here new svg
 const icons = {
@@ -18,6 +20,8 @@ const icons = {
   HeartEmpty,
   Minus,
   Plus,
+  DarkMode,
+  LightMode,
 };
 
 // here you can apply default styles to some svg
@@ -29,6 +33,8 @@ let defaultStyles: Record<string, React.CSSProperties> = {
   HeartEmpty: { width: 30 },
   Minus: { width: 30 },
   Plus: { width: 30 },
+  DarkMode: { width: 42 },
+  LightMode: { width: 42 },
 };
 
 //

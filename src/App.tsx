@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { CircularProgress, ThemeProvider } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { CircularProgress, PaletteMode, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
@@ -26,36 +26,24 @@ import AppStore from "stores/AppStore";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
 import UsersHome from "pages/user/UsersHome";
-
-// interface UserMethods {
-
-//   loadInitialData: (tokenProvider: (uuid: string) => Promise<string>) => void;
-
-//   // Use this method to set user Datas after Successful Backend Api
-//   setUserData: (user: User) => void;
-// }
-const theme = createTheme({
-  palette: {
-    primary: {
-      light: "#757ce8",
-      main: "#3f50b5",
-      dark: "#002884",
-      contrastText: "#fff",
-    },
-    secondary: {
-      light: "#ff7961",
-      main: "#f44336",
-      dark: "#ba000d",
-      contrastText: "#000",
-    },
-  },
-});
-// NON VA => usare reducer
-//  https://kentcdodds.com/blog/how-to-use-react-context-effectively
+import { getDesignTokens } from "styles/theme";
 
 function App() {
   const [loading, setloading] = useState(true);
   const user = useSelector(userState);
+  const [mode, setMode] = React.useState<PaletteMode>("dark");
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode: PaletteMode) =>
+          prevMode === "light" ? "dark" : "light"
+        );
+      },
+    }),
+    []
+  );
+  const theme = React.useMemo(() => createTheme(getDesignTokens(mode)), [mode]);
+  const toggleColorMode = () => colorMode.toggleColorMode();
 
   useEffect(() => {
     loadInitialData();
@@ -65,8 +53,6 @@ function App() {
   }, []);
 
   const loadInitialData = async () => {
-    // Load cached datas if UUID exist ok otherwhise generate a new one
-    // this method is responsible to identify user and assign him a token to make requests
     await AppStore.loadInitialData();
     setloading(false);
   };
@@ -82,7 +68,7 @@ function App() {
     <div>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={5}>
-          <TopNavigation />
+          <TopNavigation toggleColorMode={toggleColorMode} colorMode={mode} />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="menu/:category" element={<StoreCategorized />} />
@@ -97,7 +83,6 @@ function App() {
             />
             <Route path="users" element={<UsersHome />} />
             <Route path="user/:userId" element={<UserDetail />} />
-
             <Route path="recipes" element={<RecipesHome />} />
             <Route path="recipe/:recipeId" element={<RecipeDetail />} />
             <Route

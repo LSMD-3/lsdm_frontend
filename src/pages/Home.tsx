@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Typography, Grid, Box, Button } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  Grid,
+  Box,
+  Button,
+  CssBaseline,
+} from "@mui/material";
 import { SpringModal, FlexBox, Footer, CardItem } from "components";
 
 import { IS_DEV } from "../config";
@@ -72,6 +79,7 @@ export default function Home() {
 
   return (
     <div>
+      <CssBaseline />
       {renderMenu()}
       {renderModal()}
       <Footer />

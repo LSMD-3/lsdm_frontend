@@ -14,6 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
 import store, { userState } from "redux/store";
 import { useSelector } from "react-redux";
+import { Icon, PaletteMode } from "@mui/material";
+import SvgIcons from "assets/svg/SvgIcons";
 
 const pages = [
   { title: "Menu", url: "/menu" },
@@ -29,7 +31,12 @@ interface Setting {
   onclick?: () => void;
 }
 
-const TopNavigation = () => {
+interface TopNavigationProps {
+  toggleColorMode: () => void;
+  colorMode: "light" | "dark";
+}
+
+const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
   const user = useSelector(userState);
 
   const logout = () => {
@@ -157,26 +164,40 @@ const TopNavigation = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            {user.authenticated && (
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp">
-                    {user.user?.name.charAt(0) ??
-                      "" + user.user?.surname.charAt(0) ??
-                      ""}
-                  </Avatar>
+            <Box>
+              {user.authenticated && (
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar alt="Remy Sharp">
+                      {user.user?.name.charAt(0) ??
+                        "" + user.user?.surname.charAt(0) ??
+                        ""}
+                    </Avatar>
+                  </IconButton>
+                </Tooltip>
+              )}
+
+              {!user.authenticated && (
+                <Button
+                  onClick={() => navigate("/signin")}
+                  sx={{ my: 2, color: "white" }}
+                >
+                  Accedi
+                </Button>
+              )}
+
+              <Tooltip title="Toogle Color Mode">
+                <IconButton
+                  onClick={toggleColorMode}
+                  sx={{ p: 0 }}
+                  style={{ marginLeft: 20 }}
+                >
+                  <SvgIcons
+                    icon={colorMode === "light" ? "LightMode" : "DarkMode"}
+                  />
                 </IconButton>
               </Tooltip>
-            )}
-
-            {!user.authenticated && (
-              <Button
-                onClick={() => navigate("/signin")}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Accedi
-              </Button>
-            )}
+            </Box>
 
             <Menu
               sx={{ mt: "45px" }}

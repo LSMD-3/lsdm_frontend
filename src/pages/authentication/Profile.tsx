@@ -9,30 +9,27 @@ export default function Profile() {
   const user = useSelector(userState);
 
   return (
-    <div>
-      <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          {user.authenticated ? user.user?.email : "Non sei autenticato"}
+        </Typography>
+
         <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            {user.authenticated ? user.user?.email : "Non sei autenticato"}
-          </Typography>
-
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          ></Box>
-        </Box>
-      </Container>
-
+          component="form"
+          noValidate
+          onSubmit={handleSubmit}
+          sx={{ mt: 3 }}
+        ></Box>
+      </Box>
       <Footer />
-    </div>
+    </Container>
   );
 }
