@@ -49,12 +49,16 @@ export default function ColumnGroupingTable({
   const [loading, setloading] = useState(true);
   const [items, setitems] = useState<any[]>([]);
   const [selectedItems, setselectedItems] = useState<string[]>([]);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<string>();
+  const [search, setsearch] = useState<SearchParams>();
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     fetch();
+    fetchTotalCount();
     return () => {};
-  }, [page, pageSize]);
+  }, [page, pageSize, search]);
 
   useEffect(() => {
     fetch();
@@ -68,6 +72,12 @@ export default function ColumnGroupingTable({
       const res = await searchApi({
         limit: pageSize,
         offset: page * pageSize,
+        sort:
+          order && orderBy
+            ? [{ field: orderBy, direction: order === "asc" ? 1 : -1 }]
+            : undefined,
+        like: search?.like,
+        equal: search?.equal,
       });
       setitems(res);
     } catch (error: any) {
@@ -78,7 +88,7 @@ export default function ColumnGroupingTable({
 
   const fetchTotalCount = async () => {
     try {
-      const res = await countApi();
+      const res = await countApi({ like: search?.like, equal: search?.equal });
       settotalCount(res);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
@@ -101,9 +111,6 @@ export default function ColumnGroupingTable({
       );
     });
   };
-
-  const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<string>("name");
 
   const formatValue = (column: TableColumn, value: any) => {
     if (column.format && typeof value === "number") return column.format(value);
@@ -166,6 +173,7 @@ export default function ColumnGroupingTable({
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
+    fetch();
   };
 
   const deleteItems = async () => {
@@ -192,6 +200,8 @@ export default function ColumnGroupingTable({
         title={title}
         numSelected={selectedItems.length}
         onDeletePress={deleteItems}
+        columns={columns}
+        onFilterApplyed={(search) => setsearch(search)}
       />
       <TableContainer sx={{ maxHeight: 700 }}>
         <Table stickyHeader aria-label="sticky table">

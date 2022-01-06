@@ -47,14 +47,25 @@ axios.interceptors.response.use(
 
 export interface SearchParams {
   general?: GeneralFilter;
-  equal?: BaseFilter[];
-  like?: BaseFilter[];
-  range?: RangeFilter[];
-  dateRange?: DateRangeFilter[];
+  equal?: BaseAndOrFilter | BaseFilter;
+  like?: BaseAndOrFilter | BaseFilter;
+  range?: RangeFilter;
+  dateRange?: DateRangeFilter;
   offset?: number;
   limit?: number;
-  sortField?: string;
-  sortDirection?: SortDirection;
+  sort?: SortField[];
+  projectFieldsSearch?: string | "all";
+  customProject?: string;
+}
+
+export interface BaseAndOrFilter {
+  or: BaseFilter[];
+  and: BaseFilter[];
+}
+
+export interface SortField {
+  field: string;
+  direction: SortDirection;
 }
 
 export enum SortDirection {

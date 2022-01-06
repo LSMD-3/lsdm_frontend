@@ -11,7 +11,7 @@ interface EnhancedTableProps {
   onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
-  orderBy: string;
+  orderBy?: string;
   rowCount: number;
   columns: TableColumn[];
 }

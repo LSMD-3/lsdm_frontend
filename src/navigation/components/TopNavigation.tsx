@@ -190,10 +190,10 @@ const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
                 <IconButton
                   onClick={toggleColorMode}
                   sx={{ p: 0 }}
-                  style={{ marginLeft: 20 }}
+                  style={{ marginLeft: 10, marginTop: 6 }}
                 >
                   <SvgIcons
-                    icon={colorMode === "light" ? "LightMode" : "DarkMode"}
+                    icon={colorMode === "light" ? "DarkMode" : "LightMode"}
                   />
                 </IconButton>
               </Tooltip>
