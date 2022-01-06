@@ -1,26 +1,14 @@
 import * as React from "react";
-import { alpha } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import {
-  Tooltip,
-  Box,
-  Checkbox,
-  Skeleton,
-  TableSortLabel,
-  Toolbar,
-  Typography,
-  IconButton,
-} from "@mui/material";
-import { visuallyHidden } from "@mui/utils";
+import { Checkbox, Skeleton } from "@mui/material";
+import { EnhancedTableHead } from "./EnhancedTableHead";
+import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 
 export interface TableColumn {
   id: string;
@@ -32,6 +20,8 @@ export interface TableColumn {
   format?: (value: number) => string;
   render?: (value: any) => JSX.Element;
 }
+
+export type Order = "asc" | "desc";
 
 interface TableProps {
   rows: Record<string, any>[];
@@ -117,137 +107,6 @@ export default function ColumnGroupingTable({
     });
   };
 
-  type Order = "asc" | "desc";
-
-  interface EnhancedTableProps {
-    numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    order: Order;
-    orderBy: string;
-    rowCount: number;
-  }
-
-  function EnhancedTableHead(props: EnhancedTableProps) {
-    const {
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount,
-      onRequestSort,
-    } = props;
-    const createSortHandler =
-      (property: string) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-      };
-
-    return (
-      <TableHead>
-        {title && (
-          <TableRow>
-            <TableCell align="center" colSpan={5}>
-              {title}
-            </TableCell>
-          </TableRow>
-        )}
-        <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                "aria-label": "select all desserts",
-              }}
-            />
-          </TableCell>
-          {columns.map((column) => (
-            <TableCell
-              key={column.id}
-              align={column.numeric ? "right" : "left"}
-              padding={column.disablePadding ? "none" : "normal"}
-              sortDirection={orderBy === column.id ? order : false}
-            >
-              <TableSortLabel
-                active={orderBy === column.id}
-                direction={orderBy === column.id ? order : "asc"}
-                onClick={createSortHandler(column.id)}
-              >
-                {column.label}
-                {orderBy === column.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-    );
-  }
-
-  interface EnhancedTableToolbarProps {
-    numSelected: number;
-  }
-
-  const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-    const { numSelected } = props;
-
-    return (
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Nutrition
-          </Typography>
-        )}
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    );
-  };
-
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: string
@@ -259,6 +118,7 @@ export default function ColumnGroupingTable({
 
   return (
     <Paper sx={{ width: "100%" }}>
+      <EnhancedTableToolbar numSelected={10} />
       <TableContainer sx={{ maxHeight: 700 }}>
         <Table stickyHeader aria-label="sticky table">
           <EnhancedTableHead
@@ -268,6 +128,8 @@ export default function ColumnGroupingTable({
             onSelectAllClick={() => console.log("select all")}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
+            columns={columns}
+            title={title}
           />
           <TableBody>
             {loading && renderLoading()}
