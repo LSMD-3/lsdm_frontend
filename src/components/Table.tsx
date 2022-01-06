@@ -1,4 +1,5 @@
 import * as React from "react";
+import { alpha } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -7,7 +8,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import { Box, Checkbox, Skeleton, TableSortLabel } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import {
+  Tooltip,
+  Box,
+  Checkbox,
+  Skeleton,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  IconButton,
+} from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
 
 export interface TableColumn {
@@ -63,6 +75,9 @@ export default function ColumnGroupingTable({
     });
   };
 
+  const [order, setOrder] = React.useState<Order>("asc");
+  const [orderBy, setOrderBy] = React.useState<string>("name");
+
   const formatValue = (column: TableColumn, value: any) => {
     if (column.format && typeof value === "number") return column.format(value);
     return value;
@@ -78,6 +93,15 @@ export default function ColumnGroupingTable({
           key={row.code}
           onClick={() => onRowClick && onRowClick(row)}
         >
+          <TableCell padding="checkbox">
+            <Checkbox
+              color="primary"
+              checked={false}
+              inputProps={{
+                "aria-labelledby": row.code,
+              }}
+            />
+          </TableCell>
           {columns.map((column) => {
             const value = row[column.id];
             return (
@@ -120,6 +144,13 @@ export default function ColumnGroupingTable({
 
     return (
       <TableHead>
+        {title && (
+          <TableRow>
+            <TableCell align="center" colSpan={5}>
+              {title}
+            </TableCell>
+          </TableRow>
+        )}
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
@@ -160,30 +191,84 @@ export default function ColumnGroupingTable({
     );
   }
 
+  interface EnhancedTableToolbarProps {
+    numSelected: number;
+  }
+
+  const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
+    const { numSelected } = props;
+
+    return (
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
+          }),
+        }}
+      >
+        {numSelected > 0 ? (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            Nutrition
+          </Typography>
+        )}
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton>
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Toolbar>
+    );
+  };
+
+  const handleRequestSort = (
+    event: React.MouseEvent<unknown>,
+    property: string
+  ) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ maxHeight: 700 }}>
         <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            {title && (
-              <TableRow>
-                <TableCell align="center" colSpan={5}>
-                  {title}
-                </TableCell>
-              </TableRow>
-            )}
-            <TableRow>
-              {columns.map((column) => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ top: 57, minWidth: column.minWidth }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
+          <EnhancedTableHead
+            numSelected={10}
+            order={order}
+            orderBy={orderBy}
+            onSelectAllClick={() => console.log("select all")}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
+          />
           <TableBody>
             {loading && renderLoading()}
             {!loading && renderTable()}
