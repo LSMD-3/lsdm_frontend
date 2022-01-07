@@ -5,7 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "types";
 import { useSnackbar } from "notistack";
-import { Container, CssBaseline } from "@mui/material";
+import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
+import { ModeEdit } from "@mui/icons-material";
 
 export default function RecipesHome() {
   const navigate = useNavigate();
@@ -14,6 +15,25 @@ export default function RecipesHome() {
   const columns: TableColumn[] = [
     { id: "recipe_name", label: "Nome Ricetta" },
     { id: "recipe_link", label: "Link" },
+    {
+      id: "actions",
+      label: "Actions",
+      render: (data: { _id: string }) => {
+        const { _id } = data;
+        return (
+          <div>
+            <Tooltip
+              title="edit user"
+              onClick={() => navigate(`/recipe/${_id}/edit`)}
+            >
+              <IconButton>
+                <ModeEdit />
+              </IconButton>
+            </Tooltip>
+          </div>
+        );
+      },
+    },
   ];
 
   const openRecipeDetails = (recipe: Recipe) => {

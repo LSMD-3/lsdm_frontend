@@ -12,11 +12,12 @@ export { default as Store } from "./examples/StoreExamplePage";
 
 export { default as SimulatorHome } from "./simulator/SimulatorHome";
 
-export { default as RestaurantDetail } from "./restaurant/RestaurantDetail";
+export { default as RestaurantEdit } from "./restaurant/RestaurantEdit";
 export { default as RestaurantsHome } from "./restaurant/RestaurantsHome";
 
 export { default as UserHome } from "./user/UsersHome";
-export { default as UserDetail } from "./user/UserDetail";
+export { default as UserOperation } from "./user/UserOperation";
+export { default as UserEdit } from "./user/UserEdit";
 
 export { default as RecipesHome } from "./recipe/RecipesHome";
-export { default as RecipeDetail } from "./recipe/RecipeDetail";
+export { default as RecipeEdit } from "./recipe/RecipeEdit";

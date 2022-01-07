@@ -4,8 +4,8 @@ import { TableColumn } from "components/Table";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Restaurant } from "types";
-import { useSnackbar } from "notistack";
-import { Container, CssBaseline } from "@mui/material";
+import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
+import { ModeEdit } from "@mui/icons-material";
 
 export default function RestaurantsHome() {
   const navigate = useNavigate();
@@ -16,6 +16,26 @@ export default function RestaurantsHome() {
     { id: "email", label: "Email" },
     { id: "comune", label: "Comune" },
     { id: "provincia", label: "Provincia" },
+    {
+      id: "actions",
+      label: "Actions",
+      render: (data: { _id: string }) => {
+        const { _id } = data;
+        console.log(data);
+        return (
+          <div>
+            <Tooltip
+              title="edit restaurant"
+              onClick={() => navigate(`/restaurant/${_id}/edit`)}
+            >
+              <IconButton>
+                <ModeEdit />
+              </IconButton>
+            </Tooltip>
+          </div>
+        );
+      },
+    },
   ];
 
   const openRestaurantDetails = (restaurant: Restaurant) => {

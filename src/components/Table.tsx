@@ -134,13 +134,7 @@ export default function ColumnGroupingTable({
   const renderTable = () => {
     return items.map((row) => {
       return (
-        <TableRow
-          hover
-          role="checkbox"
-          tabIndex={-1}
-          key={row._id}
-          // onClick={() => onRowClick && onRowClick(row)}
-        >
+        <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
           <TableCell padding="checkbox">
             <Checkbox
               color="primary"
@@ -156,7 +150,7 @@ export default function ColumnGroupingTable({
             return (
               <TableCell key={column.id} align={column.align}>
                 {column.render
-                  ? column.render(value)
+                  ? column.render(row)
                   : formatValue(column, value)}
               </TableCell>
             );

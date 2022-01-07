@@ -5,6 +5,7 @@ import {
   CssBaseline,
   Grid,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { RecipeApi } from "api";
@@ -13,11 +14,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Recipe } from "types";
 
-export default function RecipeDetail() {
+export default function RecipeEdit() {
   let { recipeId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const [recipe, setrecipe] = useState<Recipe>();
-  const [editable, seteditable] = useState(false);
 
   const navigate = useNavigate();
 
@@ -62,61 +62,63 @@ export default function RecipeDetail() {
   // descrizione: string;
   // tipologia: string;
 
+  if (!recipe)
+    return (
+      <div className="center-loader">
+        <CircularProgress />
+      </div>
+    );
+
   return (
     <div style={{ margin: 100 }}>
-      {!editable && (
-        <div>
-          <code>{JSON.stringify(recipe, null, 2)}</code>
-          <Button onClick={() => seteditable(true)}>Edit</Button>
-        </div>
-      )}
-      {editable && (
-        <div>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
+      <div>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography component="h1" variant="h5">
+              Edit Recipe
+            </Typography>
             <Box
-              sx={{
-                marginTop: 8,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
+              component="form"
+              noValidate
+              onSubmit={updateRecipe}
+              sx={{ mt: 3 }}
             >
-              <Typography component="h1" variant="h5">
-                Edit Recipe
-              </Typography>
-              <Box
-                component="form"
-                noValidate
-                onSubmit={updateRecipe}
-                sx={{ mt: 3 }}
-              >
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      name="name"
-                      required
-                      fullWidth
-                      id="name"
-                      label="Recipe Name"
-                      autoFocus
-                      defaultValue={recipe?.recipe_name}
-                    />
-                  </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    name="name"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Recipe Name"
+                    autoFocus
+                    value={recipe.recipe_name}
+                    onChange={(event) =>
+                      setrecipe({ ...recipe, recipe_name: event.target.value })
+                    }
+                  />
                 </Grid>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Save Recipe
-                </Button>
-              </Box>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Save Recipe
+              </Button>
             </Box>
-          </Container>
-        </div>
-      )}
+          </Box>
+        </Container>
+      </div>
     </div>
   );
 }

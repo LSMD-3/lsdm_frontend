@@ -1,12 +1,18 @@
 import { UserApi } from "api";
 import { Table } from "components";
 import { TableColumn } from "components/Table";
-import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User } from "types";
 import { useSnackbar } from "notistack";
-import { Button, Container, CssBaseline } from "@mui/material";
+import {
+  Button,
+  Container,
+  CssBaseline,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import FakerFactory from "generators/faker";
+import { ModeEdit, VerifiedUserOutlined } from "@mui/icons-material";
 
 export default function UserHome() {
   const navigate = useNavigate();
@@ -19,7 +25,34 @@ export default function UserHome() {
     {
       id: "master",
       label: "Master",
-      render: (master: boolean) => <p>{master ? "Yes" : "No"}</p>,
+      render: ({ master }: { master: boolean }) => (
+        <p>{master ? "Yes" : "No"}</p>
+      ),
+    },
+    {
+      id: "actions",
+      label: "Actions",
+      render: (data: { _id: string }) => {
+        const { _id } = data;
+        console.log(data);
+        return (
+          <div>
+            <Tooltip
+              title="edit user"
+              onClick={() => navigate(`/user/${_id}/edit`)}
+            >
+              <IconButton>
+                <ModeEdit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="impersonate">
+              <IconButton onClick={() => navigate(`/user/${_id}`)}>
+                <VerifiedUserOutlined />
+              </IconButton>
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
 

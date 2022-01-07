@@ -29,4 +29,6 @@ export interface Recipe {
   _id: string;
   recipe_name: string;
   recipe_link: string;
+  image_url?: string;
+  ingredients: { name: string; url: string }[];
 }

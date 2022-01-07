@@ -15,9 +15,10 @@ import {
   SimulatorHome,
   RestaurantsHome,
   RecipesHome,
-  RestaurantDetail,
-  RecipeDetail,
-  UserDetail,
+  RestaurantEdit,
+  RecipeEdit,
+  UserEdit,
+  UserOperation,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -78,13 +79,14 @@ function App() {
             <Route path="simulator" element={<SimulatorHome />} />
             <Route path="restaurants" element={<RestaurantsHome />} />
             <Route
-              path="restaurant/:restaurantId"
-              element={<RestaurantDetail />}
+              path="restaurant/:restaurantId/edit"
+              element={<RestaurantEdit />}
             />
             <Route path="users" element={<UsersHome />} />
-            <Route path="user/:userId" element={<UserDetail />} />
+            <Route path="user/:userId/edit" element={<UserEdit />} />
+            <Route path="user/:userId" element={<UserOperation />} />
             <Route path="recipes" element={<RecipesHome />} />
-            <Route path="recipe/:recipeId" element={<RecipeDetail />} />
+            <Route path="recipe/:recipeId/edit" element={<RecipeEdit />} />
             <Route
               path="profile"
               element={user.authenticated ? <Profile /> : <Signup />}
