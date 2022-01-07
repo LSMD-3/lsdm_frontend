@@ -50,22 +50,6 @@ export default function UserEdit() {
 
   if (!userId) return <h1>User Not Found</h1>;
 
-  // nome: string;
-  // email: string;
-  // descrizione: string;
-  // tipologia: string;
-
-  const deleteUser = () => {
-    if (!userId) return;
-    try {
-      UserApi.delete(userId);
-      enqueueSnackbar("Utente Cancellato", { variant: "success" });
-      navigate("/users");
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
   if (!user)
     return (
       <div className="center-loader">

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Restaurant } from "types";
 import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
-import { ModeEdit } from "@mui/icons-material";
+import { ModeEdit, MenuBook } from "@mui/icons-material";
 
 export default function RestaurantsHome() {
   const navigate = useNavigate();
@@ -30,6 +30,14 @@ export default function RestaurantsHome() {
             >
               <IconButton>
                 <ModeEdit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip
+              title="open menu"
+              onClick={() => navigate(`/restaurant/${_id}/menu`)}
+            >
+              <IconButton>
+                <MenuBook />
               </IconButton>
             </Tooltip>
           </div>

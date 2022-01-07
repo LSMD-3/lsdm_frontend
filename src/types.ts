@@ -32,3 +32,22 @@ export interface Recipe {
   image_url?: string;
   ingredients: { name: string; url: string }[];
 }
+
+export interface Category {
+  category: string;
+  totalRecipe: number;
+}
+
+export interface MenuRecipes {
+  recipe_id: string;
+  recipe_name: string;
+  price: number;
+  max_quantity?: number;
+}
+
+export interface Menu {
+  name: string;
+  description?: string;
+  recipes: MenuRecipes[];
+  ayce_available: boolean;
+}

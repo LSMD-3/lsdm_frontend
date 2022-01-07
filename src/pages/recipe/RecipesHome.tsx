@@ -12,6 +12,11 @@ export default function RecipesHome() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
+  useEffect(() => {
+    RecipeApi.getCategories();
+    return () => {};
+  }, []);
+
   const columns: TableColumn[] = [
     {
       id: "recipe_link",
@@ -26,6 +31,7 @@ export default function RecipesHome() {
       },
     },
     { id: "recipe_name", label: "Nome Ricetta" },
+    { id: "category", label: "Categoria" },
     {
       id: "actions",
       label: "Actions",
