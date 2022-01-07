@@ -56,10 +56,6 @@ export default function UserHome() {
     },
   ];
 
-  const openUserDetails = (user: User) => {
-    navigate("/user/" + user._id);
-  };
-
   const generateUsers = async (count: number) => {
     const users = FakerFactory.createUsers(count);
     const promises: any[] = [];
@@ -80,14 +76,7 @@ export default function UserHome() {
       <Button onClick={() => generateUsers(10)}>Generate Bulk 10</Button>
       <Button onClick={() => generateUsers(100)}>Generate Bulk 100</Button>
       <Button onClick={() => generateUsers(500)}>Generate Bulk 500</Button>
-      <Table
-        title="Users"
-        columns={columns}
-        onRowClick={openUserDetails}
-        deleteApi={UserApi.delete}
-        searchApi={UserApi.search}
-        countApi={UserApi.count}
-      />
+      <Table title="Users" columns={columns} api={UserApi} />
     </Container>
   );
 }

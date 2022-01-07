@@ -13,13 +13,24 @@ export default function RecipesHome() {
   const { enqueueSnackbar } = useSnackbar();
 
   const columns: TableColumn[] = [
+    {
+      id: "recipe_link",
+      label: "Image",
+      render: (recipe: Recipe) => {
+        const { image_url, recipe_name } = recipe;
+        return (
+          <a href={image_url} target={"_blank"}>
+            <img src={image_url} height={40} alt={recipe_name}></img>
+          </a>
+        );
+      },
+    },
     { id: "recipe_name", label: "Nome Ricetta" },
-    { id: "recipe_link", label: "Link" },
     {
       id: "actions",
       label: "Actions",
-      render: (data: { _id: string }) => {
-        const { _id } = data;
+      render: (recipe: Recipe) => {
+        const { _id } = recipe;
         return (
           <div>
             <Tooltip
@@ -36,21 +47,10 @@ export default function RecipesHome() {
     },
   ];
 
-  const openRecipeDetails = (recipe: Recipe) => {
-    navigate("/recipe/" + recipe._id);
-  };
-
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
-      <Table
-        title="Recipes"
-        columns={columns}
-        onRowClick={openRecipeDetails}
-        deleteApi={RecipeApi.delete}
-        searchApi={RecipeApi.search}
-        countApi={RecipeApi.count}
-      />
+      <Table title="Recipes" columns={columns} api={RecipeApi} />
     </Container>
   );
 }

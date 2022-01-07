@@ -38,21 +38,10 @@ export default function RestaurantsHome() {
     },
   ];
 
-  const openRestaurantDetails = (restaurant: Restaurant) => {
-    navigate("/restaurant/" + restaurant._id);
-  };
-
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
-      <Table
-        title="Restaurants"
-        columns={columns}
-        onRowClick={openRestaurantDetails}
-        deleteApi={RestaurantApi.delete}
-        searchApi={RestaurantApi.search}
-        countApi={RestaurantApi.count}
-      />
+      <Table title="Restaurants" columns={columns} api={RestaurantApi} />
     </Container>
   );
 }

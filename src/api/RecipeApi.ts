@@ -1,37 +1,8 @@
-import { responseErrorCheck, SearchParams } from "./utils";
-import axios from "axios";
 import { Recipe } from "types";
+import { BaseResource } from "./BaseResource";
 
-const endpoint = "recipe";
-
-export default class RecipeApi {
-  static search(params: SearchParams = {}): Promise<Recipe[]> {
-    return axios
-      .post(endpoint + "/advancedsearch", params)
-      .then(responseErrorCheck);
-  }
-
-  static find(recipeId: string): Promise<Recipe> {
-    return axios.get(endpoint + `/${recipeId}`).then(responseErrorCheck);
-  }
-
-  static count(params = {}): Promise<number> {
-    return axios
-      .post(endpoint + "/advancedcount", params)
-      .then(responseErrorCheck);
-  }
-
-  static update(recipe: Recipe): Promise<Recipe> {
-    return axios
-      .put(endpoint + `/${recipe._id}`, recipe)
-      .then(responseErrorCheck);
-  }
-
-  static add(recipe: Recipe): Promise<Recipe> {
-    return axios.post(endpoint + `/add`, recipe).then(responseErrorCheck);
-  }
-
-  static delete(recipeId: string): Promise<void> {
-    return axios.delete(endpoint + `/${recipeId}`).then(responseErrorCheck);
-  }
+class RecipeApi extends BaseResource<Recipe> {
+  endpoint = "recipe";
 }
+
+export default new RecipeApi();

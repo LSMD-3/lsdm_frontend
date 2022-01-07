@@ -11,6 +11,7 @@ import { EnhancedTableHead } from "./EnhancedTableHead";
 import { EnhancedTableToolbar } from "./EnhancedTableToolbar";
 import { SearchParams } from "api/utils";
 import { useSnackbar } from "notistack";
+import { BaseResource } from "api/BaseResource";
 
 export interface TableColumn {
   id: string;
@@ -25,24 +26,19 @@ export interface TableColumn {
 
 export type Order = "asc" | "desc";
 
-interface TableProps {
+interface TableProps<Resource> {
   // rows: Record<string, any>[];
   title: string;
   columns: TableColumn[];
-  searchApi: (params?: SearchParams) => any;
-  countApi: (params?: SearchParams) => any;
-  deleteApi: (itemId: string) => void;
-  onRowClick?: (item: any) => void;
+  api: BaseResource<Resource>;
+  onRowClick?: (item: Resource) => void;
 }
 
-export default function ColumnGroupingTable({
+export default function ColumnGroupingTable<Resource>({
   title,
   columns,
-  searchApi,
-  countApi,
-  deleteApi,
-  onRowClick,
-}: TableProps) {
+  api,
+}: TableProps<Resource>) {
   const [page, setpage] = useState(0);
   const [pageSize, setpageSize] = useState(10);
   const [totalCount, settotalCount] = useState<number>(0);
@@ -69,7 +65,7 @@ export default function ColumnGroupingTable({
   const fetch = async () => {
     setloading(true);
     try {
-      const res = await searchApi({
+      const res = await api.search({
         limit: pageSize,
         offset: page * pageSize,
         sort:
@@ -88,7 +84,7 @@ export default function ColumnGroupingTable({
 
   const fetchTotalCount = async () => {
     try {
-      const res = await countApi({ like: search?.like, equal: search?.equal });
+      const res = await api.count({ like: search?.like, equal: search?.equal });
       settotalCount(res);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
@@ -173,7 +169,7 @@ export default function ColumnGroupingTable({
   const deleteItems = async () => {
     const promises: any = [];
     selectedItems.forEach((itm) => {
-      promises.push(deleteApi(itm));
+      promises.push(api.delete(itm));
     });
     try {
       const res = await Promise.all(promises);
