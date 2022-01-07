@@ -1,3 +1,5 @@
+export type UserType = "user" | "admin" | "chef" | "waiter" | "super-admin";
+
 export interface User {
   _id: string;
   email: string;
@@ -5,7 +7,7 @@ export interface User {
   surname: string;
   accessToken: string;
   refreshToken: string;
-  master: boolean;
+  userType: UserType;
 }
 
 export interface Restaurant {

@@ -16,14 +16,31 @@ import store, { userState } from "redux/store";
 import { useSelector } from "react-redux";
 import { Icon, PaletteMode } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
+import AppStore from "stores/AppStore";
 
-const pages = [
-  { title: "Menu", url: "/menu" },
-  { title: "Simulator", url: "/simulator" },
-  { title: "Restaurants", url: "/restaurants" },
-  { title: "Users", url: "/users" },
-  { title: "Recipes", url: "/recipes" },
-];
+let pages = [{ title: "Restaurants", url: "/restaurants" }];
+
+if (AppStore.user?.userType === "user") {
+  pages = [{ title: "Restaurants", url: "/restaurants" }];
+}
+
+if (AppStore.user?.userType === "chef") {
+}
+
+if (AppStore.user?.userType === "waiter") {
+}
+
+if (AppStore.user?.userType === "admin") {
+}
+
+if (AppStore.user?.userType === "super-admin") {
+  pages = [
+    { title: "Restaurants", url: "/restaurants" },
+    { title: "Users", url: "/users" },
+    { title: "Recipes", url: "/recipes" },
+    { title: "Simulator", url: "/simulator" },
+  ];
+}
 
 interface Setting {
   title: string;

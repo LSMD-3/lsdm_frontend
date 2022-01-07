@@ -1,4 +1,4 @@
-import { Container, Typography } from "@mui/material";
+import { Container, CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { Footer } from "components";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ export default function Profile() {
 
   return (
     <Container component="main" maxWidth="xs">
+      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -22,6 +23,9 @@ export default function Profile() {
           {user.authenticated ? user.user?.email : "Non sei autenticato"}
         </Typography>
 
+        <h4>TODO Friend List</h4>
+        <h4>TODO Search for a new friend</h4>
+
         <Box
           component="form"
           noValidate
@@ -29,7 +33,6 @@ export default function Profile() {
           sx={{ mt: 3 }}
         ></Box>
       </Box>
-      <Footer />
     </Container>
   );
 }

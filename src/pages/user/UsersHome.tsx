@@ -22,13 +22,7 @@ export default function UserHome() {
     { id: "name", label: "Nome" },
     { id: "surname", label: "Cognome" },
     { id: "email", label: "Email" },
-    {
-      id: "master",
-      label: "Master",
-      render: ({ master }: { master: boolean }) => (
-        <p>{master ? "Yes" : "No"}</p>
-      ),
-    },
+    { id: "userType", label: "User Type" },
     {
       id: "actions",
       label: "Actions",

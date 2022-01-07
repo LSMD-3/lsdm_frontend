@@ -7,13 +7,16 @@ import {
   Typography,
   Switch,
   CircularProgress,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { UserApi } from "api";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { User } from "types";
+import { User, UserType } from "types";
 
 export default function UserEdit() {
   let { userId } = useParams();
@@ -123,15 +126,25 @@ export default function UserEdit() {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  Master
-                  <Switch
-                    id="email"
-                    checked={user.master}
+                  <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={user.userType}
+                    label="User Type"
                     onChange={(event) =>
-                      setuser({ ...user, master: event.target.checked })
+                      setuser({
+                        ...user,
+                        userType: event.target.value as UserType,
+                      })
                     }
-                    aria-label="Master"
-                  />
+                  >
+                    <MenuItem value={"user"}>User</MenuItem>
+                    <MenuItem value={"admin"}>Admin</MenuItem>
+                    <MenuItem value={"chef"}>Chef</MenuItem>
+                    <MenuItem value={"waiter"}>Waiter</MenuItem>
+                    <MenuItem value={"super-admin"}>Super Admin</MenuItem>
+                  </Select>
                 </Grid>
               </Grid>
               <Button

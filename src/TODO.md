@@ -1,34 +1,45 @@
-# Notification Handling
+# User
 
-https://mui.com/components/snackbars/#customized-snackbars
+## Profile Page
 
-# Examples Pages
+- Browse Users -> view User
+- See following User
 
-## Store Page
+## Restaurant
 
-Aggiungere filtri sui prodotti
+- see restaurant list
+- search restaurants -> join a table -> ( hide Restauran section, show table section)
 
-- category
-- subcategory
-- search in description field
+## Table
 
-## Cart Page
+- Browse Menu -> View Recipe
+- Add/Remove Recipes to cart
+- View Cart -> Send Order
+- Browse Order -> See Pending Order
 
-Resoconto di quello che hai messo nel carrello
+# Waiter (assume waiter associated to a restaurant)
 
-## Payment Page
+## Waiter Page
 
-Paga il tot di quello che hai nel carrello e seleziona indirizzo spedizione
+- Browse Orders -> View Order
+- Confirm Order
+- Confirm/Cancel Recipe
+- Browse Table -> View Table
 
-## Configure Address Page
+# Chef
 
-Configura i tuoi indirizzi di spedizione
+## Chef Order Page
 
-# Buttons
+- View Orders
 
-- Fab Button
+# Admin
 
-# List
+## Restaurant Administration (Browse your Restaurant)
 
-- Infinite Scroll & Lazy Loading => FlatList
-- Checkable list
+- View/Edit Tables
+- Assign Staff (waiters,chef)
+- Browse Recipes
+
+## Statistics
+
+# Super Admin
