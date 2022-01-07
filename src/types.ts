@@ -39,8 +39,7 @@ export interface Category {
 }
 
 export interface MenuRecipes {
-  recipe_id: string;
-  recipe_name: string;
+  recipe: Recipe;
   price: number;
   max_quantity?: number;
 }
