@@ -25,6 +25,7 @@ export interface Restaurant {
   longitudine: string;
   provincia: string;
   cap: string;
+  tables_number: number;
 }
 
 export interface Recipe {

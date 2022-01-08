@@ -6,13 +6,14 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { useSpring, animated, config } from "react-spring";
 
 interface CardItemProps {
-  text: string;
+  text?: string;
   image?: string;
   url?: string;
   onClick?: () => void;
   liked?: boolean;
   quantity?: number;
   limit?: number;
+  children?: JSX.Element;
   toggleLike?: () => void;
   increment?: () => void;
   decrement?: () => void;
@@ -26,6 +27,7 @@ export default function CardItem({
   url,
   liked,
   quantity,
+  children,
   onClick,
   toggleLike,
   increment,
@@ -58,14 +60,18 @@ export default function CardItem({
         />
       )}
 
-      <Typography
-        id="spring-modal-title"
-        variant="h5"
-        component="h2"
-        style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
-      >
-        {text}
-      </Typography>
+      {text && (
+        <Typography
+          id="spring-modal-title"
+          variant="h5"
+          component="h2"
+          style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
+        >
+          {text}
+        </Typography>
+      )}
+
+      {children}
       {showButtons && (
         <div
           style={{

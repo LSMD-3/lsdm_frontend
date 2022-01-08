@@ -20,6 +20,8 @@ import {
   UserEdit,
   UserOperation,
   RestaurantMenu,
+  RestaurantLanding,
+  RestaurantTable,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -86,6 +88,14 @@ function App() {
             <Route
               path="restaurant/:restaurantId/menu"
               element={<RestaurantMenu />}
+            />
+            <Route
+              path="restaurant/:restaurantId/:tableId"
+              element={<RestaurantTable />}
+            />
+            <Route
+              path="restaurant/:restaurantId"
+              element={<RestaurantLanding />}
             />
             <Route path="users" element={<UsersHome />} />
             <Route path="user/:userId/edit" element={<UserEdit />} />

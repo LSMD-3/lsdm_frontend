@@ -15,6 +15,8 @@ export { default as SimulatorHome } from "./simulator/SimulatorHome";
 export { default as RestaurantEdit } from "./restaurant/RestaurantEdit";
 export { default as RestaurantsHome } from "./restaurant/RestaurantsHome";
 export { default as RestaurantMenu } from "./restaurant/RestaurantMenu";
+export { default as RestaurantLanding } from "./restaurant/RestaurantLanding";
+export { default as RestaurantTable } from "./restaurant/RestaurantTable";
 
 export { default as UserHome } from "./user/UsersHome";
 export { default as UserOperation } from "./user/UserOperation";
