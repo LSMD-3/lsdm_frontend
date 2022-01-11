@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme } from "@mui/material/styles";
 import { Copyright } from "components";
 import AuthenticationApi from "api/AuthenticationApi";
-import { IconButton, InputAdornment } from "@mui/material";
+import { IconButton, InputAdornment, Switch } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import store from "redux/store";
@@ -142,12 +142,6 @@ export default function Signup() {
                     </InputAdornment>
                   ),
                 }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
               />
             </Grid>
           </Grid>

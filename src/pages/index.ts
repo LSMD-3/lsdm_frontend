@@ -2,7 +2,9 @@ export { default as Profile } from "./authentication/Profile";
 export { default as Signup } from "./authentication/Signup";
 export { default as Signin } from "./authentication/Signin";
 
-export { default as Home } from "./Home";
+export { default as DevPage } from "./DevPage";
+
+export { default as Home } from "./homes/Home";
 export { default as NotFound } from "./NotFound";
 export { default as StoreCategorized } from "./StoreCategorized";
 

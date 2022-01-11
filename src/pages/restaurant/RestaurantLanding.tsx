@@ -4,17 +4,7 @@ import { TableColumn } from "components/Table";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Restaurant } from "types";
-import {
-  Autocomplete,
-  Container,
-  CssBaseline,
-  IconButton,
-  Tooltip,
-  TextField,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { ModeEdit, MenuBook } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
@@ -78,17 +68,15 @@ export default function RestaurantLanding() {
                       padding: 16,
                     }}
                   >
-                    <span style={{ marginRight: 10 }}>
-                      {"Table " + (i + 1)}
-                    </span>
-                    <Button
-                      variant="contained"
+                    <span
+                      className="clickable"
+                      style={{ marginRight: 10 }}
                       onClick={() =>
                         navigate(`/restaurant/${restaurantId}/table_${i + 1}`)
                       }
                     >
-                      Join
-                    </Button>
+                      {"Join Table " + (i + 1)}
+                    </span>
                   </div>
                 </CardItem>
               </Grid>

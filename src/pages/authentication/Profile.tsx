@@ -8,6 +8,48 @@ export default function Profile() {
   const handleSubmit = () => {};
   const user = useSelector(userState);
 
+  const renderUserProfile = () => {
+    return (
+      <div>
+        <h4>TODO Friend List</h4>
+        <h4>TODO Search for a new friend</h4>
+      </div>
+    );
+  };
+
+  const renderAdminProfile = () => {
+    return (
+      <div>
+        <h4>TODO Admin profile</h4>
+      </div>
+    );
+  };
+
+  const renderSuperAdminProfile = () => {
+    return (
+      <div>
+        <h4>TODO Super Admin profile</h4>
+      </div>
+    );
+  };
+
+  const renderWaiterProfile = () => {
+    return (
+      <div>
+        <h4>TODO Waiter profile</h4>
+      </div>
+    );
+  };
+
+  const renderChefProfile = () => {
+    return (
+      <div>
+        <h4>TODO Chef profile</h4>
+      </div>
+    );
+  };
+
+  const userType = user.user?.userType;
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -23,15 +65,11 @@ export default function Profile() {
           {user.authenticated ? user.user?.email : "Non sei autenticato"}
         </Typography>
 
-        <h4>TODO Friend List</h4>
-        <h4>TODO Search for a new friend</h4>
-
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          sx={{ mt: 3 }}
-        ></Box>
+        {userType === "user" && renderUserProfile()}
+        {userType === "waiter" && renderWaiterProfile()}
+        {userType === "chef" && renderChefProfile()}
+        {userType === "admin" && renderAdminProfile()}
+        {userType === "super-admin" && renderSuperAdminProfile()}
       </Box>
     </Container>
   );

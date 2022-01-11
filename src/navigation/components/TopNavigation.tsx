@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { Icon, PaletteMode } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
 import AppStore from "stores/AppStore";
+import { type } from "os";
+import { User, UserType } from "types";
 
 interface Setting {
   title: string;
@@ -28,20 +30,34 @@ interface TopNavigationProps {
   toggleColorMode: () => void;
   colorMode: "light" | "dark";
 }
+type Pages = { title: string; url: string }[];
 
-const UNAUTHENTICATE_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
-const USER_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
-const CHEF_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
-const WAITER_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
-const ADMIN_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
-const SUPER_ADMIN_PAGES = [
+const SUPER_ADMIN_PAGES: Pages = [
   { title: "Restaurants", url: "/restaurants" },
   { title: "Users", url: "/users" },
   { title: "Recipes", url: "/recipes" },
   { title: "Simulator", url: "/simulator" },
 ];
 
-const PAGES = {
+const UNAUTHENTICATE_PAGES: Pages = [];
+const USER_PAGES: Pages = [
+  { title: "Profile", url: "/profile" },
+  { title: "Dev", url: "/dev" },
+];
+const CHEF_PAGES: Pages = [
+  { title: "Profile", url: "/profile" },
+  { title: "Dev", url: "/dev" },
+];
+const WAITER_PAGES: Pages = [
+  { title: "Profile", url: "/profile" },
+  { title: "Dev", url: "/dev" },
+];
+const ADMIN_PAGES: Pages = [
+  { title: "Profile", url: "/profile" },
+  { title: "Dev", url: "/dev" },
+];
+
+const PAGES: Record<UserType, Pages> = {
   user: USER_PAGES,
   chef: CHEF_PAGES,
   waiter: WAITER_PAGES,
@@ -51,7 +67,7 @@ const PAGES = {
 
 const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
   const user = useSelector(userState);
-  const [pages, setpages] = useState(UNAUTHENTICATE_PAGES);
+  const [pages, setpages] = useState<Pages>(UNAUTHENTICATE_PAGES);
 
   useEffect(() => {
     if (user.user) setpages(PAGES[user.user.userType]);

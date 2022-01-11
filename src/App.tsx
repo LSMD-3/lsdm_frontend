@@ -22,6 +22,7 @@ import {
   RestaurantMenu,
   RestaurantLanding,
   RestaurantTable,
+  DevPage,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -77,6 +78,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="menu/:category" element={<StoreCategorized />} />
             <Route path="menu" element={<Store />} />
+            <Route path="dev" element={<DevPage />} />
             <Route path="signup" element={<Signup />} />
             <Route path="signin" element={<Signin />} />
             <Route path="simulator" element={<SimulatorHome />} />

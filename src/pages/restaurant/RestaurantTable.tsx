@@ -51,8 +51,9 @@ export default function RestaurantTable() {
     );
   return (
     <div>
-      <h2>{"Table " + tableId}</h2>
-      <Button onClick={() => RestaurantApi.addOrder()}>add order</Button>
+      <h2 onClick={() => RestaurantApi.addOrder()} className="clickable">
+        {"Join Table " + tableId}
+      </h2>
     </div>
   );
 }
