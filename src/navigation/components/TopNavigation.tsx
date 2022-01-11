@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -18,30 +18,6 @@ import { Icon, PaletteMode } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
 import AppStore from "stores/AppStore";
 
-let pages = [{ title: "Restaurants", url: "/restaurants" }];
-
-if (AppStore.user?.userType === "user") {
-  pages = [{ title: "Restaurants", url: "/restaurants" }];
-}
-
-if (AppStore.user?.userType === "chef") {
-}
-
-if (AppStore.user?.userType === "waiter") {
-}
-
-if (AppStore.user?.userType === "admin") {
-}
-
-if (AppStore.user?.userType === "super-admin") {
-  pages = [
-    { title: "Restaurants", url: "/restaurants" },
-    { title: "Users", url: "/users" },
-    { title: "Recipes", url: "/recipes" },
-    { title: "Simulator", url: "/simulator" },
-  ];
-}
-
 interface Setting {
   title: string;
   url?: string;
@@ -53,14 +29,42 @@ interface TopNavigationProps {
   colorMode: "light" | "dark";
 }
 
+const UNAUTHENTICATE_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
+const USER_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
+const CHEF_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
+const WAITER_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
+const ADMIN_PAGES = [{ title: "Restaurants", url: "/restaurants" }];
+const SUPER_ADMIN_PAGES = [
+  { title: "Restaurants", url: "/restaurants" },
+  { title: "Users", url: "/users" },
+  { title: "Recipes", url: "/recipes" },
+  { title: "Simulator", url: "/simulator" },
+];
+
+const PAGES = {
+  user: USER_PAGES,
+  chef: CHEF_PAGES,
+  waiter: WAITER_PAGES,
+  admin: ADMIN_PAGES,
+  "super-admin": SUPER_ADMIN_PAGES,
+};
+
 const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
   const user = useSelector(userState);
+  const [pages, setpages] = useState(UNAUTHENTICATE_PAGES);
+
+  useEffect(() => {
+    if (user.user) setpages(PAGES[user.user.userType]);
+    else setpages(UNAUTHENTICATE_PAGES);
+    return () => {};
+  }, [user]);
 
   const logout = () => {
     store.dispatch({
       type: "user/logout",
       payload: undefined,
     });
+    navigate("/signin");
     return;
   };
 
@@ -72,12 +76,8 @@ const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
 
   const navigate = useNavigate();
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const navigateToSetting = (setting: Setting) => {
     handleCloseUserMenu();
@@ -186,9 +186,8 @@ const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     <Avatar alt="Remy Sharp">
-                      {user.user?.name.charAt(0) ??
-                        "" + user.user?.surname.charAt(0) ??
-                        ""}
+                      {(user.user?.name.charAt(0) ?? "") +
+                        (user.user?.surname.charAt(0) ?? "")}
                     </Avatar>
                   </IconButton>
                 </Tooltip>

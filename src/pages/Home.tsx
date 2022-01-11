@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   TextField,
-  Typography,
+  Container,
   Grid,
   Box,
   Button,
@@ -12,9 +12,36 @@ import { SpringModal, FlexBox, Footer, CardItem } from "components";
 import { IS_DEV } from "../config";
 
 import Images from "assets/img/Images";
+import { AuthenticationApi } from "api";
+import store from "redux/store";
+import { useSnackbar } from "notistack";
+
+const userAccounts = [
+  {
+    name: "User Mario Rossi",
+    email: "mario.rossi@gmail.com",
+    password: "Mariorossi1!",
+  },
+  {
+    name: "Chef Tony Bianchi",
+    email: "tony.bianchi@gmail.com",
+    password: "Tonybianchi1!",
+  },
+  {
+    name: "Waiter Marco Gentile",
+    email: "marco.gentile@gmail.com",
+    password: "Marcogentile1!",
+  },
+  {
+    name: "Admin Luca Verdi",
+    email: "luca.verdi@gmail.com",
+    password: "Lucaverdi1!",
+  },
+];
 
 export default function Home() {
   const [open, setOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   let email = "";
 
@@ -28,32 +55,18 @@ export default function Home() {
     setOpen(false);
   };
 
-  const renderModal = () => (
-    <SpringModal open={open} handleClose={() => setOpen(false)}>
-      <Typography id="spring-modal-title" variant="h6" component="h2">
-        Nuovi pezzi in arrivo
-      </Typography>
-      <Typography id="spring-modal-description" sx={{ mt: 2 }}>
-        Registrati alla nostra news letter
-      </Typography>
-      <FlexBox>
-        <TextField
-          id="email"
-          label="Email"
-          variant="outlined"
-          style={{ flex: 5 }}
-          onChange={(e) => (email = e.target.value)}
-        />
-        <Button
-          variant="text"
-          onClick={onConfirmSubscription}
-          style={{ flex: 1 }}
-        >
-          Iscriviti
-        </Button>
-      </FlexBox>
-    </SpringModal>
-  );
+  const fakeLogin = async (email: string, password: string) => {
+    try {
+      const user = await AuthenticationApi.login(email, password);
+      store.dispatch({
+        type: "user/login",
+        payload: user,
+      });
+      enqueueSnackbar("Login effettuato", { variant: "success" });
+    } catch (error: any) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+  };
 
   const renderMenu = () => (
     <Box sx={{ flexGrow: 1 }} style={{ marginTop: 50 }}>
@@ -81,8 +94,20 @@ export default function Home() {
     <div>
       <CssBaseline />
       {renderMenu()}
-      {renderModal()}
-      <Footer />
+      <Container style={{ marginTop: 40 }}>
+        <h3>Join with</h3>
+        {userAccounts.map((user) => {
+          return (
+            <Button
+              onClick={() => fakeLogin(user.email, user.password)}
+              variant="contained"
+              style={{ marginRight: 20 }}
+            >
+              {user.name}
+            </Button>
+          );
+        })}
+      </Container>
     </div>
   );
 }
