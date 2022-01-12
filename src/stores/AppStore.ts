@@ -3,6 +3,7 @@ import store from "redux/store";
 import { sleep } from "utils/helper";
 import { VirtualTable, User, Cart } from "types";
 import axios from "axios";
+import { RestaurantApi } from "api";
 
 class AppStore {
   cart: Cart = {};
@@ -25,6 +26,19 @@ class AppStore {
   fetchCart = async () => {};
   fetchLikes = async () => {};
   fetchTableJoined = async () => {};
+  fetchStaffRestaurant = async () => {
+    console.log(this.user);
+    if (!this.user?._id) return;
+    if (!["admin", "waiter", "chef"].includes(this.user.userType)) return;
+    try {
+      const restaurant = await RestaurantApi.findRestaurantOfStaff(
+        this.user?._id,
+        this.user.userType
+      );
+      if (restaurant)
+        store.dispatch({ type: "restaurant/join", payload: restaurant });
+    } catch (error: any) {}
+  };
 
   inizializers = [this.loadUser(), this.loadCart(), this.loadLikes()];
 
@@ -32,7 +46,11 @@ class AppStore {
     this.fetchCart,
     this.fetchLikes,
     this.fetchTableJoined,
+    this.fetchStaffRestaurant,
   ];
+
+  refreshNetworkIntializers = async () =>
+    await Promise.all(this.networkInizializers.map((f) => f())); // cool trick isn' it?
 
   async loadInitialData() {
     await Promise.all(this.inizializers);
@@ -45,11 +63,8 @@ class AppStore {
       });
     }
 
-    sleep(1000).then(() => {
-      this.initializeReducers();
-    });
-
-    await Promise.all(this.networkInizializers);
+    this.initializeReducers();
+    await this.refreshNetworkIntializers();
   }
 
   initializeReducers() {

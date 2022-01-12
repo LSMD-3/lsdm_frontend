@@ -8,7 +8,8 @@ export interface User {
   accessToken: string;
   refreshToken: string;
   userType: UserType;
-  joinedTable?: VirtualTable;
+  joinedTable?: VirtualTable; //Only for users
+  joinedRestaurant?: Restaurant; //Only for staff
 }
 
 export interface Restaurant {

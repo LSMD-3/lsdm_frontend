@@ -1,6 +1,6 @@
 import { responseErrorCheck } from "./utils";
 import axios from "axios";
-import { Menu, Restaurant } from "types";
+import { Menu, Restaurant, UserType } from "types";
 import { BaseResource } from "./BaseResource";
 
 export interface MenuCreationPreferences {
@@ -15,6 +15,25 @@ class RestaurantApi extends BaseResource<Restaurant> {
 
   async addOrder() {
     return axios.post(this.endpoint + "/order/add").then(responseErrorCheck);
+  }
+
+  async addStaffMember(
+    restaurantId: string,
+    userId: string,
+    userType: UserType
+  ) {
+    return axios
+      .post(this.endpoint + "/staff", { restaurantId, userId, userType })
+      .then(responseErrorCheck);
+  }
+
+  async findRestaurantOfStaff(
+    userId: string,
+    userType: UserType
+  ): Promise<Restaurant> {
+    return axios
+      .get(this.endpoint + `/staff/${userId}/${userType}`)
+      .then(responseErrorCheck);
   }
 
   async getMenu(restaurantId: string): Promise<Menu> {

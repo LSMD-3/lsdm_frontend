@@ -3,7 +3,12 @@ import AppStore from "stores/AppStore";
 import { User } from "types";
 import store from "./store";
 
-type actionType = "user/login" | "user/logout" | "user/init" | "table/join";
+type actionType =
+  | "user/login"
+  | "user/logout"
+  | "user/init"
+  | "table/join"
+  | "restaurant/join";
 
 export interface UserData {
   authenticated: boolean;
@@ -37,6 +42,13 @@ export default function userReducer(
     case "table/join": {
       const joinedTable = action.payload;
       state.user!.joinedTable = joinedTable;
+      AppStore.setUser(state.user);
+      return { ...state };
+    }
+
+    case "restaurant/join": {
+      const joinedRestaurant = action.payload;
+      state.user!.joinedRestaurant = joinedRestaurant;
       AppStore.setUser(state.user);
       return { ...state };
     }

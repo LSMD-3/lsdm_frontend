@@ -3,6 +3,7 @@ import { AuthenticationApi } from "api";
 import { useSnackbar } from "notistack";
 import React from "react";
 import store from "redux/store";
+import AppStore from "stores/AppStore";
 
 const userAccounts = [
   {
@@ -37,6 +38,7 @@ export default function DevPage() {
         type: "user/login",
         payload: user,
       });
+      AppStore.refreshNetworkIntializers();
       enqueueSnackbar("Login effettuato", { variant: "success" });
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
