@@ -7,16 +7,14 @@ type actionType =
   | "cart/increaseItemQuantity"
   | "cart/decreaseItemQuantity"
   | "cart/removeItem"
-  | "cart/init"
-  | "table/join";
+  | "cart/init";
 // sku quantity
 
-export interface CartData {
+interface State {
   cart: Cart;
-  joinedTable?: VirtualTable;
 }
 
-const cartState: CartData = {
+const cartState: State = {
   cart: {},
 };
 
@@ -24,11 +22,7 @@ function checkItem(item: Item) {
   return true;
 }
 
-function updateItemQuantity(
-  cartState: CartData,
-  item: Item,
-  increment: number
-) {
+function updateItemQuantity(cartState: State, item: Item, increment: number) {
   let newCart = { ...cartState.cart };
   // update quantity
   if (Object.keys(cartState.cart).includes(item.id)) {
@@ -75,11 +69,6 @@ export default function cartReducer(
     case "cart/init": {
       const state = action.payload;
       return state;
-    }
-
-    case "table/join": {
-      const joinedTable = action.payload;
-      return { ...state, joinedTable };
     }
 
     case "cart/decreaseItemQuantity": {

@@ -1,19 +1,22 @@
 import { RestaurantApi } from "api";
 
 import { useEffect, useState } from "react";
-import { Restaurant } from "types";
-import { Container } from "@mui/material";
+import { Item, Restaurant } from "types";
+import { Container, CssBaseline } from "@mui/material";
 import { useSelector } from "react-redux";
 import { cartState, userState } from "redux/store";
 import { useSnackbar } from "notistack";
+import { ItemList } from "components";
+import { extractItemsFromMenuRecipes } from "helpers";
 
 export default function RestaurantTable() {
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const { enqueueSnackbar } = useSnackbar();
-  const cart = useSelector(cartState);
+  const user = useSelector(userState);
 
   useEffect(() => {
-    if (cart.joinedTable) fetchRestaurant(cart.joinedTable.restaurant._id);
+    if (user.user?.joinedTable)
+      fetchRestaurant(user.user?.joinedTable.restaurant._id);
     return () => {};
   }, []);
 
@@ -26,19 +29,35 @@ export default function RestaurantTable() {
     }
   };
 
-  if (cart.joinedTable === undefined)
+  if (user.user?.joinedTable === undefined)
     return (
       <div>
         <h2>{"Table not found"}</h2>
       </div>
     );
+
+  const allRecipes = user.user.joinedTable.restaurant.menu.recipes;
+
+  // TODO NEO4J INTEGRATION
+  const toggleItemLike = (item: Item) => {};
+  // TODO REDIS INTEGRATION
+  const increment = (item: Item) => {};
+  const decrement = (item: Item) => {};
+
+  console.log(allRecipes);
   return (
     <Container>
+      <CssBaseline />
       <h2 onClick={() => RestaurantApi.addOrder()} className="clickable">
-        {" Table " + cart.joinedTable.tableNumber}
+        {" Table " + user.user?.joinedTable.tableNumber}
       </h2>
       <h3>Partecipants</h3>
-      <h3>Menu here</h3>
+      <ItemList
+        items={extractItemsFromMenuRecipes(allRecipes)}
+        toggleItemLike={toggleItemLike}
+        increment={increment}
+        decrement={decrement}
+      />
     </Container>
   );
 }

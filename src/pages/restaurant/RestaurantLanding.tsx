@@ -25,6 +25,8 @@ export default function RestaurantLanding() {
     if (!restaurantId) return;
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
+      const menu = await RestaurantApi.getMenu(restaurantId);
+      restaurant.menu = menu;
       setrestaurant(restaurant);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
@@ -104,6 +106,7 @@ export default function RestaurantLanding() {
               type: "table/join",
               payload: joinedTable,
             });
+            navigate("/");
           },
         }}
       />

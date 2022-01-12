@@ -129,10 +129,10 @@ export default function StoreExamplePage() {
                 text={itm.name}
                 image={itm.image_url}
                 toggleLike={() => toggleItemLike(itm)}
-                increment={() => (cart.cart[itm.id] ?? 0) < 5 && addToCart(itm)}
+                increment={() => (cart[itm.id] ?? 0) < 5 && addToCart(itm)}
                 decrement={() => decrementCart(itm)}
                 liked={(likes || []).includes(itm.id)}
-                quantity={cart.cart[itm.id]}
+                quantity={cart[itm.id]}
                 limit={5}
               />
             </Grid>

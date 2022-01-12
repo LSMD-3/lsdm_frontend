@@ -37,11 +37,11 @@ const SUPER_ADMIN_PAGES: Pages = [
   { title: "Dev", url: "/dev" },
 ];
 
-const UNAUTHENTICATE_PAGES: Pages = [];
+const UNAUTHENTICATE_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
 const USER_PAGES: Pages = [
+  { title: "Cart", url: "/cart" },
   { title: "Profile", url: "/profile" },
   { title: "Dev", url: "/dev" },
-  { title: "Cart", url: "/cart" },
 ];
 const CHEF_PAGES: Pages = [
   { title: "Profile", url: "/profile" },

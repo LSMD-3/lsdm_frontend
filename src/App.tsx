@@ -37,7 +37,6 @@ import { getDesignTokens } from "styles/theme";
 function App() {
   const [loading, setloading] = useState(true);
   const user = useSelector(userState);
-  const cart = useSelector(cartState);
   const [mode, setMode] = React.useState<PaletteMode>("dark");
   const colorMode = React.useMemo(
     () => ({
@@ -72,7 +71,7 @@ function App() {
     );
 
   let homeElement = <Home />;
-  if (cart.joinedTable) {
+  if (user.user?.joinedTable) {
     homeElement = <RestaurantTable />;
   }
 

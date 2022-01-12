@@ -6,19 +6,11 @@ import axios from "axios";
 
 class AppStore {
   cart: Cart = {};
-  tableJoined?: VirtualTable;
   likes: string[] = [];
   user?: User;
 
   loadCart = async () => {
     this.cart = await Storage.load("@AppStore:cart", this.cart);
-  };
-
-  loadTableJoined = async () => {
-    this.tableJoined = await Storage.load(
-      "@AppStore:tableJoined",
-      this.tableJoined
-    );
   };
 
   loadLikes = async () => {
@@ -34,12 +26,8 @@ class AppStore {
   fetchLikes = async () => {};
   fetchTableJoined = async () => {};
 
-  inizializers = [
-    this.loadUser(),
-    this.loadCart(),
-    this.loadLikes(),
-    this.loadTableJoined(),
-  ];
+  inizializers = [this.loadUser(), this.loadCart(), this.loadLikes()];
+
   networkInizializers = [
     this.fetchCart,
     this.fetchLikes,
@@ -71,18 +59,13 @@ class AppStore {
     });
     store.dispatch({
       type: "cart/init",
-      payload: { carth: this.cart, tableJoined: this.tableJoined },
+      payload: { carth: this.cart },
     });
   }
 
   async setCart(cart: Cart) {
     this.cart = cart;
     await Storage.save("@AppStore:cart", cart);
-  }
-
-  async setTableJoined(tableJoined: VirtualTable) {
-    this.tableJoined = tableJoined;
-    await Storage.save("@AppStore:tableJoined", tableJoined);
   }
 
   async setLikes(likes: string[]) {

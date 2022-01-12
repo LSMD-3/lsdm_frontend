@@ -1,8 +1,9 @@
 import axios from "axios";
 import AppStore from "stores/AppStore";
 import { User } from "types";
+import store from "./store";
 
-type actionType = "user/login" | "user/logout" | "user/init";
+type actionType = "user/login" | "user/logout" | "user/init" | "table/join";
 
 export interface UserData {
   authenticated: boolean;
@@ -31,6 +32,13 @@ export default function userReducer(
       axios.defaults.headers.common["authorization"] = "null";
       AppStore.setUser(undefined);
       return { authenticated: false, user: undefined };
+    }
+
+    case "table/join": {
+      const joinedTable = action.payload;
+      state.user!.joinedTable = joinedTable;
+      AppStore.setUser(state.user);
+      return { ...state };
     }
 
     case "user/init": {

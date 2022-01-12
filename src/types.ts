@@ -8,6 +8,7 @@ export interface User {
   accessToken: string;
   refreshToken: string;
   userType: UserType;
+  joinedTable?: VirtualTable;
 }
 
 export interface Restaurant {
@@ -26,6 +27,7 @@ export interface Restaurant {
   provincia: string;
   cap: string;
   tables_number: number;
+  menu: Menu;
 }
 
 export interface Recipe {
@@ -41,7 +43,8 @@ export interface Category {
   totalRecipe: number;
 }
 
-export interface MenuRecipes {
+export interface MenuRecipe {
+  _id: string;
   recipe: Recipe;
   price: number;
   max_quantity?: number;
@@ -50,7 +53,7 @@ export interface MenuRecipes {
 export interface Menu {
   name: string;
   description?: string;
-  recipes: MenuRecipes[];
+  recipes: MenuRecipe[];
   ayce_available: boolean;
 }
 
@@ -64,5 +67,7 @@ export type Cart = Record<string, number>;
 export interface Item {
   id: string;
   name: string;
-  image_url: string;
+  image_url?: string;
+  quantity?: number;
+  liked?: boolean;
 }

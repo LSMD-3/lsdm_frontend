@@ -12,6 +12,13 @@ import SuperAdminHome from "./SuperAdminHome";
 export default function Home() {
   const user = useSelector(userState);
 
+  if (!user.user)
+    return (
+      <Container>
+        <CssBaseline />
+        <h3>Please Login or Signin to use the App</h3>
+      </Container>
+    );
   return (
     <Container>
       <CssBaseline />
