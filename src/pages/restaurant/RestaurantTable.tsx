@@ -1,40 +1,23 @@
 import { RestaurantApi } from "api";
-import { CardItem, Table } from "components";
-import { TableColumn } from "components/Table";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Restaurant } from "types";
-import {
-  Autocomplete,
-  Container,
-  CssBaseline,
-  IconButton,
-  Tooltip,
-  TextField,
-  Button,
-  Grid,
-  Typography,
-} from "@mui/material";
-import { ModeEdit, MenuBook } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import { userState } from "redux/store";
-import { useSnackbar } from "notistack";
-import { Box } from "@mui/system";
 
-import { SpringModal, FlexBox, Footer } from "components";
+import { useEffect, useState } from "react";
+import { Restaurant } from "types";
+import { Container } from "@mui/material";
+import { useSelector } from "react-redux";
+import { cartState, userState } from "redux/store";
+import { useSnackbar } from "notistack";
 
 export default function RestaurantTable() {
-  let { restaurantId, tableId } = useParams();
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const { enqueueSnackbar } = useSnackbar();
+  const cart = useSelector(cartState);
 
   useEffect(() => {
-    fetchRestaurant();
+    if (cart.joinedTable) fetchRestaurant(cart.joinedTable.restaurant._id);
     return () => {};
   }, []);
 
-  const fetchRestaurant = async () => {
-    if (!restaurantId) return;
+  const fetchRestaurant = async (restaurantId: string) => {
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
       setrestaurant(restaurant);
@@ -43,17 +26,19 @@ export default function RestaurantTable() {
     }
   };
 
-  if (tableId === undefined)
+  if (cart.joinedTable === undefined)
     return (
       <div>
         <h2>{"Table not found"}</h2>
       </div>
     );
   return (
-    <div>
+    <Container>
       <h2 onClick={() => RestaurantApi.addOrder()} className="clickable">
-        {"Join Table " + tableId}
+        {" Table " + cart.joinedTable.tableNumber}
       </h2>
-    </div>
+      <h3>Partecipants</h3>
+      <h3>Menu here</h3>
+    </Container>
   );
 }

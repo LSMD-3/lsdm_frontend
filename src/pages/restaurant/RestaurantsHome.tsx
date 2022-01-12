@@ -3,12 +3,10 @@ import { Table } from "components";
 import { TableColumn } from "components/Table";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Restaurant } from "types";
 import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
 import { ModeEdit, MenuBook } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
-import { useSnackbar } from "notistack";
 
 export default function RestaurantsHome() {
   const navigate = useNavigate();

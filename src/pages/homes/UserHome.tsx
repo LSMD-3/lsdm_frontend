@@ -1,12 +1,5 @@
-import React, { useEffect, useState } from "react";
-import {
-  TextField,
-  Container,
-  Grid,
-  Box,
-  Button,
-  CssBaseline,
-} from "@mui/material";
+import { useState } from "react";
+import { Container, Button, CssBaseline } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
 import { Restaurant } from "types";
@@ -36,9 +29,6 @@ export default function UserHome() {
       >
         Open Restaurant
       </Button>
-
-      <h3>Your Favourite Restaurants</h3>
-      <h3>Your Favourite Recepies</h3>
     </Container>
   );
 }

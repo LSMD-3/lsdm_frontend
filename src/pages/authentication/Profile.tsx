@@ -1,11 +1,9 @@
 import { Container, CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { Footer } from "components";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
 
 export default function Profile() {
-  const handleSubmit = () => {};
   const user = useSelector(userState);
 
   const renderUserProfile = () => {
@@ -13,6 +11,8 @@ export default function Profile() {
       <div>
         <h4>TODO Friend List</h4>
         <h4>TODO Search for a new friend</h4>
+        <h3>Your Favourite Restaurants</h3>
+        <h3>Your Favourite Recepies</h3>
       </div>
     );
   };

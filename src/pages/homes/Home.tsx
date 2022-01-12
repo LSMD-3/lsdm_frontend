@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Button, CssBaseline } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 
-import { IS_DEV } from "../../config";
-
-import Images from "assets/img/Images";
-import { AuthenticationApi } from "api";
-import store, { userState } from "redux/store";
-import { useSnackbar } from "notistack";
+import { userState } from "redux/store";
 import { useSelector } from "react-redux";
 import UserHome from "./UserHome";
 import ChefHome from "./ChefHome";
@@ -15,14 +10,7 @@ import AdminHome from "./AdminHome";
 import SuperAdminHome from "./SuperAdminHome";
 
 export default function Home() {
-  const [open, setOpen] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
-
-  useEffect(() => {
-    if (!IS_DEV) setTimeout(() => setOpen(true), 2000);
-    return () => {};
-  }, []);
 
   return (
     <Container>

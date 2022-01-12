@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 import store, { cartState, likeState } from "redux/store";
-import { Item } from "stores";
+import { Item } from "types";
 import { sleep } from "utils/helper";
 import ITEMS from "../../generators/items1.json";
 import ITEMS2 from "../../generators/items2.json";
@@ -129,10 +129,10 @@ export default function StoreExamplePage() {
                 text={itm.name}
                 image={itm.image_url}
                 toggleLike={() => toggleItemLike(itm)}
-                increment={() => (cart[itm.id] ?? 0) < 5 && addToCart(itm)}
+                increment={() => (cart.cart[itm.id] ?? 0) < 5 && addToCart(itm)}
                 decrement={() => decrementCart(itm)}
                 liked={(likes || []).includes(itm.id)}
-                quantity={cart[itm.id]}
+                quantity={cart.cart[itm.id]}
                 limit={5}
               />
             </Grid>

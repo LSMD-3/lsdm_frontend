@@ -1,21 +1,30 @@
-import { Cart } from "./CartStore";
 import Storage from "utils/Storage";
 import store from "redux/store";
 import { sleep } from "utils/helper";
-import { User } from "types";
+import { VirtualTable, User, Cart } from "types";
 import axios from "axios";
 
 class AppStore {
   cart: Cart = {};
+  tableJoined?: VirtualTable;
   likes: string[] = [];
   user?: User;
 
   loadCart = async () => {
     this.cart = await Storage.load("@AppStore:cart", this.cart);
   };
+
+  loadTableJoined = async () => {
+    this.tableJoined = await Storage.load(
+      "@AppStore:tableJoined",
+      this.tableJoined
+    );
+  };
+
   loadLikes = async () => {
     this.likes = await Storage.load("@AppStore:likes", this.likes);
   };
+
   loadUser = async () => {
     this.user = await Storage.load("@AppStore:user", this.user);
   };
@@ -23,9 +32,19 @@ class AppStore {
   // TODO CONNECT API
   fetchCart = async () => {};
   fetchLikes = async () => {};
+  fetchTableJoined = async () => {};
 
-  inizializers = [this.loadUser(), this.loadCart(), this.loadLikes()];
-  networkInizializers = [this.fetchCart, this.fetchLikes];
+  inizializers = [
+    this.loadUser(),
+    this.loadCart(),
+    this.loadLikes(),
+    this.loadTableJoined(),
+  ];
+  networkInizializers = [
+    this.fetchCart,
+    this.fetchLikes,
+    this.fetchTableJoined,
+  ];
 
   async loadInitialData() {
     await Promise.all(this.inizializers);
@@ -51,14 +70,19 @@ class AppStore {
       payload: this.likes,
     });
     store.dispatch({
-      type: "cart/initCart",
-      payload: this.cart,
+      type: "cart/init",
+      payload: { carth: this.cart, tableJoined: this.tableJoined },
     });
   }
 
   async setCart(cart: Cart) {
     this.cart = cart;
     await Storage.save("@AppStore:cart", cart);
+  }
+
+  async setTableJoined(tableJoined: VirtualTable) {
+    this.tableJoined = tableJoined;
+    await Storage.save("@AppStore:tableJoined", tableJoined);
   }
 
   async setLikes(likes: string[]) {

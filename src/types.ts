@@ -53,3 +53,16 @@ export interface Menu {
   recipes: MenuRecipes[];
   ayce_available: boolean;
 }
+
+export interface VirtualTable {
+  tableNumber: string;
+  restaurant: Restaurant;
+}
+
+export type Cart = Record<string, number>;
+
+export interface Item {
+  id: string;
+  name: string;
+  image_url: string;
+}

@@ -1,5 +1,5 @@
-import { Cart, Item } from "stores";
 import AppStore from "stores/AppStore";
+import { VirtualTable, Cart, Item } from "types";
 import { sleep } from "utils/helper";
 
 type actionType =
@@ -7,14 +7,16 @@ type actionType =
   | "cart/increaseItemQuantity"
   | "cart/decreaseItemQuantity"
   | "cart/removeItem"
-  | "cart/initCart";
+  | "cart/init"
+  | "table/join";
 // sku quantity
 
-interface State {
+export interface CartData {
   cart: Cart;
+  joinedTable?: VirtualTable;
 }
 
-const cartState: State = {
+const cartState: CartData = {
   cart: {},
 };
 
@@ -22,7 +24,11 @@ function checkItem(item: Item) {
   return true;
 }
 
-function updateItemQuantity(cartState: State, item: Item, increment: number) {
+function updateItemQuantity(
+  cartState: CartData,
+  item: Item,
+  increment: number
+) {
   let newCart = { ...cartState.cart };
   // update quantity
   if (Object.keys(cartState.cart).includes(item.id)) {
@@ -66,9 +72,14 @@ export default function cartReducer(
       return updateItemQuantity(state, item, -1000000);
     }
 
-    case "cart/initCart": {
-      const cart = action.payload;
-      return { cart };
+    case "cart/init": {
+      const state = action.payload;
+      return state;
+    }
+
+    case "table/join": {
+      const joinedTable = action.payload;
+      return { ...state, joinedTable };
     }
 
     case "cart/decreaseItemQuantity": {

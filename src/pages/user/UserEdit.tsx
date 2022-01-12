@@ -5,7 +5,6 @@ import {
   CssBaseline,
   Grid,
   Typography,
-  Switch,
   CircularProgress,
   InputLabel,
   Select,
@@ -44,7 +43,7 @@ export default function UserEdit() {
     if (!user) return;
 
     try {
-      const res = await UserApi.update(user);
+      await UserApi.update(user);
       enqueueSnackbar("Utent Modificato", { variant: "success" });
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });

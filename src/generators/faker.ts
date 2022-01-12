@@ -1,6 +1,5 @@
-import { Item } from "stores";
 import faker from "faker";
-import { User } from "types";
+import { User, Item } from "types";
 export default class FakerFactory {
   static createUser = () => {
     return "";

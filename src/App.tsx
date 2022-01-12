@@ -23,19 +23,21 @@ import {
   RestaurantLanding,
   RestaurantTable,
   DevPage,
+  UserCart,
 } from "pages";
 import { TopNavigation } from "navigation";
 
 import { createTheme } from "@mui/material/styles";
 import AppStore from "stores/AppStore";
 import { useSelector } from "react-redux";
-import { userState } from "redux/store";
+import { cartState, userState } from "redux/store";
 import UsersHome from "pages/user/UsersHome";
 import { getDesignTokens } from "styles/theme";
 
 function App() {
   const [loading, setloading] = useState(true);
   const user = useSelector(userState);
+  const cart = useSelector(cartState);
   const [mode, setMode] = React.useState<PaletteMode>("dark");
   const colorMode = React.useMemo(
     () => ({
@@ -69,16 +71,22 @@ function App() {
       />
     );
 
+  let homeElement = <Home />;
+  if (cart.joinedTable) {
+    homeElement = <RestaurantTable />;
+  }
+
   return (
     <div>
       <ThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={5}>
           <TopNavigation toggleColorMode={toggleColorMode} colorMode={mode} />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={homeElement} />
             <Route path="menu/:category" element={<StoreCategorized />} />
             <Route path="menu" element={<Store />} />
             <Route path="dev" element={<DevPage />} />
+            <Route path="cart" element={<UserCart />} />
             <Route path="signup" element={<Signup />} />
             <Route path="signin" element={<Signin />} />
             <Route path="simulator" element={<SimulatorHome />} />
@@ -91,10 +99,7 @@ function App() {
               path="restaurant/:restaurantId/menu"
               element={<RestaurantMenu />}
             />
-            <Route
-              path="restaurant/:restaurantId/:tableId"
-              element={<RestaurantTable />}
-            />
+
             <Route
               path="restaurant/:restaurantId"
               element={<RestaurantLanding />}

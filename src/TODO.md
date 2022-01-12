@@ -2,18 +2,16 @@
 
 ## Profile Page
 
-- Browse Users -> view User
-- See following User
+- [mike] Browse Users -> view User
+- [mike] See following User
 
 ## Restaurant
 
-- see restaurant list
-- search restaurants -> join a table -> ( hide Restauran section, show table section)
+- [jack] search restaurants -> join a table -> ( hide Restauran section, show table section)
 
 ## Table
 
 - Browse Menu -> View Recipe
-- Add/Remove Recipes to cart
 - View Cart -> Send Order
 - Browse Order -> See Pending Order
 

@@ -1,7 +1,7 @@
 import { RecipeApi } from "api";
 import { Table } from "components";
 import { TableColumn } from "components/Table";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "types";
 import { useSnackbar } from "notistack";

@@ -23,6 +23,7 @@ export { default as RestaurantTable } from "./restaurant/RestaurantTable";
 export { default as UserHome } from "./user/UsersHome";
 export { default as UserOperation } from "./user/UserOperation";
 export { default as UserEdit } from "./user/UserEdit";
+export { default as UserCart } from "./user/UserCart";
 
 export { default as RecipesHome } from "./recipe/RecipesHome";
 export { default as RecipeEdit } from "./recipe/RecipeEdit";

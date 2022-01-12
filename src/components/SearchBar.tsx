@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Button, Autocomplete } from "@mui/material";
-import { SpringModal, FlexBox, Footer, CardItem } from "components";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import { useSnackbar } from "notistack";
-import { Restaurant } from "types";
 
 export interface SearchBarProps<T> {
   onSelectOption: (option: T) => void;

@@ -14,11 +14,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from "react-router";
 import store, { userState } from "redux/store";
 import { useSelector } from "react-redux";
-import { Icon, PaletteMode } from "@mui/material";
 import SvgIcons from "assets/svg/SvgIcons";
-import AppStore from "stores/AppStore";
-import { type } from "os";
-import { User, UserType } from "types";
+import { UserType } from "types";
 
 interface Setting {
   title: string;
@@ -44,6 +41,7 @@ const UNAUTHENTICATE_PAGES: Pages = [];
 const USER_PAGES: Pages = [
   { title: "Profile", url: "/profile" },
   { title: "Dev", url: "/dev" },
+  { title: "Cart", url: "/cart" },
 ];
 const CHEF_PAGES: Pages = [
   { title: "Profile", url: "/profile" },
