@@ -37,6 +37,7 @@ const SUPER_ADMIN_PAGES: Pages = [
   { title: "Users", url: "/users" },
   { title: "Recipes", url: "/recipes" },
   { title: "Simulator", url: "/simulator" },
+  { title: "Dev", url: "/dev" },
 ];
 
 const UNAUTHENTICATE_PAGES: Pages = [];

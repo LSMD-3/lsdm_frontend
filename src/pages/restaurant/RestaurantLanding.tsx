@@ -4,7 +4,7 @@ import { TableColumn } from "components/Table";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Restaurant } from "types";
-import { Grid, Typography } from "@mui/material";
+import { Container, CssBaseline, Grid, Typography } from "@mui/material";
 import { ModeEdit, MenuBook } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
@@ -87,5 +87,10 @@ export default function RestaurantLanding() {
     );
   };
 
-  return <div>{renderTableList()} </div>;
+  return (
+    <Container>
+      <CssBaseline />
+      {renderTableList()}
+    </Container>
+  );
 }
