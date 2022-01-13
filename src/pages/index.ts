@@ -1,4 +1,4 @@
-export { default as Profile } from "./authentication/Profile";
+export { default as Profile } from "./profile/Profile";
 export { default as Signup } from "./authentication/Signup";
 export { default as Signin } from "./authentication/Signin";
 

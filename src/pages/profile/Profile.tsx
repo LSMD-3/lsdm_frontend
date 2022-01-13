@@ -2,20 +2,10 @@ import { Container, CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
+import UserProfile from "./UserProfile";
 
 export default function Profile() {
   const user = useSelector(userState);
-
-  const renderUserProfile = () => {
-    return (
-      <div>
-        <h4>TODO Friend List</h4>
-        <h4>TODO Search for a new friend</h4>
-        <h3>Your Favourite Restaurants</h3>
-        <h3>Your Favourite Recepies</h3>
-      </div>
-    );
-  };
 
   const renderAdminProfile = () => {
     return (
@@ -50,6 +40,9 @@ export default function Profile() {
   };
 
   const userType = user.user?.userType;
+
+  if (userType === "user") return <UserProfile />;
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -65,7 +58,6 @@ export default function Profile() {
           {user.authenticated ? user.user?.email : "Non sei autenticato"}
         </Typography>
 
-        {userType === "user" && renderUserProfile()}
         {userType === "waiter" && renderWaiterProfile()}
         {userType === "chef" && renderChefProfile()}
         {userType === "admin" && renderAdminProfile()}

@@ -1,4 +1,4 @@
-import { UserApi } from "api";
+import { AuthenticationApi, UserApi } from "api";
 import { Table } from "components";
 import { TableColumn } from "components/Table";
 import { useNavigate } from "react-router-dom";
@@ -51,10 +51,18 @@ export default function UserHome() {
   ];
 
   const generateUsers = async (count: number) => {
+    // TODO change this putting a singnir rather than a user add
     const users = FakerFactory.createUsers(count);
     const promises: any[] = [];
     users.forEach((user) => {
-      promises.push(UserApi.add(user));
+      promises.push(
+        AuthenticationApi.signup(
+          user.email!,
+          "Password1!",
+          user.name!,
+          user.surname!
+        )
+      );
     });
     try {
       await Promise.all(promises);
