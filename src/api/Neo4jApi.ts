@@ -10,6 +10,12 @@ class Neo4jApi {
       .post(this.endpoint + `/follow`, { follower, followee })
       .then(responseErrorCheck);
   }
+
+  async getFollowersCount(userId: string): Promise<number[]> {
+    return axios
+      .get(this.endpoint + `/followers/${userId}`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new Neo4jApi();

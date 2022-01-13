@@ -5,6 +5,12 @@ import { BaseResource } from "./BaseResource";
 
 class UserApi extends BaseResource<User> {
   endpoint = "user";
+
+  async getFollowerEmails(userId: string): Promise<Partial<User>> {
+    return axios
+      .get(this.endpoint + `/followers/${userId}`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new UserApi();

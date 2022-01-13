@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Button, CssBaseline } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,15 @@ export default function UserProfile() {
   const [selectedUser, setselectedUser] = useState<User>();
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
+
+  const fetchFriendsEmail = async () => {
+    const emails = await UserApi.getFollowerEmails(user.user!._id);
+  };
+
+  useEffect(() => {
+    fetchFriendsEmail();
+    return () => {};
+  }, []);
 
   const searchUsers = async (text: string): Promise<User[]> => {
     try {
