@@ -25,10 +25,10 @@ function checkItem(item: Item) {
 function updateItemQuantity(cartState: State, item: Item, increment: number) {
   let newCart = { ...cartState.cart };
   // update quantity
-  if (Object.keys(cartState.cart).includes(item.id)) {
-    const quantity = newCart[item.id] + increment;
-    if (quantity > 0) newCart[item.id] = newCart[item.id] + increment;
-    if (quantity <= 0) delete newCart[item.id];
+  if (Object.keys(cartState.cart).includes(item._id)) {
+    const quantity = newCart[item._id] + increment;
+    if (quantity > 0) newCart[item._id] = newCart[item._id] + increment;
+    if (quantity <= 0) delete newCart[item._id];
     // TODO API CALL HERE
     sleep(100).then(() => {
       //  se va tutto bene apposto
@@ -43,7 +43,7 @@ function updateItemQuantity(cartState: State, item: Item, increment: number) {
     //  se va tutto bene apposto
     // altrimenti devo revertare lo stato
   });
-  if (increment > 0) newCart[item.id] = (newCart[item.id] ?? 0) + increment;
+  if (increment > 0) newCart[item._id] = (newCart[item._id] ?? 0) + increment;
   AppStore.setCart(newCart).then(() => console.log(AppStore.cart));
   return { ...cartState, cart: newCart };
 }

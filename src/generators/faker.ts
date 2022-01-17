@@ -9,7 +9,7 @@ export default class FakerFactory {
     const items: Item[] = [];
     for (let i = 0; i < quantity; i++) {
       const item: Item = {
-        id: "" + i,
+        _id: "" + i,
         image_url: faker.image.imageUrl(300, 200, undefined, true),
         name: faker.commerce.product(),
       };

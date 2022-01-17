@@ -26,7 +26,7 @@ export default function ItemList({
       style={{ marginTop: 40 }}
     >
       {items.map((itm) => (
-        <Grid key={itm.id} item xs={6} sm={6} md={3}>
+        <Grid key={itm._id} item xs={6} sm={6} md={3}>
           <CardItem
             text={itm.name}
             image={itm.image_url}

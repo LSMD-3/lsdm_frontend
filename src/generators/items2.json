@@ -1,6 +1,6 @@
 [
   {
-    "id": "10",
+    "_id": "10",
     "image_url": "http://placeimg.com/300/200?75121",
     "name": "Chicken",
     "category": "AAA",
@@ -8,7 +8,7 @@
     "price": 5.5
   },
   {
-    "id": "11",
+    "_id": "11",
     "image_url": "http://placeimg.com/300/200?16048",
     "name": "Car",
     "category": "CCC",
@@ -16,7 +16,7 @@
     "price": 19999.99
   },
   {
-    "id": "12",
+    "_id": "12",
     "image_url": "http://placeimg.com/300/200?15621",
     "name": "Pants",
     "category": "BBB",
@@ -24,7 +24,7 @@
     "price": 30.9
   },
   {
-    "id": "13",
+    "_id": "13",
     "image_url": "http://placeimg.com/300/200?38201",
     "name": "Shirt",
     "category": "AAA",
@@ -33,7 +33,7 @@
     "description": "A shirt is a cloth garment for the upper body Originally an undergarment worn exclusively by men, it has become, in American English, a catch-all term for a"
   },
   {
-    "id": "14",
+    "_id": "14",
     "image_url": "http://placeimg.com/300/200?44849",
     "name": "Chips",
     "category": "AAA",
@@ -41,7 +41,7 @@
     "description": "Chips is an entertaining cop buddy flick, rated R and has some adult humor. Both Pena and Shepard play their parts well and along the way the movie pokes fun at ..."
   },
   {
-    "id": "15",
+    "_id": "15",
     "image_url": "http://placeimg.com/300/200?91849",
     "name": "Table",
     "category": "BBB",
@@ -50,7 +50,7 @@
     "description": "a piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working at."
   },
   {
-    "id": "16",
+    "_id": "16",
     "image_url": "http://placeimg.com/300/200?26645",
     "name": "Keyboard",
     "category": "AAA",
@@ -59,7 +59,7 @@
     "description": "Das Keyboard offers badass geeks the ultimate experience with high-performance mechanical keyboards with superior durability, construction, and design."
   },
   {
-    "id": "17",
+    "_id": "17",
     "image_url": "http://placeimg.com/300/200?22329",
     "name": "Bike",
     "category": "CCC",

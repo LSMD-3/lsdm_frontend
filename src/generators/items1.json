@@ -1,6 +1,6 @@
 [
   {
-    "id": "0",
+    "_id": "0",
     "image_url": "http://placeimg.com/300/200?38201",
     "name": "Shirt",
     "category": "AAA",
@@ -9,7 +9,7 @@
     "description": "A shirt is a cloth garment for the upper body Originally an undergarment worn exclusively by men, it has become, in American English, a catch-all term for a"
   },
   {
-    "id": "1",
+    "_id": "1",
     "image_url": "http://placeimg.com/300/200?44849",
     "name": "Chips",
     "category": "AAA",
@@ -17,7 +17,7 @@
     "description": "Chips is an entertaining cop buddy flick, rated R and has some adult humor. Both Pena and Shepard play their parts well and along the way the movie pokes fun at ..."
   },
   {
-    "id": "2",
+    "_id": "2",
     "image_url": "http://placeimg.com/300/200?91849",
     "name": "Table",
     "category": "BBB",
@@ -26,7 +26,7 @@
     "description": "a piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working at."
   },
   {
-    "id": "3",
+    "_id": "3",
     "image_url": "http://placeimg.com/300/200?26645",
     "name": "Keyboard",
     "category": "AAA",
@@ -35,7 +35,7 @@
     "description": "Das Keyboard offers badass geeks the ultimate experience with high-performance mechanical keyboards with superior durability, construction, and design."
   },
   {
-    "id": "4",
+    "_id": "4",
     "image_url": "http://placeimg.com/300/200?22329",
     "name": "Bike",
     "category": "CCC",
@@ -44,7 +44,7 @@
     "description": " Il più grande e specializzato noleggio biciclette di tutta Firenze e provincia. Le nostre biciclette vengono rinnovate di anno in anno per dare ..."
   },
   {
-    "id": "5",
+    "_id": "5",
     "image_url": "http://placeimg.com/300/200?6195",
     "name": "Sushi",
     "category": "AAA",
@@ -53,14 +53,14 @@
     "description": "Sushi is a traditional Japanese dish of prepared vinegared rice (鮨飯, sushi-meshi), usually with some sugar and salt, accompanied by a variety of ..."
   },
   {
-    "id": "6",
+    "_id": "6",
     "image_url": "http://placeimg.com/300/200?6668",
     "name": "Chair",
     "category": "BBB",
     "price": 19.9
   },
   {
-    "id": "8",
+    "_id": "8",
     "image_url": "http://placeimg.com/300/200?38802",
     "name": "Mouse",
     "category": "BBB",
@@ -68,7 +68,7 @@
     "price": 10.9
   },
   {
-    "id": "9",
+    "_id": "9",
     "image_url": "http://placeimg.com/300/200?23949",
     "name": "Cheese",
     "category": "AAA",

@@ -1,4 +1,4 @@
-import { RestaurantApi } from "api";
+import { RestaurantApi, TableApi } from "api";
 import { CardItem, DialogManager } from "components";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,7 +7,8 @@ import { Container, CssBaseline, Grid } from "@mui/material";
 import store from "redux/store";
 import { useSnackbar } from "notistack";
 import { Box } from "@mui/system";
-
+import { userState } from "redux/store";
+import { useSelector } from "react-redux";
 export default function RestaurantLanding() {
   let { restaurantId } = useParams();
   const [restaurant, setrestaurant] = useState<Restaurant>();
@@ -15,6 +16,10 @@ export default function RestaurantLanding() {
   const [modalOpen, set_modalOpen] = useState(false);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+
+  const user = useSelector(userState);
+  console.log("TEST");
+  console.log(user);
 
   useEffect(() => {
     fetchRestaurant();
@@ -102,6 +107,13 @@ export default function RestaurantLanding() {
               restaurant,
               tableNumber: `table_${selectedTable + 1}`,
             };
+            console.log("USER:");
+            console.log(user.user!._id);
+            TableApi.joinTable(
+              String(restaurantId),
+              String(selectedTable + 1),
+              String(user.user!._id)
+            );
             store.dispatch({
               type: "table/join",
               payload: joinedTable,

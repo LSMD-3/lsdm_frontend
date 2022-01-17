@@ -43,6 +43,11 @@ export interface Category {
   category: string;
   totalRecipe: number;
 }
+export interface Table {
+  restaurant_id: string;
+  table_id: string;
+  customers: string;
+}
 
 export interface MenuRecipe {
   _id: string;
@@ -66,9 +71,10 @@ export interface VirtualTable {
 export type Cart = Record<string, number>;
 
 export interface Item {
-  id: string;
+  _id: string;
   name: string;
   image_url?: string;
   quantity?: number;
+  note?: string;
   liked?: boolean;
 }

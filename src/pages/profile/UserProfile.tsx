@@ -16,7 +16,7 @@ export default function UserProfile() {
   const user = useSelector(userState);
 
   const fetchFriendsEmail = async () => {
-    const emails = await UserApi.getFollowerEmails(user.user!._id);
+    //const emails = await UserApi.getFollowerEmails(user.user!._id);
   };
 
   useEffect(() => {

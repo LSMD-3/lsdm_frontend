@@ -1,6 +1,6 @@
 [
   {
-    "id": "42",
+    "_id": "42",
     "image_url": "http://placeimg.com/300/200?16048",
     "name": "Car",
     "category": "CCC",
@@ -8,7 +8,7 @@
     "price": 19999.99
   },
   {
-    "id": "45",
+    "_id": "45",
     "image_url": "http://placeimg.com/300/200?15621",
     "name": "Pants",
     "category": "BBB",
@@ -16,7 +16,7 @@
     "price": 30.9
   },
   {
-    "id": "30",
+    "_id": "30",
     "image_url": "http://placeimg.com/300/200?38201",
     "name": "Shirt",
     "category": "AAA",
@@ -25,7 +25,7 @@
     "description": "A shirt is a cloth garment for the upper body Originally an undergarment worn exclusively by men, it has become, in American English, a catch-all term for a"
   },
   {
-    "id": "41",
+    "_id": "41",
     "image_url": "http://placeimg.com/300/200?44849",
     "name": "Chips",
     "category": "AAA",
@@ -33,7 +33,7 @@
     "description": "Chips is an entertaining cop buddy flick, rated R and has some adult humor. Both Pena and Shepard play their parts well and along the way the movie pokes fun at ..."
   },
   {
-    "id": "32",
+    "_id": "32",
     "image_url": "http://placeimg.com/300/200?91849",
     "name": "Table",
     "category": "BBB",
@@ -42,7 +42,7 @@
     "description": "a piece of furniture with a flat top and one or more legs, providing a level surface for eating, writing, or working at."
   },
   {
-    "id": "33",
+    "_id": "33",
     "image_url": "http://placeimg.com/300/200?26645",
     "name": "Keyboard",
     "category": "AAA",
@@ -51,7 +51,7 @@
     "description": "Das Keyboard offers badass geeks the ultimate experience with high-performance mechanical keyboards with superior durability, construction, and design."
   },
   {
-    "id": "34",
+    "_id": "34",
     "image_url": "http://placeimg.com/300/200?22329",
     "name": "Bike",
     "category": "CCC",
@@ -60,7 +60,7 @@
     "description": " Il più grande e specializzato noleggio biciclette di tutta Firenze e provincia. Le nostre biciclette vengono rinnovate di anno in anno per dare ..."
   },
   {
-    "id": "35",
+    "_id": "35",
     "image_url": "http://placeimg.com/300/200?6195",
     "name": "Sushi",
     "category": "AAA",
@@ -69,14 +69,14 @@
     "description": "Sushi is a traditional Japanese dish of prepared vinegared rice (鮨飯, sushi-meshi), usually with some sugar and salt, accompanied by a variety of ..."
   },
   {
-    "id": "36",
+    "_id": "36",
     "image_url": "http://placeimg.com/300/200?6668",
     "name": "Chair",
     "category": "BBB",
     "price": 19.9
   },
   {
-    "id": "38",
+    "_id": "38",
     "image_url": "http://placeimg.com/300/200?38802",
     "name": "Mouse",
     "category": "BBB",
@@ -84,7 +84,7 @@
     "price": 10.9
   },
   {
-    "id": "39",
+    "_id": "39",
     "image_url": "http://placeimg.com/300/200?23949",
     "name": "Cheese",
     "category": "AAA",
@@ -93,7 +93,7 @@
   },
 
   {
-    "id": "50",
+    "_id": "50",
     "image_url": "http://placeimg.com/300/200?75121",
     "name": "Chicken",
     "category": "AAA",
@@ -101,7 +101,7 @@
     "price": 5.5
   },
   {
-    "id": "52",
+    "_id": "52",
     "image_url": "http://placeimg.com/300/200?16048",
     "name": "Car",
     "category": "CCC",
@@ -109,7 +109,7 @@
     "price": 19999.99
   },
   {
-    "id": "55",
+    "_id": "55",
     "image_url": "http://placeimg.com/300/200?15621",
     "name": "Pants",
     "category": "BBB",

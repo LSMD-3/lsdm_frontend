@@ -29,7 +29,7 @@ export default function StoreExamplePage() {
   const toggleItemLike = (item: Item) => {
     store.dispatch({
       type: "item/toggleLike",
-      payload: item.id,
+      payload: item._id,
     });
   };
 
@@ -124,15 +124,15 @@ export default function StoreExamplePage() {
           style={{ marginTop: 40 }}
         >
           {items.map((itm) => (
-            <Grid key={itm.id} item xs={6} sm={6} md={3}>
+            <Grid key={itm._id} item xs={6} sm={6} md={3}>
               <CardItem
                 text={itm.name}
                 image={itm.image_url}
                 toggleLike={() => toggleItemLike(itm)}
-                increment={() => (cart[itm.id] ?? 0) < 5 && addToCart(itm)}
+                increment={() => (cart[itm._id] ?? 0) < 5 && addToCart(itm)}
                 decrement={() => decrementCart(itm)}
-                liked={(likes || []).includes(itm.id)}
-                quantity={cart[itm.id]}
+                liked={(likes || []).includes(itm._id)}
+                quantity={cart[itm._id]}
                 limit={5}
               />
             </Grid>

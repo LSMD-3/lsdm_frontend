@@ -12,6 +12,11 @@ const userAccounts = [
     password: "Mariorossi1!",
   },
   {
+    name: "User C",
+    email: "c@c.com",
+    password: "Password1!",
+  },
+  {
     name: "Chef Tony Bianchi",
     email: "tony.bianchi@gmail.com",
     password: "Tonybianchi1!",
