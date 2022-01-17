@@ -1,16 +1,22 @@
 import { RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
-import { Item, Restaurant } from "types";
-import { Container, CssBaseline } from "@mui/material";
+import { Item, Restaurant, Menu, Order } from "types";
+import {
+  Container,
+  CssBaseline,
+  CircularProgress,
+  Button,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import store, { userState, cartState } from "redux/store";
 import { useSnackbar } from "notistack";
 import { ItemList } from "components";
-import { extractItemsFromMenuRecipes } from "helpers";
+import { extractItemsFromMenu } from "helpers";
 
 export default function RestaurantTable() {
   const [restaurant, setrestaurant] = useState<Restaurant>();
+  const [menu, setMenu] = useState<Menu>();
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
   const cart = useSelector(cartState);
@@ -24,7 +30,9 @@ export default function RestaurantTable() {
   const fetchRestaurant = async (restaurantId: string) => {
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
+      const menu = await RestaurantApi.getMenu(restaurantId);
       setrestaurant(restaurant);
+      setMenu(menu);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
@@ -36,8 +44,6 @@ export default function RestaurantTable() {
         <h2>{"Table not found"}</h2>
       </div>
     );
-
-  const allRecipes = user.user.joinedTable.restaurant.menu.recipes;
 
   // TODO NEO4J INTEGRATION
   const toggleItemLike = (item: Item) => {};
@@ -56,11 +62,43 @@ export default function RestaurantTable() {
     });
   };
 
-  const items: Item[] = extractItemsFromMenuRecipes(allRecipes).map((itm) => {
+  if (!menu)
+    return (
+      <CircularProgress
+        style={{ position: "absolute", top: 200, right: "50%" }}
+      />
+    );
+
+  const items: Item[] = extractItemsFromMenu(menu).map((itm) => {
     if (cart) itm.quantity = cart[itm._id];
     itm.note = "";
     return itm;
   });
+
+  const totalRecipes = Object.keys(cart).reduce(
+    (prev, curr) => prev + (cart[curr] ?? 0),
+    0
+  );
+
+  const submitOrder = async () => {
+    const order: Order = [];
+    Object.keys(cart).forEach((id) => {
+      const row = { _id: id, qty: cart[id], note: "" };
+      order.push(row);
+    });
+
+    try {
+      await TableApi.submitOrder(
+        restaurant!._id,
+        String(user.user!.joinedTable!.tableNumber),
+        order
+      );
+      enqueueSnackbar("Ordes submitted", { variant: "success" });
+      store.dispatch({ type: "cart/init", payload: { cart: {} } });
+    } catch (error: any) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+  };
 
   return (
     <Container>
@@ -69,6 +107,11 @@ export default function RestaurantTable() {
         {" Table " + user.user?.joinedTable.tableNumber}
       </h2>
       <h3>Partecipants</h3>
+      {totalRecipes > 0 && (
+        <Button variant="contained" onClick={submitOrder}>
+          Submit Order
+        </Button>
+      )}
       <ItemList
         items={items}
         toggleItemLike={toggleItemLike}

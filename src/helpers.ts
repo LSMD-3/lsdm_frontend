@@ -1,9 +1,9 @@
-import { Item, MenuRecipe } from "types";
+import { Item, Menu } from "types";
 
-export function extractItemsFromMenuRecipes(recipes: MenuRecipe[]): Item[] {
-  return recipes.map((r) => {
+export function extractItemsFromMenu(menu: Menu): Item[] {
+  return menu.recipes.map((r) => {
     return {
-      _id: r._id,
+      _id: r.recipe._id,
       image_url: r.recipe.image_url,
       name: r.recipe.recipe_name,
     };

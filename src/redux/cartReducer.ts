@@ -7,7 +7,8 @@ type actionType =
   | "cart/increaseItemQuantity"
   | "cart/decreaseItemQuantity"
   | "cart/removeItem"
-  | "cart/init";
+  | "cart/init"
+  | "cart/itemNote";
 // sku quantity
 
 interface State {
@@ -68,6 +69,13 @@ export default function cartReducer(
 
     case "cart/init": {
       const state = action.payload;
+      AppStore.setCart(state.cart);
+      return state;
+    }
+
+    case "cart/itemNote": {
+      const payload: { _id: string; note: string } = action.payload;
+      console.log("TODO");
       return state;
     }
 

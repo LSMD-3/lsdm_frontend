@@ -74,7 +74,7 @@ class AppStore {
     });
     store.dispatch({
       type: "cart/init",
-      payload: { carth: this.cart },
+      payload: { cart: this.cart },
     });
   }
 

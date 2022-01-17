@@ -105,7 +105,7 @@ export default function RestaurantLanding() {
             if (!restaurant) return;
             const joinedTable: VirtualTable = {
               restaurant,
-              tableNumber: `table_${selectedTable + 1}`,
+              tableNumber: `${selectedTable + 1}`,
             };
             console.log("USER:");
             console.log(user.user!._id);
