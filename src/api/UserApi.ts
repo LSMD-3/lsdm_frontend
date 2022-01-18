@@ -11,6 +11,11 @@ class UserApi extends BaseResource<User> {
       .get(this.endpoint + `/followers/${userId}`)
       .then(responseErrorCheck);
   }
+
+  async getFollowsEmail(userId: string): Promise<{_id:string, email:string}[]> {
+    return axios.get(this.endpoint + `/followsemails/${userId}`).then(responseErrorCheck)
+  }
+
 }
 
 export default new UserApi();
