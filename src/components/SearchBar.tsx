@@ -4,6 +4,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useSnackbar } from "notistack";
 
 export interface SearchBarProps<T> {
+  label?: string;
   onSelectOption: (option: T) => void;
   searchApi: (text: string) => Promise<T[]>;
   labelExtractor: (option: T) => string;
@@ -15,6 +16,7 @@ export default function SearchBar<T>({
   labelExtractor,
   keyExtractor,
   searchApi,
+  label,
 }: SearchBarProps<T>) {
   const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = React.useState(false);
@@ -92,7 +94,7 @@ export default function SearchBar<T>({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Asynchronous"
+            label={label ?? "Search here"}
             InputProps={{
               ...params.InputProps,
               endAdornment: (
