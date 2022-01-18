@@ -1,5 +1,5 @@
 import axios from "axios";
-axios.defaults.baseURL = "http://localhost:10000/api";
+axios.defaults.baseURL = "http://localhost:5001/api";
 
 export const responseErrorCheck = (res: any) => {
   if (res.status > 199 || res.status < 300) {
