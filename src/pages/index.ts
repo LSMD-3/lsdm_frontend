@@ -10,7 +10,6 @@ export { default as StoreCategorized } from "./StoreCategorized";
 
 export { default as ExamplesPage } from "./examples/ExamplesPage";
 export { default as SpingAnimations } from "./examples/SpringAnimationsExample";
-export { default as Store } from "./examples/StoreExamplePage";
 
 export { default as SimulatorHome } from "./simulator/SimulatorHome";
 

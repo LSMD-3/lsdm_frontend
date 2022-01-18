@@ -2,6 +2,7 @@ import { responseErrorCheck } from "./utils";
 import axios from "axios";
 import { Menu, Restaurant, UserType } from "types";
 import { BaseResource } from "./BaseResource";
+import { RestaurantNameId } from "./Neo4jApi";
 
 export interface MenuCreationPreferences {
   totalRecipes: number;
@@ -54,6 +55,14 @@ class RestaurantApi extends BaseResource<Restaurant> {
   async searchRestaurantByName(text: string): Promise<Restaurant[]> {
     return axios
       .get(this.endpoint + "/search/" + text)
+      .then(responseErrorCheck);
+  }
+
+  async findRestaurantByIds(
+    restaurantIds: string[]
+  ): Promise<RestaurantNameId[]> {
+    return axios
+      .post(this.endpoint + "/restaurantsByIds/", { restaurantIds })
       .then(responseErrorCheck);
   }
 }

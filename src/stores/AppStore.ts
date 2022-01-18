@@ -3,11 +3,13 @@ import store from "redux/store";
 import { sleep } from "utils/helper";
 import { VirtualTable, User, Cart } from "types";
 import axios from "axios";
-import { RestaurantApi } from "api";
+import { Neo4jApi, RestaurantApi } from "api";
+import { LikesState } from "redux/likesReducer";
 
 class AppStore {
   cart: Cart = {};
-  likes: string[] = [];
+
+  likesState: LikesState = { recipesLikes: [], restaurantLikes: [] };
   user?: User;
 
   loadCart = async () => {
@@ -15,7 +17,10 @@ class AppStore {
   };
 
   loadLikes = async () => {
-    this.likes = await Storage.load("@AppStore:likes", this.likes);
+    this.likesState = await Storage.load(
+      "@AppStore:likesState",
+      this.likesState
+    );
   };
 
   loadUser = async () => {
@@ -24,7 +29,13 @@ class AppStore {
 
   // TODO CONNECT API
   fetchCart = async () => {};
-  fetchLikes = async () => {};
+  fetchLikes = async () => {
+    if (this.user) {
+      const restaurantLikes = await Neo4jApi.likesRestaurant(this.user._id);
+      this.likesState.restaurantLikes = restaurantLikes;
+      this.setLikes(this.likesState);
+    }
+  };
   fetchTableJoined = async () => {};
   fetchStaffRestaurant = async () => {
     console.log(this.user);
@@ -63,14 +74,14 @@ class AppStore {
       });
     }
 
-    this.initializeReducers();
     await this.refreshNetworkIntializers();
+    this.initializeReducers();
   }
 
   initializeReducers() {
     store.dispatch({
-      type: "item/initLikes",
-      payload: this.likes,
+      type: "initLikes",
+      payload: this.likesState,
     });
     store.dispatch({
       type: "cart/init",
@@ -83,9 +94,9 @@ class AppStore {
     await Storage.save("@AppStore:cart", cart);
   }
 
-  async setLikes(likes: string[]) {
-    this.likes = likes;
-    await Storage.save("@AppStore:likes", likes);
+  async setLikes(likesState: LikesState) {
+    this.likesState = likesState;
+    await Storage.save("@AppStore:likesState", likesState);
   }
 
   async setUser(user?: User) {

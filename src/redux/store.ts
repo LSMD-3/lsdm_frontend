@@ -1,5 +1,6 @@
 import { createStore } from "redux";
 import { Cart } from "types";
+import { LikesState } from "./likesReducer";
 import rootReducer from "./reducer";
 import { UserData } from "./userReducer";
 
@@ -19,7 +20,7 @@ export const cartState = (state: any) => {
   return state.cartState.cart as Cart;
 };
 export const likeState = (state: any) => {
-  return state.likesState.itemLikes as string[];
+  return state.likesState as LikesState;
 };
 export const userState = (state: any) => {
   return state.userState as UserData;

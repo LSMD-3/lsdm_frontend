@@ -7,7 +7,6 @@ import {
   ExamplesPage,
   Home,
   NotFound,
-  Store,
   StoreCategorized,
   Profile,
   Signup,
@@ -83,7 +82,6 @@ function App() {
           <Routes>
             <Route path="/" element={homeElement} />
             <Route path="menu/:category" element={<StoreCategorized />} />
-            <Route path="menu" element={<Store />} />
             <Route path="dev" element={<DevPage />} />
             <Route path="cart" element={<UserCart />} />
             <Route path="signup" element={<Signup />} />

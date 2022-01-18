@@ -1,38 +1,49 @@
 import AppStore from "stores/AppStore";
 import { sleep } from "utils/helper";
 
-type actionType = "item/toggleLike" | "item/initLikes";
+type actionType = "recipe/toggleLike" | "restaurant/toggleLike" | "initLikes";
 
-interface State {
-  itemLikes: string[];
+export interface LikesState {
+  recipesLikes: string[];
+  restaurantLikes: string[];
 }
 
-const likeState: State = {
-  itemLikes: [],
+const likeState: LikesState = {
+  recipesLikes: [],
+  restaurantLikes: [],
 };
 
 // This method must not raise an exception
-function toggleItemLike(itemLikes: string[], itemId: string) {
-  if (!itemLikes) return { itemLikes: [] };
-
-  if (itemLikes.includes(itemId)) {
-    const filtered = itemLikes.filter(function (el) {
+function toggleItemLike(likes: string[], itemId: string) {
+  if (!likes) return [];
+  if (likes.includes(itemId)) {
+    const filtered = likes.filter(function (el) {
       return el.localeCompare(itemId);
     });
-    AppStore.setLikes([...filtered]);
-    return { itemLikes: [...filtered] };
+    return [...filtered];
   }
+  return [...likes, itemId];
+}
 
-  // TODO put here api calls
-  sleep(100).then(() => {
-    //  se va tutto bene apposto
-    // altrimenti devo revertare lo stato
-  });
+function toggle(
+  state: LikesState,
+  type: "recipe" | "restaurant",
+  itemId: string
+): LikesState {
+  let recipesLikes = state.recipesLikes;
+  let restaurantLikes = state.restaurantLikes;
+  switch (type) {
+    case "recipe":
+      recipesLikes = toggleItemLike(state.recipesLikes, itemId);
+      break;
 
-  AppStore.setLikes([...itemLikes, itemId]);
-  return {
-    itemLikes: [...itemLikes, itemId],
-  };
+    case "restaurant":
+      restaurantLikes = toggleItemLike(state.restaurantLikes, itemId);
+      break;
+  }
+  AppStore.setLikes(likeState);
+
+  return { recipesLikes, restaurantLikes };
 }
 
 export default function likesReducer(
@@ -40,17 +51,21 @@ export default function likesReducer(
   action: { payload: any; type: actionType }
 ) {
   switch (action.type) {
-    case "item/toggleLike": {
-      const itemId = action.payload;
-      if (!itemId) return state;
-      return toggleItemLike(state.itemLikes, itemId);
+    case "recipe/toggleLike": {
+      const recipeId = action.payload;
+      if (!recipeId) return state;
+      return toggle(state, "recipe", recipeId);
     }
 
-    case "item/initLikes": {
-      const itemLikes = action.payload;
-      if (Array.isArray(itemLikes)) return { itemLikes: [...itemLikes] };
-      AppStore.setLikes([]);
-      return { itemLikes: [] };
+    case "restaurant/toggleLike": {
+      const restaurantId = action.payload;
+      if (!restaurantId) return state;
+      return toggle(state, "restaurant", restaurantId);
+    }
+
+    case "initLikes": {
+      const restaurantLikes = action.payload;
+      return restaurantLikes;
     }
 
     default:

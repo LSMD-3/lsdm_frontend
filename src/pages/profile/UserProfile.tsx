@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Button,
@@ -11,21 +11,33 @@ import { Restaurant, User } from "types";
 import { ItemList, SearchBar, DialogManager } from "components";
 import { RestaurantApi, UserApi, Neo4jApi } from "api";
 import { useSnackbar } from "notistack";
-import { userState } from "redux/store";
+import { likeState, userState } from "redux/store";
 import { useSelector } from "react-redux";
 import { UserModal } from "./UserModal";
 import { UserEmail } from "api/UserApi";
+import { RestaurantNameId } from "api/Neo4jApi";
 
 export default function UserProfile() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
+  const likes = useSelector(likeState);
   const [totalFollowers, setTotalFollowers] = useState<number>();
   const [totalFollows, setTotalFollows] = useState<number>();
   const [followingOpen, setFollowingOpen] = useState(false);
   const [followerOpen, setFollowerOpen] = useState(false);
   const [followsEmails, setFollowsEmails] = useState<UserEmail[]>([]);
   const [followerEmails, setFollowerEmails] = useState<UserEmail[]>([]);
+  const [favouriteRestaurants, setFavoriteRestaurants] = useState<
+    RestaurantNameId[]
+  >([]);
+
+  const fetchFavouritesRestaurants = async () => {
+    const favouriteRestaurants = await RestaurantApi.findRestaurantByIds(
+      likes.restaurantLikes
+    );
+    setFavoriteRestaurants(favouriteRestaurants);
+  };
 
   const fetchTotalFollowers = async () => {
     const result = await Neo4jApi.getFollowersCount(user.user!._id);
@@ -56,34 +68,42 @@ export default function UserProfile() {
 
   useEffect(() => {
     fetchTotalFollowers();
+    fetchFavouritesRestaurants();
     fetchTotalFollows();
     return () => {};
   }, []);
 
+  const renderButton = (children: JSX.Element, onClick?: () => void) => {
+    return (
+      <Button onClick={onClick} variant="contained" className="m12 flex">
+        {children}
+      </Button>
+    );
+  };
+
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
-      <h2>Search for Friends here:</h2>
 
       <div>
         <Grid item xs={7} sm={6} md={4}>
-          <Button
-            onClick={() => setFollowerOpen(true)}
-            variant="contained"
-            className="m12 flex"
-          >
-            {totalFollowers && <h4>Followers 👨: {totalFollowers}</h4>}
-          </Button>
+          <h2>Friend List</h2>
 
-          <Button
-            variant="contained"
-            className="m12 flex"
-            onClick={() => setFollowingOpen(true)}
-          >
-            {totalFollows && <h4>Following 👨: {totalFollows}</h4>}
-          </Button>
+          {renderButton(<h4>Followers 👨: {totalFollowers ?? 0}</h4>, () =>
+            setFollowerOpen(true)
+          )}
+          {renderButton(<h4>Following 👨: {totalFollows ?? 0}</h4>, () =>
+            setFollowingOpen(true)
+          )}
 
           <br />
+          <h2>Your Favourite Restaurants</h2>
+          {favouriteRestaurants.map((rest) =>
+            renderButton(<h4>{rest.nome}</h4>, () =>
+              navigate("/restaurant/" + rest._id)
+            )
+          )}
+          <h2>Your Favourite Recepies</h2>
 
           <UserModal
             open={followingOpen || followerOpen}
@@ -97,9 +117,6 @@ export default function UserProfile() {
             title={followingOpen ? "Following Users" : "Your Followers"}
           />
         </Grid>
-
-        <h3>Your Favourite Restaurants</h3>
-        <h3>Your Favourite Recepies</h3>
       </div>
       <div></div>
     </Container>

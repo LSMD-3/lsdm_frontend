@@ -1,30 +1,41 @@
-import { RestaurantApi, TableApi } from "api";
+import { RestaurantApi, TableApi, Neo4jApi } from "api";
 import { CardItem, DialogManager } from "components";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Restaurant, VirtualTable } from "types";
-import { Container, CssBaseline, Grid } from "@mui/material";
-import store from "redux/store";
+import { Container, CssBaseline, Grid, IconButton } from "@mui/material";
+import store, { likeState } from "redux/store";
 import { useSnackbar } from "notistack";
 import { Box } from "@mui/system";
 import { userState } from "redux/store";
 import { useSelector } from "react-redux";
+import { Delete, Favorite } from "@mui/icons-material";
+
 export default function RestaurantLanding() {
   let { restaurantId } = useParams();
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const [selectedTable, setselectedTable] = useState<number>(0);
   const [modalOpen, set_modalOpen] = useState(false);
+  const likes = useSelector(likeState);
+
+  const [isLiked, setIsLiked] = useState(
+    likes.restaurantLikes.includes(restaurantId ?? "")
+  );
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-
   const user = useSelector(userState);
-  console.log("TEST");
-  console.log(user);
 
   useEffect(() => {
     fetchRestaurant();
     return () => {};
   }, []);
+
+  const toggleLike = async () => {
+    if (!user.user || !restaurant) return;
+    setIsLiked(!isLiked);
+    if (!isLiked) Neo4jApi.likeRestaurant(user.user._id, restaurant._id);
+    else Neo4jApi.unlikeRestaurant(user.user._id, restaurant._id);
+  };
 
   const fetchRestaurant = async () => {
     if (!restaurantId) return;
@@ -50,6 +61,14 @@ export default function RestaurantLanding() {
     if (!restaurantId) return <h3>Restaurant Not Found</h3>;
     return (
       <Box sx={{ flexGrow: 1 }} style={{ marginTop: 50 }}>
+        <h1>{restaurant?.nome}</h1>
+        <h4>
+          {restaurant?.tipologia} - {restaurant?.comune}
+          <IconButton onClick={toggleLike}>
+            <Favorite color={isLiked ? "error" : undefined} />
+          </IconButton>
+        </h4>
+
         <h2 style={{ textAlign: "center" }}>Select a table</h2>
         <Grid
           container
