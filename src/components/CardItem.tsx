@@ -17,6 +17,7 @@ interface CardItemProps {
   toggleLike?: () => void;
   increment?: () => void;
   decrement?: () => void;
+  status?: string;
 }
 
 const BORDER_RADIUS = 16;
@@ -32,6 +33,7 @@ export default function CardItem({
   toggleLike,
   increment,
   decrement,
+  status,
 }: CardItemProps) {
   const navigate = useNavigate();
   const showButtons = toggleLike || increment || decrement;
@@ -70,7 +72,16 @@ export default function CardItem({
           {text}
         </Typography>
       )}
-
+      {status && (
+        <Typography
+          id="spring-modal-title"
+          variant="h5"
+          component="h2"
+          style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
+        >
+          {status}
+        </Typography>
+      )}
       {children}
       {showButtons && (
         <div

@@ -83,7 +83,12 @@ export default function RestaurantTable() {
   const submitOrder = async () => {
     const order: Order = [];
     Object.keys(cart).forEach((id) => {
-      const row = { _id: id, qty: cart[id], note: "" };
+      const row = {
+        _id: id,
+        qty: cart[id],
+        note: "",
+        status: "In preparation",
+      };
       order.push(row);
     });
 
@@ -91,6 +96,7 @@ export default function RestaurantTable() {
       await TableApi.submitOrder(
         restaurant!._id,
         String(user.user!.joinedTable!.tableNumber),
+        user.user!._id,
         order
       );
       enqueueSnackbar("Ordes submitted", { variant: "success" });

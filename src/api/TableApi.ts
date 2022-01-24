@@ -23,12 +23,14 @@ class TableApi extends BaseResource<Table> {
   async submitOrder(
     restaurant_id: string,
     table_id: string,
+    user_id: string,
     order: Order
   ): Promise<Category[]> {
     return axios
       .post(this.endpoint + `/order/create_order`, {
         restaurant_id: restaurant_id,
         table_id: table_id,
+        user_id: user_id,
         orders: order,
       })
       .then(responseErrorCheck);
@@ -42,6 +44,19 @@ class TableApi extends BaseResource<Table> {
       .post(this.endpoint + `/get_all_orders`, {
         restaurant_id: restaurant_id,
         table_id: table_id,
+      })
+      .then(responseErrorCheck);
+  }
+  async get_all_user_orders(
+    restaurant_id: string,
+    table_id: string,
+    user_id: string
+  ): Promise<Order[]> {
+    return axios
+      .post(this.endpoint + `/table/get_orders_for_user`, {
+        restaurant_id: restaurant_id,
+        table_id: table_id,
+        user_id: user_id,
       })
       .then(responseErrorCheck);
   }
