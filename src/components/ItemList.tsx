@@ -50,6 +50,7 @@ export default function ItemList({
             liked={likedItems.includes(itm._id)}
             quantity={itm.quantity}
             limit={limit}
+            status={itm.status}
           />
         </Grid>
       ))}

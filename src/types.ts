@@ -70,7 +70,12 @@ export interface VirtualTable {
 
 export type Cart = Record<string, number>;
 
-export type Order = { _id: string; qty: number; note?: string }[];
+export type Order = {
+  _id: string;
+  qty: number;
+  note?: string;
+  status?: string;
+}[];
 
 export interface Item {
   _id: string;
@@ -79,4 +84,5 @@ export interface Item {
   quantity?: number;
   note?: string;
   liked?: boolean;
+  status?: string;
 }

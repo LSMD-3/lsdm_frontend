@@ -35,7 +35,12 @@ export default function UserCart() {
 
   const fetchPreviousOrders = async (restaurantId: string, tableId: string) => {
     try {
-      const orders = await TableApi.get_all_orders(restaurantId, tableId);
+      const orders = await TableApi.get_all_user_orders(
+        restaurantId,
+        tableId,
+        user.user!._id
+      );
+      console.log(orders);
       setOrders(orders);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
@@ -64,6 +69,7 @@ export default function UserCart() {
       await TableApi.submitOrder(
         restaurant!._id,
         String(user.user!.joinedTable!.tableNumber),
+        user.user!._id,
         order
       );
       enqueueSnackbar("Ordes submitted", { variant: "success" });
@@ -141,6 +147,7 @@ export default function UserCart() {
         if (recipeOrdered) {
           itm.quantity = recipeOrdered.qty;
           itm.note = recipeOrdered.note;
+          itm.status = recipeOrdered.status;
         }
         return itm;
       });

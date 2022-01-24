@@ -36,7 +36,7 @@ import { getDesignTokens } from "styles/theme";
 function App() {
   const [loading, setloading] = useState(true);
   const user = useSelector(userState);
-  const [mode, setMode] = React.useState<PaletteMode>("dark");
+  const [mode, setMode] = React.useState<PaletteMode>("light");
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
