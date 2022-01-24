@@ -43,21 +43,3 @@
 # Super Admin
 
 <!--  -->
-
-getFavouritesRecipes(userId)
-
-{
-restaurant_id:"1234567",
-recipes:[
-{
-recipe_id:"123456",
-recipe_name:"pasta"
-},..
-]
-}
-
-1. neo4j -> ids of [{restaurant_id:"123456",recipe_id:"1234567"},...]
-2. mongo -> populate [{restaurant_id:"123456",restaurant_name:"Il gatto",recipe_id:"1234567",recipe_name:"Pasta"},...]
-
-user1 -like-> recipe1
-recipe1 -in-> restaurant1

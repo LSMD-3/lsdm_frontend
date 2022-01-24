@@ -48,9 +48,21 @@ class Neo4jApi {
       .then(responseErrorCheck);
   }
 
-  async likesRestaurant(user: string): Promise<string[]> {
+  async unlikeRecipe(user: string, recipe: string): Promise<void> {
+    return axios
+      .post(this.endpoint + `/unlikerecipe`, { user, recipe })
+      .then(responseErrorCheck);
+  }
+
+  async likedRestaurant(user: string): Promise<string[]> {
     return axios
       .get(this.endpoint + `/likedRestaurant/` + user)
+      .then(responseErrorCheck);
+  }
+
+  async likedRecipe(user: string): Promise<string[]> {
+    return axios
+      .get(this.endpoint + `/likedRecipe/` + user)
       .then(responseErrorCheck);
   }
 }

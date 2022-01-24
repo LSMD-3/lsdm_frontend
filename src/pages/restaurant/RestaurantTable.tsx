@@ -1,4 +1,4 @@
-import { RestaurantApi, TableApi } from "api";
+import { Neo4jApi, RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
 import { Item, Restaurant, Menu, Order } from "types";
@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import store, { userState, cartState } from "redux/store";
+import store, { userState, cartState, likeState } from "redux/store";
 import { useSnackbar } from "notistack";
 import { ItemList } from "components";
 import { extractItemsFromMenu } from "helpers";
@@ -17,13 +17,16 @@ import { extractItemsFromMenu } from "helpers";
 export default function RestaurantTable() {
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const [menu, setMenu] = useState<Menu>();
+  const [items, setItems] = useState<Item[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
   const cart = useSelector(cartState);
+  const liked = useSelector(likeState);
 
   useEffect(() => {
     if (user.user?.joinedTable)
       fetchRestaurant(user.user?.joinedTable.restaurant._id);
+
     return () => {};
   }, []);
 
@@ -33,6 +36,12 @@ export default function RestaurantTable() {
       const menu = await RestaurantApi.getMenu(restaurantId);
       setrestaurant(restaurant);
       setMenu(menu);
+      const items: Item[] = extractItemsFromMenu(menu).map((itm) => {
+        if (cart) itm.quantity = cart[itm._id];
+        itm.note = "";
+        return itm;
+      });
+      setItems(items);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
@@ -46,7 +55,15 @@ export default function RestaurantTable() {
     );
 
   // TODO NEO4J INTEGRATION
-  const toggleItemLike = (item: Item) => {};
+  const toggleItemLike = (item: Item, liked: boolean) => {
+    store.dispatch({ type: "recipe/toggleLike", payload: item._id });
+    if (liked) {
+      Neo4jApi.likeRecipe(user.user!._id, item._id);
+    } else {
+      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+    }
+  };
+
   // TODO REDIS INTEGRATION
   const increment = (item: Item) => {
     store.dispatch({
@@ -68,12 +85,6 @@ export default function RestaurantTable() {
         style={{ position: "absolute", top: 200, right: "50%" }}
       />
     );
-
-  const items: Item[] = extractItemsFromMenu(menu).map((itm) => {
-    if (cart) itm.quantity = cart[itm._id];
-    itm.note = "";
-    return itm;
-  });
 
   const totalRecipes = Object.keys(cart).reduce(
     (prev, curr) => prev + (cart[curr] ?? 0),
@@ -117,6 +128,7 @@ export default function RestaurantTable() {
         toggleItemLike={toggleItemLike}
         increment={increment}
         decrement={decrement}
+        likedItems={liked.recipesLikes}
       />
     </Container>
   );

@@ -4,10 +4,11 @@ import CardItem from "./CardItem";
 
 interface ItemListProps {
   items: Item[];
-  toggleItemLike: (item: Item) => void;
-  increment: (item: Item) => void;
-  decrement: (item: Item) => void;
+  toggleItemLike: (item: Item, liked: boolean) => void;
+  increment?: (item: Item) => void;
+  decrement?: (item: Item) => void;
   limit?: number;
+  likedItems: string[];
 }
 export default function ItemList({
   items,
@@ -15,7 +16,18 @@ export default function ItemList({
   increment,
   decrement,
   limit,
+  likedItems,
 }: ItemListProps) {
+  const inc = (itm: Item) => {
+    if (!increment) return;
+    if (
+      limit === undefined ||
+      (itm.quantity !== undefined && itm.quantity < limit)
+    )
+      increment(itm);
+  };
+  const dec = (itm: Item) => decrement && decrement(itm);
+
   return (
     <Grid
       container
@@ -30,14 +42,12 @@ export default function ItemList({
           <CardItem
             text={itm.name}
             image={itm.image_url}
-            toggleLike={() => toggleItemLike(itm)}
-            increment={() =>
-              (limit === undefined ||
-                (itm.quantity !== undefined && itm.quantity < limit)) &&
-              increment(itm)
+            toggleLike={() =>
+              toggleItemLike(itm, !likedItems.includes(itm._id))
             }
-            decrement={() => decrement(itm)}
-            liked={itm.liked}
+            increment={increment ? () => inc(itm) : undefined}
+            decrement={decrement ? () => dec(itm) : undefined}
+            liked={likedItems.includes(itm._id)}
             quantity={itm.quantity}
             limit={limit}
           />

@@ -7,11 +7,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Restaurant, User } from "types";
+import { Item, Recipe, Restaurant, User } from "types";
 import { ItemList, SearchBar, DialogManager } from "components";
-import { RestaurantApi, UserApi, Neo4jApi } from "api";
+import { RestaurantApi, UserApi, Neo4jApi, RecipeApi } from "api";
 import { useSnackbar } from "notistack";
-import { likeState, userState } from "redux/store";
+import store, { likeState, userState } from "redux/store";
 import { useSelector } from "react-redux";
 import { UserModal } from "./UserModal";
 import { UserEmail } from "api/UserApi";
@@ -31,6 +31,7 @@ export default function UserProfile() {
   const [favouriteRestaurants, setFavoriteRestaurants] = useState<
     RestaurantNameId[]
   >([]);
+  const [favouriteRecipes, setFavouriteRecipes] = useState<Item[]>([]);
 
   const fetchFavouritesRestaurants = async () => {
     const favouriteRestaurants = await RestaurantApi.findRestaurantByIds(
@@ -39,17 +40,31 @@ export default function UserProfile() {
     setFavoriteRestaurants(favouriteRestaurants);
   };
 
+  const fetchFavouritesRecipes = async () => {
+    const favouriteRecipes = await RecipeApi.getRecipesByIds(
+      likes.recipesLikes
+    );
+    const items = favouriteRecipes.map((r) => {
+      const item: Item = {
+        _id: r._id,
+        name: r.recipe_name,
+        image_url: r.image_url,
+        liked: true,
+      };
+      return item;
+    });
+    setFavouriteRecipes(items);
+  };
+
   const fetchTotalFollowers = async () => {
-    const result = await Neo4jApi.getFollowersCount(user.user!._id);
-    setTotalFollowers(result.length);
     const followerEmails = await UserApi.getFollowerEmails(user.user!._id);
+    setTotalFollowers(followerEmails.length);
     setFollowerEmails(followerEmails);
   };
 
   const fetchTotalFollows = async () => {
-    const result = await Neo4jApi.getFollowsCount(user.user!._id);
-    setTotalFollows(result[0]);
     const followsEmails = await UserApi.getFollowsEmail(user.user!._id);
+    setTotalFollows(followsEmails.length);
     setFollowsEmails(followsEmails);
   };
 
@@ -69,6 +84,7 @@ export default function UserProfile() {
   useEffect(() => {
     fetchTotalFollowers();
     fetchFavouritesRestaurants();
+    fetchFavouritesRecipes();
     fetchTotalFollows();
     return () => {};
   }, []);
@@ -79,6 +95,15 @@ export default function UserProfile() {
         {children}
       </Button>
     );
+  };
+
+  const toggleItemLike = (item: Item, liked: boolean) => {
+    store.dispatch({ type: "recipe/toggleLike", payload: item._id });
+    if (liked) {
+      Neo4jApi.likeRecipe(user.user!._id, item._id);
+    } else {
+      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+    }
   };
 
   return (
@@ -103,7 +128,6 @@ export default function UserProfile() {
               navigate("/restaurant/" + rest._id)
             )
           )}
-          <h2>Your Favourite Recepies</h2>
 
           <UserModal
             open={followingOpen || followerOpen}
@@ -117,6 +141,12 @@ export default function UserProfile() {
             title={followingOpen ? "Following Users" : "Your Followers"}
           />
         </Grid>
+        <h2>Your Favourite Recepies</h2>
+        <ItemList
+          items={favouriteRecipes}
+          likedItems={likes.recipesLikes}
+          toggleItemLike={toggleItemLike}
+        />
       </div>
       <div></div>
     </Container>

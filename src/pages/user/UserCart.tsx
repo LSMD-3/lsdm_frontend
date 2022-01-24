@@ -6,9 +6,9 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import store, { userState, cartState } from "redux/store";
+import store, { userState, cartState, likeState } from "redux/store";
 import { MenuRecipe, Restaurant, Menu, Item, Order } from "types";
-import { TableApi, RestaurantApi } from "api";
+import { TableApi, RestaurantApi, Neo4jApi } from "api";
 import { useSnackbar } from "notistack";
 import { ItemList } from "components";
 import { extractItemsFromMenu } from "helpers";
@@ -20,6 +20,7 @@ export default function UserCart() {
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
   const cart = useSelector(cartState);
+  const likes = useSelector(likeState);
 
   useEffect(() => {
     if (user.user?.joinedTable) {
@@ -76,7 +77,14 @@ export default function UserCart() {
   };
 
   // TODO NEO4J INTEGRATION
-  const toggleItemLike = (item: Item) => {};
+  const toggleItemLike = (item: Item, liked: boolean) => {
+    store.dispatch({ type: "recipe/toggleLike", payload: item._id });
+    if (liked) {
+      Neo4jApi.likeRecipe(user.user!._id, item._id);
+    } else {
+      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+    }
+  };
   const increment = (item: Item) => {
     store.dispatch({
       type: "cart/addItem",
@@ -141,6 +149,7 @@ export default function UserCart() {
       <div key={"order_" + i}>
         <h3>Order {i}</h3>
         <ItemList
+          likedItems={likes.recipesLikes}
           items={items}
           toggleItemLike={toggleItemLike}
           increment={increment}
@@ -162,6 +171,7 @@ export default function UserCart() {
       )}
       {!isCartEmpty && (
         <ItemList
+          likedItems={likes.recipesLikes}
           items={items}
           toggleItemLike={toggleItemLike}
           increment={increment}
