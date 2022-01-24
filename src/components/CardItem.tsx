@@ -83,6 +83,16 @@ export default function CardItem({
         </Typography>
       )}
       {children}
+      {!showButtons && quantity && (
+        <Typography
+          id="spring-modal-title"
+          variant="h5"
+          component="h2"
+          style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
+        >
+          {quantity}
+        </Typography>
+      )}
       {showButtons && (
         <div
           style={{

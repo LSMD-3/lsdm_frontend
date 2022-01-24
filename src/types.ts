@@ -77,6 +77,11 @@ export type Order = {
   status?: string;
 }[];
 
+export type TableOrder = {
+  tableId: string;
+  orders: Order[];
+};
+
 export interface Item {
   _id: string;
   name: string;
@@ -85,4 +90,5 @@ export interface Item {
   note?: string;
   liked?: boolean;
   status?: string;
+  invisible?: boolean;
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Category, Table, Order } from "types";
+import { Category, Table, Order, TableOrder } from "types";
 import { BaseResource } from "./BaseResource";
 import { responseErrorCheck } from "./utils";
 
@@ -36,6 +36,22 @@ class TableApi extends BaseResource<Table> {
       .then(responseErrorCheck);
   }
 
+  async updateOrder(
+    restaurant_id: string,
+    table_id: string,
+    order_index: string,
+    order: Order
+  ): Promise<Category[]> {
+    return axios
+      .post(this.endpoint + `/update_order`, {
+        restaurant_id: restaurant_id,
+        table_id: table_id,
+        order_index: order_index,
+        orders: order,
+      })
+      .then(responseErrorCheck);
+  }
+
   async get_all_orders(
     restaurant_id: string,
     table_id: string
@@ -47,6 +63,15 @@ class TableApi extends BaseResource<Table> {
       })
       .then(responseErrorCheck);
   }
+
+  async get_orders_for_chef(restaurant_id: string): Promise<TableOrder[]> {
+    return axios
+      .post(this.endpoint + `/get_orders_for_chef`, {
+        restaurant_id: restaurant_id,
+      })
+      .then(responseErrorCheck);
+  }
+
   async get_all_user_orders(
     restaurant_id: string,
     table_id: string,

@@ -4,11 +4,12 @@ import CardItem from "./CardItem";
 
 interface ItemListProps {
   items: Item[];
-  toggleItemLike: (item: Item, liked: boolean) => void;
+  toggleItemLike?: (item: Item, liked: boolean) => void;
   increment?: (item: Item) => void;
   decrement?: (item: Item) => void;
   limit?: number;
-  likedItems: string[];
+  likedItems?: string[];
+  onClick?: (item: Item) => void;
 }
 export default function ItemList({
   items,
@@ -17,6 +18,7 @@ export default function ItemList({
   decrement,
   limit,
   likedItems,
+  onClick,
 }: ItemListProps) {
   const inc = (itm: Item) => {
     if (!increment) return;
@@ -28,6 +30,11 @@ export default function ItemList({
   };
   const dec = (itm: Item) => decrement && decrement(itm);
 
+  const toggle = (itm: Item) =>
+    toggleItemLike &&
+    likedItems &&
+    toggleItemLike(itm, !likedItems.includes(itm._id));
+
   return (
     <Grid
       container
@@ -37,23 +44,24 @@ export default function ItemList({
       justifyContent="center"
       style={{ marginTop: 40 }}
     >
-      {items.map((itm) => (
-        <Grid key={itm._id} item xs={6} sm={6} md={3}>
-          <CardItem
-            text={itm.name}
-            image={itm.image_url}
-            toggleLike={() =>
-              toggleItemLike(itm, !likedItems.includes(itm._id))
-            }
-            increment={increment ? () => inc(itm) : undefined}
-            decrement={decrement ? () => dec(itm) : undefined}
-            liked={likedItems.includes(itm._id)}
-            quantity={itm.quantity}
-            limit={limit}
-            status={itm.status}
-          />
-        </Grid>
-      ))}
+      {items
+        .filter((itm) => !itm.invisible)
+        .map((itm) => (
+          <Grid key={itm._id} item xs={6} sm={6} md={3}>
+            <CardItem
+              text={itm.name}
+              image={itm.image_url}
+              toggleLike={toggleItemLike ? () => toggle(itm) : undefined}
+              increment={increment ? () => inc(itm) : undefined}
+              decrement={decrement ? () => dec(itm) : undefined}
+              liked={likedItems ? likedItems.includes(itm._id) : undefined}
+              quantity={itm.quantity}
+              limit={limit}
+              status={itm.status}
+              onClick={onClick ? () => onClick(itm) : undefined}
+            />
+          </Grid>
+        ))}
     </Grid>
   );
 }

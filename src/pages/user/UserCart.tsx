@@ -61,7 +61,12 @@ export default function UserCart() {
   const submitOrder = async () => {
     const order: Order = [];
     Object.keys(cart).forEach((id) => {
-      const row = { _id: id, qty: cart[id], note: "" };
+      const row = {
+        _id: id,
+        qty: cart[id],
+        note: "",
+        status: "In preparation",
+      };
       order.push(row);
     });
 
@@ -105,6 +110,14 @@ export default function UserCart() {
     });
   };
 
+  if (!user.user?.joinedTable)
+    return (
+      <Container>
+        <CssBaseline />
+        <h2>Join a restaurant to see cart</h2>
+      </Container>
+    );
+
   if (!menu)
     return (
       <CircularProgress
@@ -124,14 +137,6 @@ export default function UserCart() {
     (prev, curr) => prev + (cart[curr] ?? 0),
     0
   );
-
-  if (!user.user?.joinedTable)
-    return (
-      <Container>
-        <CssBaseline />
-        <h2>Join a restaurant to see cart</h2>
-      </Container>
-    );
 
   const isCartEmpty = !cart || Object.keys(cart).length === 0;
   let cartRecipes: MenuRecipe[] = [];
