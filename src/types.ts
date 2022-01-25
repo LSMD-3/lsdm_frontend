@@ -91,4 +91,5 @@ export interface Item {
   liked?: boolean;
   status?: string;
   invisible?: boolean;
+  index?: number;
 }

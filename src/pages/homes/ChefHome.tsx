@@ -73,19 +73,22 @@ export default function ChefHome() {
 
   const onRecipeClick = async (item: Item, order: Order, tableId: string) => {
     let order_index = 0;
+    console.log(order);
+    console.log("HERE");
+    console.log(item.index);
     order.forEach((o, index) => {
       if (o._id === item._id && o.status === "In preparation") {
         o.status = "To be delivered";
-        order_index = index + 1;
       }
     });
     const restaurantId = user.user!.joinedRestaurant!._id;
     console.log(order_index);
+    console.log(order);
     try {
       await TableApi.updateOrder(
         restaurantId,
         tableId,
-        String(order_index),
+        String(item.index),
         order
       );
       fetchOrders(restaurantId);
@@ -94,7 +97,7 @@ export default function ChefHome() {
     }
   };
 
-  const renderOrder = (order: Order, tableId: string) => {
+  const renderOrder = (order: Order, tableId: string, index: number) => {
     if (!menu) return <></>;
     const recipeIds = order.map((o) => o._id);
     const items: Item[] = extractItemsFromMenu(menu)
@@ -106,6 +109,7 @@ export default function ChefHome() {
           itm.note = recipeOrdered.note;
           itm.status = recipeOrdered.status;
           itm.invisible = recipeOrdered.status !== "In preparation";
+          itm.index = index;
         }
         return itm;
       });
@@ -127,7 +131,7 @@ export default function ChefHome() {
       <div key={o.tableId}>
         {orders &&
           orders.map((order, i) => {
-            return renderOrder(order, o.tableId);
+            return renderOrder(order, o.tableId, i);
           })}
       </div>
     );
