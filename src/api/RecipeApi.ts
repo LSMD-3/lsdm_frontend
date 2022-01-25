@@ -10,6 +10,12 @@ class RecipeApi extends BaseResource<Recipe> {
     return axios.get(this.endpoint + `/categories`).then(responseErrorCheck);
   }
 
+  async sample(limit: number): Promise<Recipe[]> {
+    return axios
+      .get(this.endpoint + `/sample/${limit}`)
+      .then(responseErrorCheck);
+  }
+
   async getRecipesByIds(recipeIds: string[]): Promise<Recipe[]> {
     return axios
       .post(this.endpoint + "/getrecipebyid", { recipeIds })

@@ -65,6 +65,18 @@ class RestaurantApi extends BaseResource<Restaurant> {
       .post(this.endpoint + "/restaurantsByIds/", { restaurantIds })
       .then(responseErrorCheck);
   }
+
+  async noMenuRestaurant(limit: number): Promise<Restaurant[]> {
+    return axios
+      .get(this.endpoint + "/noMenu/" + limit)
+      .then(responseErrorCheck);
+  }
+
+  async withMenuRestaurant(limit: number): Promise<Restaurant[]> {
+    return axios
+      .get(this.endpoint + "/withMenu/" + limit)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new RestaurantApi();

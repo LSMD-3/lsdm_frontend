@@ -19,6 +19,12 @@ class UserApi extends BaseResource<User> {
       .get(this.endpoint + `/followsemails/${userId}`)
       .then(responseErrorCheck);
   }
+
+  async getNormalUsers(limit: number) {
+    return axios
+      .get(this.endpoint + `/normalUser/${limit}`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new UserApi();
