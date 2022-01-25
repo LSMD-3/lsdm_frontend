@@ -43,14 +43,8 @@ const USER_PAGES: Pages = [
   { title: "Profile", url: "/profile" },
   { title: "Dev", url: "/dev" },
 ];
-const CHEF_PAGES: Pages = [
-  { title: "Profile", url: "/profile" },
-  { title: "Dev", url: "/dev" },
-];
-const WAITER_PAGES: Pages = [
-  { title: "Profile", url: "/profile" },
-  { title: "Dev", url: "/dev" },
-];
+const CHEF_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
+const WAITER_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
 const ADMIN_PAGES: Pages = [
   { title: "Profile", url: "/profile" },
   { title: "Dev", url: "/dev" },

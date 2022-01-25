@@ -1,15 +1,24 @@
-import { RestaurantApi } from "api";
-import { Table } from "components";
+import { RestaurantApi, TableApi } from "api";
+import { DialogManager, Table } from "components";
 import { TableColumn } from "components/Table";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
+import {
+  Button,
+  Container,
+  CssBaseline,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import { ModeEdit, MenuBook } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { userState } from "redux/store";
+import { useSnackbar } from "notistack";
 
 export default function RestaurantsHome() {
   const navigate = useNavigate();
+  const [modalOpen, setmodalOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const user = useSelector(userState);
 
@@ -52,7 +61,31 @@ export default function RestaurantsHome() {
   const renderSuperAdmin = () => (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
+      <Button onClick={() => setmodalOpen(true)}>
+        Backup Restaurant from redis
+      </Button>
+
       <Table title="Restaurants" columns={columns} api={RestaurantApi} />
+
+      <DialogManager
+        type="confirm"
+        open={modalOpen}
+        confirmText="YES"
+        handleClose={() => setmodalOpen(false)}
+        dialogProps={{
+          title: "Are you sure?",
+          description: "Accept to move redis historical data into mongo",
+          onConfirm: async () => {
+            try {
+              setmodalOpen(false);
+              await TableApi.backupFromRedis();
+              enqueueSnackbar("Backup completed", { variant: "success" });
+            } catch (error) {
+              enqueueSnackbar("Backup failed", { variant: "error" });
+            }
+          },
+        }}
+      />
     </Container>
   );
 

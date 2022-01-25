@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Category, Table, Order, TableOrder } from "types";
+import { Category, Table, Order, TableOrder, User } from "types";
 import { BaseResource } from "./BaseResource";
 import { responseErrorCheck } from "./utils";
 
@@ -83,6 +83,33 @@ class TableApi extends BaseResource<Table> {
         table_id: table_id,
         user_id: user_id,
       })
+      .then(responseErrorCheck);
+  }
+
+  async get_table_users(
+    restaurant_id: string,
+    table_id: string
+  ): Promise<User[]> {
+    return axios
+      .post(this.endpoint + `/get_table_users`, {
+        restaurant_id,
+        table_id,
+      })
+      .then(responseErrorCheck);
+  }
+
+  async checkout_Table(restaurant_id: string, table_id: string): Promise<void> {
+    return axios
+      .post(this.endpoint + `/table/check_out`, {
+        restaurant_id,
+        table_id,
+      })
+      .then(responseErrorCheck);
+  }
+
+  async backupFromRedis(): Promise<void> {
+    return axios
+      .post(`/tableSession/backupFromRedis`, {})
       .then(responseErrorCheck);
   }
 }

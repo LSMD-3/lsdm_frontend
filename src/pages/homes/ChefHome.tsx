@@ -100,6 +100,8 @@ export default function ChefHome() {
   const renderOrder = (order: Order, tableId: string, index: number) => {
     if (!menu) return <></>;
     const recipeIds = order.map((o) => o._id);
+    let hasItemsInPreparation = false;
+
     const items: Item[] = extractItemsFromMenu(menu)
       .filter((itm) => recipeIds.includes(itm._id))
       .map((itm) => {
@@ -110,9 +112,13 @@ export default function ChefHome() {
           itm.status = recipeOrdered.status;
           itm.invisible = recipeOrdered.status !== "In preparation";
           itm.index = index;
+          if (recipeOrdered.status === "In preparation")
+            hasItemsInPreparation = true;
         }
         return itm;
       });
+
+    if (!hasItemsInPreparation) return <></>;
 
     return (
       <div key={"table_" + tableId}>

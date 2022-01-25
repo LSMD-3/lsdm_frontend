@@ -87,6 +87,20 @@ export default function UserCart() {
     }
   };
 
+  const closeTableSession = async () => {
+    const restaurantId = user.user!.joinedTable!.restaurant._id;
+    const tableId = user.user!.joinedTable!.tableNumber;
+
+    try {
+      await TableApi.checkout_Table(restaurantId, tableId);
+
+      enqueueSnackbar("Table Closed", { variant: "success" });
+      store.dispatch({ type: "table/left", payload: {} });
+    } catch (error: any) {
+      enqueueSnackbar(error, { variant: "error" });
+    }
+  };
+
   // TODO NEO4J INTEGRATION
   const toggleItemLike = (item: Item, liked: boolean) => {
     store.dispatch({ type: "recipe/toggleLike", payload: item._id });
@@ -139,9 +153,6 @@ export default function UserCart() {
   );
 
   const isCartEmpty = !cart || Object.keys(cart).length === 0;
-  let cartRecipes: MenuRecipe[] = [];
-
-  console.log(cartRecipes);
 
   const renderOrder = (order: Order, i: number) => {
     const recipeIds = order.map((o) => o._id);
@@ -175,7 +186,18 @@ export default function UserCart() {
     <Container>
       <CssBaseline />
       <h2>User cart</h2>
-      {isCartEmpty && <h3>Cart is empty</h3>}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        {isCartEmpty && <h3>Cart is empty</h3>}
+        <Button variant="contained" onClick={closeTableSession}>
+          Close Table
+        </Button>
+      </div>
       {totalRecipes > 0 && (
         <Button variant="contained" onClick={submitOrder}>
           Submit Order

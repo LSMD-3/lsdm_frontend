@@ -8,6 +8,7 @@ type actionType =
   | "user/logout"
   | "user/init"
   | "table/join"
+  | "table/left"
   | "restaurant/join";
 
 export interface UserData {
@@ -49,6 +50,12 @@ export default function userReducer(
     case "restaurant/join": {
       const joinedRestaurant = action.payload;
       state.user!.joinedRestaurant = joinedRestaurant;
+      AppStore.setUser(state.user);
+      return { ...state };
+    }
+
+    case "table/left": {
+      state.user!.joinedTable = undefined;
       AppStore.setUser(state.user);
       return { ...state };
     }
