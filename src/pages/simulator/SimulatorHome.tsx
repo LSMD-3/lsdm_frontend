@@ -11,14 +11,16 @@ const SIMULATOR_CONFIG = {
   RECIPES: 5000,
   MAX_QUANTITY_OF_RECIPE: 4,
   MAX_QUANTITY_OF_ORDERS: 5,
-  CLOSE_TABLES: true,
-  JOIN_TABLE: true,
+  CLOSE_TABLES: false,
+  JOIN_TABLE: false,
 };
 
 // const N = [
 //   10, 25, 50, 100, 200, 300, 500, 650, 800, 1000, 1200, 1500, 1800, 2200, 2500,
 // ];
-const N = [1000];
+const N = [
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+];
 
 interface RecipeGroup {
   _id: string;
@@ -105,8 +107,6 @@ export default function SimulatorHome() {
   ) => {
     const order: Order = [];
     const recipeCount = getRandomNumberInRange(1, 6);
-
-    if (recipeCount === 0) console.log("cazzo");
 
     for (let i = 0; i < recipeCount; i++) {
       const recipe = recipes[getRandomNumberInRange(0, recipes.length)];
@@ -300,7 +300,7 @@ export default function SimulatorHome() {
             onClick={async () => {
               try {
                 const start = new Date();
-                const res = await RestaurantApi.restaurantRanking();
+                const res = await RestaurantApi.restaurantRanking("Piacenza");
                 const time = new Date().getTime() - start.getTime();
                 const message = res.map((r) => {
                   return `${r.nome}: ${r.avgPrice?.toFixed(2)}€`;
