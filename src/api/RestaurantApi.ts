@@ -77,6 +77,13 @@ class RestaurantApi extends BaseResource<Restaurant> {
       .get(this.endpoint + "/withMenu/" + limit)
       .then(responseErrorCheck);
   }
+
+  async restaurantRanking(comune?: string): Promise<Restaurant[]> {
+    const comuneQuery = comune ? `?comune=${comune}` : "";
+    return axios
+      .get(this.endpoint + "/restaurantRanking" + comuneQuery)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new RestaurantApi();

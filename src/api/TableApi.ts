@@ -112,6 +112,18 @@ class TableApi extends BaseResource<Table> {
       .post(`/tableSession/backupFromRedis`, {})
       .then(responseErrorCheck);
   }
+
+  async recipeRanking(reduced: boolean): Promise<any> {
+    return axios
+      .get(`/tableSession/recipeRanking?reduced=${reduced}`)
+      .then(responseErrorCheck);
+  }
+
+  async userRanking(reduced: boolean): Promise<any> {
+    return axios
+      .get(`/tableSession/userRanking?reduced=${reduced}`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new TableApi();

@@ -29,6 +29,7 @@ export interface Restaurant {
   cap: string;
   tables_number: number;
   menu: Menu;
+  avgPrice?: number;
 }
 
 export interface Recipe {

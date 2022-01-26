@@ -1,5 +1,6 @@
 import numpy as np
-
+import json
+import math
 a = np.matrix([
     [28, 0.092],
     [62, 0.137],
@@ -58,10 +59,11 @@ d = np.matrix([
 ])
 
 
-for (idx, v) in enumerate(a):
-    sum = a[idx] + b[idx] + c[idx] + d[idx]
-    avg = sum/4
-    print(avg)
+def calculateAverage():
+    for (idx, v) in enumerate(a):
+        sum = a[idx] + b[idx] + c[idx] + d[idx]
+        avg = sum/4
+        print(avg)
 
 
 # 24,75;0,072
@@ -75,3 +77,25 @@ for (idx, v) in enumerate(a):
 # 2000,75;4,5515
 # 2512,75;6,5365
 # 2998,0;8,24125
+
+
+def countFrequency(f, scale_factor=1):
+    recipes = json.load(f)
+
+    freq = {}
+    for _item in recipes:
+
+        item = math.trunc(_item["total"]/scale_factor)
+        if (item in freq):
+            freq[item] += 1
+        else:
+            freq[item] = 1
+
+    for key, value in freq.items():
+        print("% d : % d" % (key, value))
+
+
+f1 = open("mostEatenRecipes.json")
+f2 = open("userRecipesEatent.json")
+
+countFrequency(f2, 15)

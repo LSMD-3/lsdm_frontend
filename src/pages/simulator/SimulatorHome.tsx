@@ -11,13 +11,14 @@ const SIMULATOR_CONFIG = {
   RECIPES: 5000,
   MAX_QUANTITY_OF_RECIPE: 4,
   MAX_QUANTITY_OF_ORDERS: 5,
-  CLOSE_TABLES: false,
-  JOIN_TABLE: false,
+  CLOSE_TABLES: true,
+  JOIN_TABLE: true,
 };
 
-const N = [
-  10, 25, 50, 100, 200, 300, 500, 650, 800, 1000, 1200, 1500, 1800, 2200, 2500,
-];
+// const N = [
+//   10, 25, 50, 100, 200, 300, 500, 650, 800, 1000, 1200, 1500, 1800, 2200, 2500,
+// ];
+const N = [1000];
 
 export default function SimulatorHome() {
   const { enqueueSnackbar } = useSnackbar();
@@ -98,7 +99,10 @@ export default function SimulatorHome() {
     recipes: Recipe[]
   ) => {
     const order: Order = [];
-    const recipeCount = getRandomNumberInRange(0, 6);
+    const recipeCount = getRandomNumberInRange(1, 6);
+
+    if (recipeCount === 0) console.log("cazzo");
+
     for (let i = 0; i < recipeCount; i++) {
       const recipe = recipes[getRandomNumberInRange(0, recipes.length)];
       const row = {
@@ -113,6 +117,7 @@ export default function SimulatorHome() {
       await TableApi.submitOrder(restaurantId, tableId, userId, order);
       return true;
     } catch (error: any) {
+      console.log(error);
       return false;
     }
   };
@@ -210,7 +215,7 @@ export default function SimulatorHome() {
       <ul>
         <li>
           <b>Bulk Menu Generator</b>: Find all restaurants and Generate a random
-          menu for all
+          menu for first 100 restaurants without menu
           <Button onClick={startMenuGeneration}>Do it</Button>
         </li>
 
@@ -225,8 +230,90 @@ export default function SimulatorHome() {
           <br /> make 1-3 orders per user
           <Button onClick={startSimulation}>Do it</Button>
         </li>
+        <li>
+          <b>Backup Restaurant from redis to Mongo</b>
+          <Button
+            onClick={async () => {
+              try {
+                await TableApi.backupFromRedis();
+                enqueueSnackbar("Backup completed", { variant: "success" });
+              } catch (error) {
+                enqueueSnackbar("Backup failed", { variant: "error" });
+              }
+            }}
+          >
+            Do it
+          </Button>
+        </li>
+        <li>
+          <b>Get Recipe Ranking</b>
+          <Button
+            onClick={async () => {
+              try {
+                const start = new Date();
+                const res = await TableApi.recipeRanking(true);
+                const time = new Date().getTime() - start.getTime();
+
+                enqueueSnackbar(`Completed in ${time} ms`, {
+                  variant: "success",
+                });
+              } catch (error) {
+                enqueueSnackbar("Backup failed", { variant: "error" });
+              }
+            }}
+          >
+            Do it
+          </Button>
+        </li>
+
+        <li>
+          <b>Get User Ranking</b>
+          <Button
+            onClick={async () => {
+              try {
+                const start = new Date();
+                const res = await TableApi.userRanking(true);
+                const time = new Date().getTime() - start.getTime();
+
+                enqueueSnackbar(`Completed in ${time} ms`, {
+                  variant: "success",
+                });
+              } catch (error) {
+                enqueueSnackbar("Backup failed", { variant: "error" });
+              }
+            }}
+          >
+            Do it
+          </Button>
+        </li>
+
+        <li>
+          <b>Get Restaurant Ranking</b>
+          <Button
+            onClick={async () => {
+              try {
+                const start = new Date();
+                const res = await RestaurantApi.restaurantRanking();
+                const time = new Date().getTime() - start.getTime();
+                const message = res.map((r) => {
+                  return `${r.nome}: ${r.avgPrice?.toFixed(2)}€`;
+                });
+                setmessage(
+                  message.reduce((curr, acc) => curr + acc + "\n", "")
+                );
+                enqueueSnackbar(`Completed in ${time} ms`, {
+                  variant: "success",
+                });
+              } catch (error) {
+                enqueueSnackbar("Backup failed", { variant: "error" });
+              }
+            }}
+          >
+            Do it
+          </Button>
+        </li>
       </ul>
-      <h4>{message}</h4>
+      <h4 style={{ whiteSpace: "pre-line" }}>{message}</h4>
     </Container>
   );
 }

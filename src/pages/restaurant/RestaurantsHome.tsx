@@ -17,7 +17,6 @@ import { useSnackbar } from "notistack";
 
 export default function RestaurantsHome() {
   const navigate = useNavigate();
-  const [modalOpen, setmodalOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
   const user = useSelector(userState);
@@ -61,31 +60,8 @@ export default function RestaurantsHome() {
   const renderSuperAdmin = () => (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
-      <Button onClick={() => setmodalOpen(true)}>
-        Backup Restaurant from redis
-      </Button>
 
       <Table title="Restaurants" columns={columns} api={RestaurantApi} />
-
-      <DialogManager
-        type="confirm"
-        open={modalOpen}
-        confirmText="YES"
-        handleClose={() => setmodalOpen(false)}
-        dialogProps={{
-          title: "Are you sure?",
-          description: "Accept to move redis historical data into mongo",
-          onConfirm: async () => {
-            try {
-              setmodalOpen(false);
-              await TableApi.backupFromRedis();
-              enqueueSnackbar("Backup completed", { variant: "success" });
-            } catch (error) {
-              enqueueSnackbar("Backup failed", { variant: "error" });
-            }
-          },
-        }}
-      />
     </Container>
   );
 
