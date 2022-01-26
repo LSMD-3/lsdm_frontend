@@ -21,6 +21,12 @@ class RecipeApi extends BaseResource<Recipe> {
       .post(this.endpoint + "/getrecipebyid", { recipeIds })
       .then(responseErrorCheck);
   }
+
+  async getRecipesByIngredient(ingredient: string): Promise<any> {
+    return axios
+      .get(this.endpoint + "/byIngredient/" + ingredient)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new RecipeApi();

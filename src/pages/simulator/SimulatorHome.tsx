@@ -20,6 +20,11 @@ const SIMULATOR_CONFIG = {
 // ];
 const N = [1000];
 
+interface RecipeGroup {
+  _id: string;
+  recipes: Recipe[];
+}
+
 export default function SimulatorHome() {
   const { enqueueSnackbar } = useSnackbar();
   const [message, setmessage] = useState("");
@@ -211,7 +216,9 @@ export default function SimulatorHome() {
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
-      Todo list
+      {message.length > 0 && (
+        <Button onClick={() => setmessage("")}>Clear Message</Button>
+      )}
       <ul>
         <li>
           <b>Bulk Menu Generator</b>: Find all restaurants and Generate a random
@@ -301,6 +308,40 @@ export default function SimulatorHome() {
                 setmessage(
                   message.reduce((curr, acc) => curr + acc + "\n", "")
                 );
+                enqueueSnackbar(`Completed in ${time} ms`, {
+                  variant: "success",
+                });
+              } catch (error) {
+                enqueueSnackbar("Backup failed", { variant: "error" });
+              }
+            }}
+          >
+            Do it
+          </Button>
+        </li>
+
+        <li>
+          <b>Get Recipes by ingredient "salmone"</b>
+          <Button
+            onClick={async () => {
+              try {
+                const start = new Date();
+                const res: RecipeGroup[] =
+                  await RecipeApi.getRecipesByIngredient("salmone");
+                const time = new Date().getTime() - start.getTime();
+
+                let message = "";
+                res.forEach((r) => {
+                  message += "\n\n" + r._id + "\n";
+                  r.recipes.forEach((recipe, i) => {
+                    message +=
+                      recipe.recipe_name +
+                      (r.recipes.length - 1 === i ? "" : " - ");
+                  });
+                });
+
+                setmessage(message);
+
                 enqueueSnackbar(`Completed in ${time} ms`, {
                   variant: "success",
                 });
