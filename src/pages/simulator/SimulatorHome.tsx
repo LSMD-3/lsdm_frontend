@@ -11,15 +11,34 @@ const SIMULATOR_CONFIG = {
   RECIPES: 5000,
   MAX_QUANTITY_OF_RECIPE: 4,
   MAX_QUANTITY_OF_ORDERS: 5,
-  CLOSE_TABLES: false,
-  JOIN_TABLE: false,
+  CLOSE_TABLES: true,
+  JOIN_TABLE: true,
 };
 
 // const N = [
 //   10, 25, 50, 100, 200, 300, 500, 650, 800, 1000, 1200, 1500, 1800, 2200, 2500,
 // ];
+
+// 30k
 const N = [
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+
 ];
 
 interface RecipeGroup {
@@ -258,7 +277,7 @@ export default function SimulatorHome() {
             onClick={async () => {
               try {
                 const start = new Date();
-                const res = await TableApi.recipeRanking(true);
+                const res = await TableApi.recipeRanking(false);
                 const time = new Date().getTime() - start.getTime();
 
                 enqueueSnackbar(`Completed in ${time} ms`, {
@@ -279,7 +298,7 @@ export default function SimulatorHome() {
             onClick={async () => {
               try {
                 const start = new Date();
-                const res = await TableApi.userRanking(true);
+                const res = await TableApi.userRanking(false);
                 const time = new Date().getTime() - start.getTime();
 
                 enqueueSnackbar(`Completed in ${time} ms`, {

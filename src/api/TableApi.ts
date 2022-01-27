@@ -115,13 +115,13 @@ class TableApi extends BaseResource<Table> {
 
   async recipeRanking(reduced: boolean): Promise<any> {
     return axios
-      .get(`/tableSession/recipeRanking?reduced=${reduced}`)
+      .get(`/tableSession/recipeRanking/${reduced}`)
       .then(responseErrorCheck);
   }
 
   async userRanking(reduced: boolean): Promise<any> {
     return axios
-      .get(`/tableSession/userRanking?reduced=${reduced}`)
+      .get(`/tableSession/userRanking/${reduced}`)
       .then(responseErrorCheck);
   }
 }
