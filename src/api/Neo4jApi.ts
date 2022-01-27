@@ -65,6 +65,24 @@ class Neo4jApi {
       .get(this.endpoint + `/likedRecipe/` + user)
       .then(responseErrorCheck);
   }
+
+  async suggestFriends(userId: string): Promise<void> {
+    return axios
+      .get(this.endpoint + `/suggestfriends/${userId}`)
+      .then(responseErrorCheck);
+  }
+
+  async suggestrestaurants(userId: string): Promise<void> {
+    return axios
+      .get(this.endpoint + `/suggestrestaurants/${userId}`)
+      .then(responseErrorCheck);
+  }
+
+  async suggestRecipes(userId: string): Promise<void> {
+    return axios
+      .get(this.endpoint + `/suggestrecipes/${userId}`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new Neo4jApi();

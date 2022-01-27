@@ -120,6 +120,15 @@ export default function UserProfile() {
           {renderButton(<h4>Following 👨: {totalFollows ?? 0}</h4>, () =>
             setFollowingOpen(true)
           )}
+          {renderButton(<h4>Get Suggested friends</h4>, () =>
+            Neo4jApi.suggestFriends(user.user!._id)
+          )}
+          {renderButton(<h4>Get Suggested restaurants</h4>, () =>
+            Neo4jApi.suggestrestaurants(user.user!._id)
+          )}
+          {renderButton(<h4>Get Suggested recipes</h4>, () =>
+            Neo4jApi.suggestRecipes(user.user!._id)
+          )}
 
           <br />
           <h2>Your Favourite Restaurants</h2>
