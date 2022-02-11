@@ -33,8 +33,13 @@ export default function RestaurantLanding() {
   const toggleLike = async () => {
     if (!user.user || !restaurant) return;
     setIsLiked(!isLiked);
-    if (!isLiked) Neo4jApi.likeRestaurant(user.user._id, restaurant._id);
-    else Neo4jApi.unlikeRestaurant(user.user._id, restaurant._id);
+    if (!isLiked) {
+      Neo4jApi.likeRestaurant(user.user._id, restaurant._id);
+      enqueueSnackbar("Restaurant Liked", { variant: "success" });
+    } else {
+      Neo4jApi.unlikeRestaurant(user.user._id, restaurant._id);
+      enqueueSnackbar("Restaurant UnLiked", { variant: "error" });
+    }
   };
 
   const fetchRestaurant = async () => {
@@ -61,13 +66,14 @@ export default function RestaurantLanding() {
     if (!restaurantId) return <h3>Restaurant Not Found</h3>;
     return (
       <Box sx={{ flexGrow: 1 }} style={{ marginTop: 50 }}>
-        <h1>{restaurant?.nome}</h1>
-        <h4>
-          {restaurant?.tipologia} - {restaurant?.comune}
+        <h1>
+          {restaurant?.nome}{" "}
           <IconButton onClick={toggleLike}>
             <Favorite color={isLiked ? "error" : undefined} />
           </IconButton>
-        </h4>
+        </h1>
+        <h4>Tipologia: {restaurant?.tipologia}</h4>
+        <h4>Comune: {restaurant?.comune}</h4>
 
         <h2 style={{ textAlign: "center" }}>Select a table</h2>
         <Grid
