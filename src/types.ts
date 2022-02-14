@@ -28,16 +28,21 @@ export interface Restaurant {
   provincia: string;
   cap: string;
   tables_number: number;
-  menu: Menu;
+  menus: Menu[];
   avgPrice?: number;
+  staff: {
+    chefs: User[];
+    waiters: User[];
+    admins: User[];
+  };
 }
 
 export interface Recipe {
   _id: string;
   recipe_name: string;
-  recipe_link: string;
+  recipe_link?: string;
   image_url?: string;
-  ingredients: { name: string; url: string }[];
+  ingredients: string[];
 }
 
 export interface Category {

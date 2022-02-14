@@ -23,6 +23,9 @@ import {
   RestaurantTable,
   DevPage,
   UserCart,
+  RecipeCreate,
+  RestaurantCreate,
+  UserCreate,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -88,6 +91,7 @@ function App() {
             <Route path="signin" element={<Signin />} />
             <Route path="simulator" element={<SimulatorHome />} />
             <Route path="restaurants" element={<RestaurantsHome />} />
+            <Route path="restaurant/create" element={<RestaurantCreate />} />
             <Route
               path="restaurant/:restaurantId/edit"
               element={<RestaurantEdit />}
@@ -102,9 +106,11 @@ function App() {
               element={<RestaurantLanding />}
             />
             <Route path="users" element={<UsersHome />} />
+            <Route path="user/create" element={<UserCreate />} />
             <Route path="user/:userId/edit" element={<UserEdit />} />
             <Route path="user/:userId" element={<UserOperation />} />
             <Route path="recipes" element={<RecipesHome />} />
+            <Route path="recipe/create" element={<RecipeCreate />} />
             <Route path="recipe/:recipeId/edit" element={<RecipeEdit />} />
             <Route
               path="profile"

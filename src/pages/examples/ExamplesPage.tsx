@@ -7,7 +7,6 @@ import {
   CssBaseline,
 } from "@mui/material";
 import { FlexBox, Footer, DialogManager, CardItem } from "components";
-import MultiDialogExample from "./MultiDialogExample";
 import { useState } from "react";
 import HooksExample from "./HooksExample";
 import SpringAnimationsExample from "./SpringAnimationsExample";
@@ -49,7 +48,6 @@ export default function ExamplesPage() {
               },
             }}
           />
-          <MultiDialogExample />
         </Grid>
         <Grid item xs={7} sm={6} md={3}>
           <h3>Hooks Example</h3>

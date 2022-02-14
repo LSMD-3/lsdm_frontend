@@ -11,54 +11,56 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { UserApi } from "api";
+import { AuthenticationApi } from "api";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { User, UserType } from "types";
 
-export default function UserEdit() {
+export default function UserCreate() {
   let { userId } = useParams();
   const { enqueueSnackbar } = useSnackbar();
-  const [user, setuser] = useState<User>();
+  const [user, setuser] = useState<User>({
+    _id: "",
+    email: "",
+    name: "",
+    surname: "",
+    accessToken: "",
+    refreshToken: "",
+    userType: "user",
+  });
   const navigate = useNavigate();
 
-  const fetchUser = async () => {
-    if (!userId) return;
-    try {
-      const user = await UserApi.find(userId);
-      setuser(user);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  useEffect(() => {
-    fetchUser();
-    return () => {};
-  }, []);
-
-  const updateUser = async (event: React.FormEvent<HTMLFormElement>) => {
+  const createUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!user) return;
+    if (user.name.length === 0)
+      return enqueueSnackbar("Please set a name for the user", {
+        variant: "error",
+      });
+
+    if (user.surname.length === 0)
+      return enqueueSnackbar("Please set surname for the user", {
+        variant: "error",
+      });
+
+    if (user.email.length === 0)
+      return enqueueSnackbar("Please set email for the user", {
+        variant: "error",
+      });
 
     try {
-      await UserApi.update(user);
-      enqueueSnackbar("Utent Modificato", { variant: "success" });
+      await AuthenticationApi.signup(
+        user.email!,
+        "Password1!",
+        user.name!,
+        user.surname!
+      );
+      enqueueSnackbar("User Created", { variant: "success" });
+      navigate("/users");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
   };
-
-  if (!userId) return <h1>User Not Found</h1>;
-
-  if (!user)
-    return (
-      <div className="center-loader">
-        <CircularProgress />
-      </div>
-    );
-
   return (
     <div style={{ margin: 100 }}>
       <div>
@@ -78,7 +80,7 @@ export default function UserEdit() {
             <Box
               component="form"
               noValidate
-              onSubmit={updateUser}
+              onSubmit={createUser}
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
@@ -103,7 +105,6 @@ export default function UserEdit() {
                     fullWidth
                     id="surname"
                     label="Last Name"
-                    autoFocus
                     value={user?.surname}
                     onChange={(event) =>
                       setuser({ ...user, surname: event.target.value })

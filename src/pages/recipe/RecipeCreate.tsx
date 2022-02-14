@@ -15,17 +15,21 @@ import { Box, styled } from "@mui/system";
 import { RecipeApi } from "api";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Recipe } from "types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { FormDialog } from "components";
 
-export default function RecipeEdit() {
-  let { recipeId } = useParams();
+export default function RecipeCreate() {
   const { enqueueSnackbar } = useSnackbar();
-  const [recipe, setrecipe] = useState<Recipe>();
+  const [recipe, setrecipe] = useState<Recipe>({
+    _id: "string",
+    recipe_name: "",
+    ingredients: [],
+  });
   const [open, setopen] = useState(false);
+  const navigate = useNavigate();
 
   const [selectedIngredient, setselectedIngredient] = useState<number>();
   const [ingredientName, setingredientName] = useState("");
@@ -61,43 +65,22 @@ export default function RecipeEdit() {
     setrecipe({ ...recipe });
   };
 
-  const navigate = useNavigate();
-
-  const fetchRecipe = async () => {
-    if (!recipeId) return;
-    try {
-      const recipe = await RecipeApi.find(recipeId);
-      setrecipe(recipe);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  useEffect(() => {
-    fetchRecipe();
-    return () => {};
-  }, []);
-
-  const updateRecipe = async (event: React.FormEvent<HTMLFormElement>) => {
+  const saveRecipe = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (!recipe) return;
 
-    const recipe_name =
-      data.get("recipe_name")?.toString() ?? recipe.recipe_name;
+    if (!recipe.recipe_name)
+      return enqueueSnackbar("Please set recipe name", { variant: "error" });
 
     try {
-      const res = await RecipeApi.update({
-        ...recipe,
-        recipe_name: recipe_name,
-      });
-      enqueueSnackbar("Recipe Edited", { variant: "success" });
+      // @ts-ignore
+      recipe._id = undefined;
+      const res = await RecipeApi.add(recipe);
+      enqueueSnackbar("Recipe Created", { variant: "success" });
+      navigate("/recipes");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
   };
-
-  if (!recipeId) return <h1>Recipe Not Found</h1>;
 
   // nome: string;
   // email: string;
@@ -132,7 +115,7 @@ export default function RecipeEdit() {
         <Typography component="h1" variant="h5">
           Edit Recipe
         </Typography>
-        <Box component="form" noValidate onSubmit={updateRecipe} sx={{ mt: 3 }}>
+        <Box component="form" noValidate onSubmit={saveRecipe} sx={{ mt: 3 }}>
           <TextField
             name="name"
             required

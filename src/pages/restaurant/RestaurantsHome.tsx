@@ -26,7 +26,6 @@ export default function RestaurantsHome() {
     { id: "tipologia", label: "Tipologia" },
     { id: "email", label: "Email" },
     { id: "comune", label: "Comune" },
-    { id: "provincia", label: "Provincia" },
     {
       id: "actions",
       label: "Actions",
@@ -58,15 +57,18 @@ export default function RestaurantsHome() {
   ];
 
   const renderSuperAdmin = () => (
-    <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
-      <CssBaseline />
-
-      <Table title="Restaurants" columns={columns} api={RestaurantApi} />
-    </Container>
+    <Table title="Restaurants" columns={columns} api={RestaurantApi} />
   );
 
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
+      <Button
+        onClick={() => navigate("/restaurant/create")}
+        variant="contained"
+        style={{ marginBottom: 20 }}
+      >
+        Create Restaurant
+      </Button>
       <CssBaseline />
       {user.user?.userType === "super-admin" && renderSuperAdmin()}
     </Container>

@@ -5,7 +5,13 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Recipe } from "types";
 import { useSnackbar } from "notistack";
-import { Container, CssBaseline, IconButton, Tooltip } from "@mui/material";
+import {
+  Container,
+  CssBaseline,
+  IconButton,
+  Tooltip,
+  Button,
+} from "@mui/material";
 import { ModeEdit } from "@mui/icons-material";
 
 export default function RecipesHome() {
@@ -33,6 +39,15 @@ export default function RecipesHome() {
     { id: "recipe_name", label: "Nome Ricetta" },
     { id: "category", label: "Categoria" },
     {
+      id: "ingredients",
+      label: "Ingredienti",
+      render: (recipe: Recipe) => (
+        <span>
+          {recipe.ingredients.reduce((curr, acc) => curr + acc + ", ", "")}
+        </span>
+      ),
+    },
+    {
       id: "actions",
       label: "Actions",
       render: (recipe: Recipe) => {
@@ -55,6 +70,14 @@ export default function RecipesHome() {
 
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
+      <Button
+        variant="contained"
+        style={{ marginBottom: 20 }}
+        onClick={() => navigate("/recipe/create")}
+      >
+        Create recipe
+      </Button>
+
       <CssBaseline />
       <Table title="Recipes" columns={columns} api={RecipeApi} />
     </Container>

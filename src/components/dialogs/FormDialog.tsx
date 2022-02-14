@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -11,16 +11,24 @@ import { BaseDialogProps } from "./DialogManager";
 export interface FormDialogProps {
   title?: string;
   description?: string;
-  onConfirm?: () => void;
+  onConfirm?: (text: string) => void;
   confirmText?: string;
   cancelText?: string;
+  defaultValue?: string;
 }
 interface Props extends BaseDialogProps {
   dialogProps: FormDialogProps;
 }
 export default function FormDialog({ open, handleClose, dialogProps }: Props) {
-  const { title, description, onConfirm, confirmText, cancelText } =
-    dialogProps;
+  const [newText, setnewText] = useState("");
+  const {
+    title,
+    description,
+    onConfirm,
+    confirmText,
+    cancelText,
+    defaultValue,
+  } = dialogProps;
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -31,15 +39,23 @@ export default function FormDialog({ open, handleClose, dialogProps }: Props) {
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            defaultValue={defaultValue}
+            type="text"
             fullWidth
             variant="standard"
+            onChange={(event) => setnewText(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{cancelText ?? "Cancel"}</Button>
-          <Button onClick={onConfirm}>{confirmText ?? "Confirm"}</Button>
+          <Button
+            onClick={(res) => {
+              setnewText("");
+              onConfirm && onConfirm(newText);
+            }}
+          >
+            {confirmText ?? "Confirm"}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

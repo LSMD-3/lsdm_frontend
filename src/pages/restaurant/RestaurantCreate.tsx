@@ -10,15 +10,37 @@ import { Box } from "@mui/system";
 import { RestaurantApi } from "api";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Restaurant, User, UserType } from "types";
 
 import StaffHandler from "./components/StaffHandler";
 
-export default function RestaurantEdit() {
-  let { restaurantId } = useParams();
+export default function RestaurantCreate() {
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [restaurant, setrestaurant] = useState<Restaurant>();
+  const [restaurant, setrestaurant] = useState<Restaurant>({
+    _id: "",
+    img_url: "",
+    descrizione: "",
+    tipologia: "",
+    nome: "",
+    comune: "",
+    via: "",
+    telefono: "",
+    email: "",
+    web: "",
+    latitudine: "",
+    longitudine: "",
+    provincia: "",
+    cap: "",
+    tables_number: 30,
+    menus: [],
+    staff: {
+      chefs: [],
+      waiters: [],
+      admins: [],
+    },
+  });
 
   const updateStaff = (users: User[], type: UserType) => {
     if (!restaurant) return;
@@ -37,46 +59,33 @@ export default function RestaurantEdit() {
     setrestaurant({ ...restaurant });
   };
 
-  const fetchRestaurant = async () => {
-    if (!restaurantId) return;
-    try {
-      const restaurant = await RestaurantApi.find(restaurantId);
-      setrestaurant(restaurant);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
-  };
-
-  useEffect(() => {
-    fetchRestaurant();
-    return () => {};
-  }, []);
-
-  const updateRestaurant = async (event: React.FormEvent<HTMLFormElement>) => {
+  const saveRestaurant = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    if (!restaurant) return;
+    if (restaurant.nome.length === 0)
+      return enqueueSnackbar("Please set a name for the restaurant", {
+        variant: "error",
+      });
 
-    const name = data.get("name")?.toString() ?? restaurant.nome;
-    const email = data.get("email")?.toString() ?? restaurant.email;
-    const comune = data.get("comune")?.toString() ?? restaurant.descrizione;
-    const type = data.get("type")?.toString() ?? restaurant.tipologia;
+    if (restaurant.email.length === 0)
+      return enqueueSnackbar("Please set email for the restaurant", {
+        variant: "error",
+      });
+
+    if (restaurant.tipologia.length === 0)
+      return enqueueSnackbar("Please set activity type for the restaurant", {
+        variant: "error",
+      });
 
     try {
-      const res = await RestaurantApi.update({
-        ...restaurant,
-        nome: name,
-        email,
-        comune: comune,
-        tipologia: type,
-      });
-      enqueueSnackbar("Ristorante Modificato", { variant: "success" });
+      // @ts-ignore
+      restaurant._id = undefined;
+      const res = await RestaurantApi.add(restaurant);
+      enqueueSnackbar("Restaurant Created", { variant: "success" });
+      navigate("/restaurants");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
   };
-
-  if (!restaurantId) return <h1>Restaurant Not Found</h1>;
 
   if (!restaurant)
     return (
@@ -101,7 +110,7 @@ export default function RestaurantEdit() {
             <Typography component="h1" variant="h5">
               Edit Restaurant
             </Typography>
-            <Box component="form" noValidate onSubmit={updateRestaurant}>
+            <Box component="form" noValidate onSubmit={saveRestaurant}>
               <TextField
                 name="name"
                 required

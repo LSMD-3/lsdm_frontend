@@ -39,11 +39,6 @@ export default function UserHome() {
                 <ModeEdit />
               </IconButton>
             </Tooltip>
-            <Tooltip title="impersonate">
-              <IconButton onClick={() => navigate(`/user/${_id}`)}>
-                <VerifiedUserOutlined />
-              </IconButton>
-            </Tooltip>
           </div>
         );
       },
@@ -75,6 +70,13 @@ export default function UserHome() {
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
+      <Button
+        variant="contained"
+        onClick={() => navigate("/user/create")}
+        style={{ marginBottom: 20 }}
+      >
+        Create User
+      </Button>
       <Button onClick={() => generateUsers(10)}>Generate Bulk 10</Button>
       <Button onClick={() => generateUsers(100)}>Generate Bulk 100</Button>
       <Button onClick={() => generateUsers(500)}>Generate Bulk 500</Button>
