@@ -48,8 +48,10 @@ export default function userReducer(
     }
 
     case "restaurant/join": {
-      const joinedRestaurant = action.payload;
+      const joinedRestaurant = action.payload.restaurant;
+      const joinedRestaurantRole = action.payload.role;
       state.user!.joinedRestaurant = joinedRestaurant;
+      state.user!.userType = joinedRestaurantRole;
       AppStore.setUser(state.user);
       return { ...state };
     }

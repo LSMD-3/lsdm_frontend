@@ -27,6 +27,7 @@ export default function RestaurantMenu() {
   const [deleteRecipesMode, setdeleteRecipesMode] = useState(false);
   const [newRecipes, setnewRecipes] = useState<MenuRecipe[]>();
   const [recipeModalOpened, setrecipeModalOpened] = useState(false);
+  const [editMenuInfoMode, seteditMenuInfoMode] = useState(false);
 
   const [searchFilter, setsearchFilter] = useState<string>();
 
@@ -157,18 +158,28 @@ export default function RestaurantMenu() {
                   {m.name}
                 </Button>
               ))}
+            {!editMenuInfoMode && (
+              <h4>
+                {restaurant.menus[selectedMenu].name}
+                {restaurant.menus[selectedMenu].ayce
+                  ? ` - AYCE ${restaurant.menus[selectedMenu].price}€`
+                  : " - A la carte"}
+              </h4>
+            )}
             <h4>Actions</h4>
             {deleteRecipesMode && (
               <Button onClick={persistRecipesRemoved}>
                 Exit Delete Mode and Save
               </Button>
             )}
-            {!deleteRecipesMode && (
+            {!deleteRecipesMode && !editMenuInfoMode && (
               <div>
                 <Button onClick={() => setrecipeModalOpened(true)}>
                   Add a Recipe
                 </Button>
-                <Button>Edit Menu Informations</Button>
+                <Button onClick={() => seteditMenuInfoMode(true)}>
+                  Edit Menu Informations
+                </Button>
                 <Button
                   onClick={() => {
                     setnewRecipes(restaurant.menus[selectedMenu].recipes);
@@ -208,7 +219,12 @@ export default function RestaurantMenu() {
                 {filteredRecipes?.map((recipe, i) => (
                   <Grid key={recipe._id} item xs={8} sm={8} md={4}>
                     <CardItem
-                      text={recipe.recipe_name}
+                      text={
+                        recipe.recipe_name +
+                        (restaurant.menus[selectedMenu].ayce
+                          ? ""
+                          : "\n" + recipe.price + "€")
+                      }
                       image={recipe.image_url}
                       onClick={() =>
                         deleteRecipesMode ? removeRecipe(i) : undefined

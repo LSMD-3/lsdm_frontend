@@ -18,16 +18,6 @@ class RestaurantApi extends BaseResource<Restaurant> {
     return axios.post(this.endpoint + "/order/add").then(responseErrorCheck);
   }
 
-  async addStaffMember(
-    restaurantId: string,
-    userId: string,
-    userType: UserType
-  ) {
-    return axios
-      .post(this.endpoint + "/staff", { restaurantId, userId, userType })
-      .then(responseErrorCheck);
-  }
-
   async findRestaurantOfStaff(
     userId: string,
     userType: UserType

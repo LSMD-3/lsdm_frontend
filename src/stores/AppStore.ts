@@ -42,14 +42,40 @@ class AppStore {
   fetchStaffRestaurant = async () => {
     console.log(this.user);
     if (!this.user?._id) return;
-    if (!["admin", "waiter", "chef"].includes(this.user.userType)) return;
+
+    // if (!["admin", "waiter", "chef"].includes(this.user.userType)) return;
     try {
-      const restaurant = await RestaurantApi.findRestaurantOfStaff(
+      const restaurantAdmin = await RestaurantApi.findRestaurantOfStaff(
         this.user?._id,
-        this.user.userType
+        "admin"
       );
-      if (restaurant)
-        store.dispatch({ type: "restaurant/join", payload: restaurant });
+      const restaurantWaiter = await RestaurantApi.findRestaurantOfStaff(
+        this.user?._id,
+        "waiter"
+      );
+      const restaurantChef = await RestaurantApi.findRestaurantOfStaff(
+        this.user?._id,
+        "chef"
+      );
+
+      if (restaurantAdmin) {
+        return store.dispatch({
+          type: "restaurant/join",
+          payload: { restaurant: restaurantAdmin, role: "admin" },
+        });
+      }
+      if (restaurantWaiter) {
+        return store.dispatch({
+          type: "restaurant/join",
+          payload: { restaurant: restaurantWaiter, role: "waiter" },
+        });
+      }
+      if (restaurantChef) {
+        return store.dispatch({
+          type: "restaurant/join",
+          payload: { restaurant: restaurantChef, role: "chef" },
+        });
+      }
     } catch (error: any) {}
   };
 

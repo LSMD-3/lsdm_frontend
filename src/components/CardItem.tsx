@@ -67,7 +67,12 @@ export default function CardItem({
           id="spring-modal-title"
           variant="h5"
           component="h2"
-          style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
+          style={{
+            textAlign: "center",
+            paddingTop: 10,
+            paddingBottom: 10,
+            whiteSpace: "pre-line",
+          }}
         >
           {text}
         </Typography>

@@ -64,7 +64,8 @@ export interface Menu {
   name: string;
   description?: string;
   recipes: MenuRecipe[];
-  ayce_available: boolean;
+  ayce: boolean;
+  price: number;
 }
 
 export interface VirtualTable {
