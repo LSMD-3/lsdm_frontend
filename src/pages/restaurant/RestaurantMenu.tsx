@@ -5,28 +5,29 @@ import {
   Container,
   CssBaseline,
   Grid,
-  Slider,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { RestaurantApi, RecipeApi } from "api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import { Category, Menu } from "types";
+import { Category, Recipe, MenuRecipe, Restaurant } from "types";
 import { Box } from "@mui/system";
-import { CardItem } from "components";
+import { CardItem, SearchRecipeModal } from "components";
+import MenuGenerator from "./MenuGenerator";
 
 export default function RestaurantMenu() {
   let { restaurantId } = useParams();
-
+  const navigate = useNavigate();
   const [loading, setloading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
-  const [menu, setmenu] = useState<Menu>();
-  const [categories, setcategories] = useState<Category[]>([]);
-  const [percentages, setpercentages] = useState<number[]>([]);
-  const [range, setrange] = useState<number[]>([19, 40]);
+  const [selectedMenu, setselectedMenu] = useState(0);
+  const [restaurant, setrestaurant] = useState<Restaurant>();
+  const [deleteRecipesMode, setdeleteRecipesMode] = useState(false);
+  const [newRecipes, setnewRecipes] = useState<MenuRecipe[]>();
+  const [recipeModalOpened, setrecipeModalOpened] = useState(false);
+
   const [searchFilter, setsearchFilter] = useState<string>();
 
   useEffect(() => {
@@ -35,89 +36,67 @@ export default function RestaurantMenu() {
   }, []);
 
   const loadInitialData = async () => {
-    await Promise.all([fetchCategories(), fetchRestaurant()]);
+    await fetchRestaurant();
     setloading(false);
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const categories = await RecipeApi.getCategories();
-      setcategories(categories);
-      const percentages = new Array(categories.length);
-      for (let i = 0; i < categories.length; i++) {
-        percentages[i] = Math.trunc(Math.random() * 5) * 10;
-      }
-
-      setpercentages(percentages);
-    } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
-    }
   };
 
   const fetchRestaurant = async () => {
     if (restaurantId) {
       try {
-        const menu = await RestaurantApi.getMenu(restaurantId);
-        setmenu(menu);
+        const restaurant = await RestaurantApi.find(restaurantId);
+        setrestaurant(restaurant);
       } catch (error: any) {
         enqueueSnackbar("Menu not found", { variant: "error" });
       }
     }
   };
 
-  const createMenu = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!restaurantId) return;
-
-    const data = new FormData(event.currentTarget);
-    const totalRecipes = Number.parseInt(data.get("total")?.toString() ?? "0");
-
-    const composition = categories.map((cat, i) => {
-      return { category: cat.category, percentage: percentages[i] };
-    });
-    if (!restaurantId || !totalRecipes) return;
+  const addRecipeToMenu = async (recipe: MenuRecipe) => {
+    if (!restaurant) return;
+    restaurant.menus[selectedMenu].recipes.push(recipe);
 
     try {
-      const menu = await RestaurantApi.createMenu(restaurantId, {
-        totalRecipes,
-        composition,
-        startPrice: range[0],
-        endPrice: range[1],
-      });
-      setmenu(menu);
+      await RestaurantApi.update(restaurant);
+      setrestaurant({ ...restaurant });
+      enqueueSnackbar("Recipes updated!", { variant: "success" });
     } catch (error: any) {
-      enqueueSnackbar(error, { variant: "error" });
+      enqueueSnackbar("Menu not found", { variant: "error" });
     }
+    setrecipeModalOpened(false);
   };
 
-  const renderPercentage = (category: string, index: number) => {
-    const percentage = percentages ? percentages[index] : undefined;
-    return (
-      <div key={category}>
-        <h4>
-          {category} {percentage ? percentage + "%" : ""}
-        </h4>
-        <Slider
-          valueLabelDisplay="auto"
-          step={10}
-          marks
-          min={0}
-          max={100}
-          id={category}
-          value={percentage}
-          style={{ maxWidth: 300 }}
-          onChangeCommitted={(e, value) => {
-            if (!percentages) return;
-            percentages[index] = value as number;
-            setpercentages([...percentages]);
-          }}
-        />
-      </div>
-    );
+  const removeRecipe = (index: number) => {
+    if (!newRecipes) return;
+    newRecipes.splice(index, 1);
+
+    setnewRecipes([...newRecipes]);
   };
 
-  const handleChange = (event: Event, newrange: number | number[]) => {
-    setrange(newrange as number[]);
+  const persistRecipesRemoved = async () => {
+    if (!restaurant) return;
+    restaurant.menus[selectedMenu].recipes = newRecipes!;
+
+    try {
+      await RestaurantApi.update(restaurant);
+      setrestaurant({ ...restaurant });
+      enqueueSnackbar("Recipes updated!", { variant: "success" });
+    } catch (error: any) {
+      enqueueSnackbar("Menu not found", { variant: "error" });
+    }
+    setdeleteRecipesMode(false);
+  };
+
+  const deleteCurrentMenu = async () => {
+    if (!restaurant) return;
+    restaurant.menus.splice(selectedMenu, 1);
+    try {
+      await RestaurantApi.update(restaurant);
+      setrestaurant({ ...restaurant });
+      enqueueSnackbar("Menu removed!", { variant: "success" });
+    } catch (error: any) {
+      enqueueSnackbar("Menu not found", { variant: "error" });
+    }
+    setdeleteRecipesMode(false);
   };
 
   if (loading)
@@ -127,104 +106,126 @@ export default function RestaurantMenu() {
       </div>
     );
 
-  const filteredRecipes = searchFilter
-    ? menu?.recipes.filter(
-        (r) => searchFilter && r.recipe.recipe_name.includes(searchFilter)
-      )
-    : menu?.recipes;
+  if (!restaurant)
+    return (
+      <div className="center-loader">
+        <h1>Restaurant Not Found</h1>
+      </div>
+    );
+
+  let filteredRecipes: MenuRecipe[] = [];
+  const hasMenus = restaurant.menus.length > 0;
+
+  if (hasMenus) {
+    const recipes = deleteRecipesMode
+      ? newRecipes!
+      : restaurant.menus[selectedMenu].recipes;
+
+    filteredRecipes = searchFilter
+      ? recipes.filter(
+          (r) => searchFilter && r.recipe_name.includes(searchFilter)
+        )
+      : recipes;
+  }
 
   return (
     <div>
       <CssBaseline />
+      <Button
+        onClick={() => navigate(`/restaurant/${restaurantId}/menugenerator`)}
+        variant="contained"
+        style={{ margin: 20, float: "right" }}
+      >
+        Generate New Menu
+      </Button>
       <Container>
-        {menu && (
+        {!hasMenus && (
           <div>
-            <Autocomplete
-              id="search-recipe"
-              freeSolo
-              onChange={(event, value) => {
-                console.log(event);
-                value && setsearchFilter(value);
-              }}
-              options={menu.recipes.map((option) => option.recipe.recipe_name)}
-              renderInput={(params) => (
-                <TextField {...params} label="Search a recipe" />
-              )}
-              style={{ marginTop: 20 }}
-            />
-            <Grid
-              container
-              spacing={{ xs: 6, sm: 6, md: 3 }}
-              columnGap={{ md: 6 }}
-              columns={{ xs: 8, sm: 8, md: 12 }}
-              justifyContent="center"
-              style={{ marginTop: 40 }}
-            >
-              {filteredRecipes?.map((recipe) => (
-                <Grid key={recipe.recipe._id} item xs={8} sm={8} md={4}>
-                  <CardItem
-                    text={recipe.recipe.recipe_name}
-                    image={recipe.recipe.image_url}
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            <h1>This restaurant has not a menu</h1>
           </div>
         )}
-
-        {!menu && (
-          <Container>
-            <h1>This restaurant has not a menu</h1>
-            <h4>
-              Menu creation is based on percentages provided of the above recipe
-              types.
-            </h4>
-            <h5>
-              Creation is best effort, if the user ask for more recipes than
-              available, will be created a menu with available recipes
-            </h5>
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              onSubmit={createMenu}
-              style={{ marginTop: 40 }}
-            >
-              <TextField
-                id="total"
-                name="total"
-                label="Number of recipes"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                defaultValue={30}
-              />
-
-              <Button
-                type="submit"
-                variant="contained"
-                style={{ marginTop: 20, marginLeft: 20 }}
-              >
-                Create a menu
+        {hasMenus && (
+          <div>
+            <h2>Available Menus</h2>
+            {!deleteRecipesMode &&
+              restaurant.menus.map((m, i) => (
+                <Button
+                  variant={i === selectedMenu ? "contained" : "outlined"}
+                  onClick={() => setselectedMenu(i)}
+                  style={{ margin: 20 }}
+                >
+                  {m.name}
+                </Button>
+              ))}
+            <h4>Actions</h4>
+            {deleteRecipesMode && (
+              <Button onClick={persistRecipesRemoved}>
+                Exit Delete Mode and Save
               </Button>
-
-              <div style={{ maxWidth: 400, marginTop: 40 }}>
-                <Typography id="input-slider" gutterBottom>
-                  Recipe price range: {range[0]}-{range[1]}€
-                </Typography>
-                <Slider
-                  getAriaLabel={() => "Temperature range"}
-                  value={range}
-                  onChange={handleChange}
-                  valueLabelDisplay="auto"
-                />
+            )}
+            {!deleteRecipesMode && (
+              <div>
+                <Button onClick={() => setrecipeModalOpened(true)}>
+                  Add a Recipe
+                </Button>
+                <Button>Edit Menu Informations</Button>
+                <Button
+                  onClick={() => {
+                    setnewRecipes(restaurant.menus[selectedMenu].recipes);
+                    setdeleteRecipesMode(true);
+                  }}
+                  color="error"
+                >
+                  Remove Recipes
+                </Button>
+                <Button onClick={deleteCurrentMenu} color="error">
+                  Delete Selected Menu
+                </Button>
               </div>
-
-              {categories.map((cat, i) => renderPercentage(cat.category, i))}
-            </Box>
-          </Container>
+            )}
+            <div>
+              <Autocomplete
+                id="search-recipe"
+                freeSolo
+                onChange={(event, value) => {
+                  setsearchFilter(value ? value : undefined);
+                }}
+                options={restaurant.menus[selectedMenu].recipes.map(
+                  (option) => option.recipe_name
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search a recipe" />
+                )}
+                style={{ marginTop: 20 }}
+              />
+              <Grid
+                container
+                spacing={{ xs: 6, sm: 6, md: 3 }}
+                columns={{ xs: 8, sm: 8, md: 12 }}
+                justifyContent="center"
+                style={{ marginTop: 40 }}
+              >
+                {filteredRecipes?.map((recipe, i) => (
+                  <Grid key={recipe._id} item xs={8} sm={8} md={4}>
+                    <CardItem
+                      text={recipe.recipe_name}
+                      image={recipe.image_url}
+                      onClick={() =>
+                        deleteRecipesMode ? removeRecipe(i) : undefined
+                      }
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </div>
+          </div>
         )}
+        <SearchRecipeModal
+          open={recipeModalOpened}
+          onClose={() => setrecipeModalOpened(false)}
+          onRecipeAdded={addRecipeToMenu}
+          title="Search a recipe to add"
+        />
       </Container>
     </div>
   );

@@ -26,6 +26,7 @@ import {
   RecipeCreate,
   RestaurantCreate,
   UserCreate,
+  MenuGenerator,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -99,6 +100,11 @@ function App() {
             <Route
               path="restaurant/:restaurantId/menu"
               element={<RestaurantMenu />}
+            />
+
+            <Route
+              path="restaurant/:restaurantId/menugenerator"
+              element={<MenuGenerator />}
             />
 
             <Route

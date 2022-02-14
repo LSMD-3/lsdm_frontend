@@ -55,9 +55,7 @@ export interface Table {
   customers: string;
 }
 
-export interface MenuRecipe {
-  _id: string;
-  recipe: Recipe;
+export interface MenuRecipe extends Recipe {
   price: number;
   max_quantity?: number;
 }
