@@ -94,11 +94,11 @@ export default function UserCart() {
   };
 
   const closeTableSession = async () => {
-    const restaurantId = user.user!.joinedTable!.restaurant._id;
+    const restaurant = user.user!.joinedTable!.restaurant;
     const tableId = user.user!.joinedTable!.tableNumber;
 
     try {
-      await TableApi.checkout_Table(restaurantId, tableId);
+      await TableApi.checkout_Table(restaurant, tableId);
 
       enqueueSnackbar("Table Closed", { variant: "success" });
       store.dispatch({ type: "table/left", payload: {} });

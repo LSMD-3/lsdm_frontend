@@ -164,10 +164,10 @@ export default function SimulatorHome() {
       await makeOrder(user, myRestaurant, "" + myTable, recipes);
     }
 
-    return { table: "" + myTable, restaurant: myRestaurant._id, orderCount };
+    return { table: "" + myTable, restaurant: myRestaurant, orderCount };
   };
 
-  const closeTable = async (table: string, restaurant: string) => {
+  const closeTable = async (table: string, restaurant: Restaurant) => {
     if (SIMULATOR_CONFIG.CLOSE_TABLES)
       await TableApi.checkout_Table(restaurant, table);
   };
@@ -189,7 +189,7 @@ export default function SimulatorHome() {
     let start = new Date();
     const tablesToClose: {
       table: string;
-      restaurant: string;
+      restaurant: Restaurant;
       orderCount: number;
     }[] = await Promise.all(promises);
     let time = new Date().getTime() - start.getTime();

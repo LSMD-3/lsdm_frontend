@@ -124,10 +124,13 @@ class TableApi extends BaseResource<Table> {
       .then(responseErrorCheck);
   }
 
-  async checkout_Table(restaurant_id: string, table_id: string): Promise<void> {
+  async checkout_Table(
+    restaurant: Restaurant,
+    table_id: string
+  ): Promise<void> {
     return axios
       .post(this.endpoint + `/table/check_out`, {
-        restaurant_id,
+        restaurant: getRestaurantDao(restaurant),
         table_id,
       })
       .then(responseErrorCheck);
