@@ -19,8 +19,8 @@ export default function ChefHome() {
   const [orders, setorders] = useState<TableOrder[]>();
 
   const fetchOrders = async (restaurantId: string) => {
-    const menu = await RestaurantApi.getMenu(restaurantId);
-    setMenu(menu);
+    const restaurant = await RestaurantApi.find(restaurantId);
+    setMenu(restaurant.menus[0]);
     let tableOrders = await TableApi.get_orders_for_chef(restaurantId);
     setorders(tableOrders);
   };

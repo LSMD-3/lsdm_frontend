@@ -46,8 +46,6 @@ export default function RestaurantLanding() {
     if (!restaurantId) return;
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
-      const menu = await RestaurantApi.getMenu(restaurantId);
-      restaurant.menus = [menu];
       setrestaurant(restaurant);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });

@@ -27,12 +27,6 @@ class RestaurantApi extends BaseResource<Restaurant> {
       .then(responseErrorCheck);
   }
 
-  async getMenu(restaurantId: string): Promise<Menu> {
-    return axios
-      .get(this.endpoint + `/menu/${restaurantId}`)
-      .then(responseErrorCheck);
-  }
-
   async createMenu(
     restaurantId: string,
     preferences: MenuCreationPreferences

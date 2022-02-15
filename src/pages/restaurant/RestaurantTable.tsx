@@ -45,9 +45,8 @@ export default function RestaurantTable() {
   const fetchRestaurant = async (restaurantId: string) => {
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
-      const menu = await RestaurantApi.getMenu(restaurantId);
       setrestaurant(restaurant);
-      setMenu(menu);
+      setMenu(restaurant.menus[0]);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }
