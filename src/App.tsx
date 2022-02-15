@@ -4,10 +4,8 @@ import { Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
 import {
-  ExamplesPage,
   Home,
   NotFound,
-  StoreCategorized,
   Profile,
   Signup,
   Signin,
@@ -85,7 +83,6 @@ function App() {
           <TopNavigation toggleColorMode={toggleColorMode} colorMode={mode} />
           <Routes>
             <Route path="/" element={homeElement} />
-            <Route path="menu/:category" element={<StoreCategorized />} />
             <Route path="dev" element={<DevPage />} />
             <Route path="cart" element={<UserCart />} />
             <Route path="signup" element={<Signup />} />
@@ -116,13 +113,16 @@ function App() {
             <Route path="user/:userId/edit" element={<UserEdit />} />
             <Route path="user/:userId" element={<UserOperation />} />
             <Route path="recipes" element={<RecipesHome />} />
+            <Route
+              path="recipe/create/:restaurantId/:menuNumber"
+              element={<RecipeCreate />}
+            />
             <Route path="recipe/create" element={<RecipeCreate />} />
             <Route path="recipe/:recipeId/edit" element={<RecipeEdit />} />
             <Route
               path="profile"
               element={user.authenticated ? <Profile /> : <Signup />}
             />
-            <Route path="examples" element={<ExamplesPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </SnackbarProvider>

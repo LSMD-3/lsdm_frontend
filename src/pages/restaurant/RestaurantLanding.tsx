@@ -133,9 +133,9 @@ export default function RestaurantLanding() {
             console.log("USER:");
             console.log(user.user!._id);
             TableApi.joinTable(
-              String(restaurantId),
+              restaurant,
               String(selectedTable + 1),
-              String(user.user!._id)
+              user.user!
             );
             store.dispatch({
               type: "table/join",

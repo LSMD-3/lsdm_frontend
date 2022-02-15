@@ -1,7 +1,15 @@
 import { Neo4jApi, RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
-import { Item, Restaurant, Menu, Order, UserType, User } from "types";
+import {
+  Item,
+  Restaurant,
+  Menu,
+  Order,
+  UserType,
+  User,
+  RecipeOrder,
+} from "types";
 import {
   Container,
   CssBaseline,
@@ -95,22 +103,27 @@ export default function RestaurantTable() {
   );
 
   const submitOrder = async () => {
-    const order: Order = [];
+    const order: RecipeOrder[] = [];
     Object.keys(cart).forEach((id) => {
-      const row = {
-        _id: id,
-        qty: cart[id],
-        note: "",
-        status: "In preparation",
-      };
-      order.push(row);
+      const recipe = menu.recipes.find((r) => r._id === id);
+      if (recipe) {
+        const row: RecipeOrder = {
+          _id: id,
+          ingredients: recipe.ingredients,
+          recipe_name: recipe.recipe_name,
+          qty: cart[id],
+          note: "",
+          status: "In preparation",
+        };
+        order.push(row);
+      }
     });
 
     try {
       await TableApi.submitOrder(
-        restaurant!._id,
+        restaurant!,
         String(user.user!.joinedTable!.tableNumber),
-        user.user!._id,
+        user.user!,
         order
       );
       enqueueSnackbar("Ordes submitted", { variant: "success" });

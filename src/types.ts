@@ -75,22 +75,20 @@ export interface VirtualTable {
 
 export type Cart = Record<string, number>;
 
-export type Order = {
-  _id: string;
+export interface RecipeOrder extends Recipe {
   qty: number;
   note?: string;
   status?: string;
-}[];
+}
+
+export type Order = RecipeOrder[];
 
 export type TableOrder = {
   tableId: string;
   orders: Order[];
 };
 
-export interface Item {
-  _id: string;
-  name: string;
-  image_url?: string;
+export interface Item extends Recipe {
   quantity?: number;
   note?: string;
   liked?: boolean;

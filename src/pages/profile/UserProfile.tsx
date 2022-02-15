@@ -47,8 +47,9 @@ export default function UserProfile() {
     const items = favouriteRecipes.map((r) => {
       const item: Item = {
         _id: r._id,
-        name: r.recipe_name,
+        recipe_name: r.recipe_name,
         image_url: r.image_url,
+        ingredients: r.ingredients,
         liked: true,
       };
       return item;

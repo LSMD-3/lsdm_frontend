@@ -5,7 +5,8 @@ export function extractItemsFromMenu(menu: Menu): Item[] {
     return {
       _id: r._id,
       image_url: r.image_url,
-      name: r.recipe_name,
+      recipe_name: r.recipe_name,
+      ingredients: r.ingredients,
     };
   });
 }

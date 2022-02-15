@@ -1,37 +1,63 @@
 import axios from "axios";
-import { Category, Table, Order, TableOrder, User } from "types";
+import {
+  Category,
+  Table,
+  Order,
+  TableOrder,
+  User,
+  Restaurant,
+  RecipeOrder,
+} from "types";
 import { BaseResource } from "./BaseResource";
 import { responseErrorCheck } from "./utils";
+
+const getUserDao = (user: User) => {
+  return {
+    _id: user._id,
+    email: user.email,
+    name: user.name,
+    surname: user.surname,
+  };
+};
+
+const getRestaurantDao = (restaurant: Restaurant) => {
+  return {
+    _id: restaurant._id,
+    tipologia: restaurant.tipologia,
+    nome: restaurant.nome,
+    comune: restaurant.comune,
+  };
+};
 
 class TableApi extends BaseResource<Table> {
   endpoint = "restaurant";
 
   async joinTable(
-    restaurant_id: string,
+    restaurant: Restaurant,
     table_id: string,
-    user_id: string
+    user: User
   ): Promise<Category[]> {
     return axios
-      .post(this.endpoint + `/join_table`, {
-        restaurant_id: restaurant_id,
+      .post(this.endpoint + `/join_tablenew`, {
+        restaurant: getRestaurantDao(restaurant),
         table_id: table_id,
-        customer: user_id,
+        customer: getUserDao(user),
       })
       .then(responseErrorCheck);
   }
 
   async submitOrder(
-    restaurant_id: string,
+    restaurant: Restaurant,
     table_id: string,
-    user_id: string,
-    order: Order
+    user: User,
+    orders: RecipeOrder[]
   ): Promise<Category[]> {
     return axios
-      .post(this.endpoint + `/order/create_order`, {
-        restaurant_id: restaurant_id,
+      .post(this.endpoint + `/order/create_ordernew`, {
+        restaurant: getRestaurantDao(restaurant),
         table_id: table_id,
-        user_id: user_id,
-        orders: order,
+        user: getUserDao(user),
+        orders: orders,
       })
       .then(responseErrorCheck);
   }
@@ -73,15 +99,15 @@ class TableApi extends BaseResource<Table> {
   }
 
   async get_all_user_orders(
-    restaurant_id: string,
+    restaurant: Restaurant,
     table_id: string,
-    user_id: string
+    user: User
   ): Promise<Order[]> {
     return axios
-      .post(this.endpoint + `/table/get_orders_for_user`, {
-        restaurant_id: restaurant_id,
+      .post(this.endpoint + `/table/get_orders_for_user_new`, {
+        restaurant: getRestaurantDao(restaurant),
         table_id: table_id,
-        user_id: user_id,
+        user: getUserDao(user),
       })
       .then(responseErrorCheck);
   }

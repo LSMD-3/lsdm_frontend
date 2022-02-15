@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import { Item } from "types";
 import CardItem from "./CardItem";
+import RecipeCard from "./RecipeCard";
 
 interface ItemListProps {
   items: Item[];
@@ -11,6 +12,7 @@ interface ItemListProps {
   likedItems?: string[];
   onClick?: (item: Item) => void;
 }
+
 export default function ItemList({
   items,
   toggleItemLike,
@@ -48,9 +50,8 @@ export default function ItemList({
         .filter((itm) => !itm.invisible)
         .map((itm) => (
           <Grid key={itm._id} item xs={6} sm={6} md={3}>
-            <CardItem
-              text={itm.name}
-              image={itm.image_url}
+            <RecipeCard
+              recipe={itm}
               toggleLike={toggleItemLike ? () => toggle(itm) : undefined}
               increment={increment ? () => inc(itm) : undefined}
               decrement={decrement ? () => dec(itm) : undefined}

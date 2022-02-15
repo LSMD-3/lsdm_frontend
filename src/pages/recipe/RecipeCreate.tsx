@@ -15,13 +15,15 @@ import { Box, styled } from "@mui/system";
 import { RecipeApi } from "api";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Recipe } from "types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { FormDialog } from "components";
 
 export default function RecipeCreate() {
+  let { restaurantId } = useParams();
+  let { menuNumber } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const [recipe, setrecipe] = useState<Recipe>({
     _id: "string",
@@ -76,7 +78,10 @@ export default function RecipeCreate() {
       recipe._id = undefined;
       const res = await RecipeApi.add(recipe);
       enqueueSnackbar("Recipe Created", { variant: "success" });
-      navigate("/recipes");
+      if (restaurantId) {
+        navigate(`/restaurant/${restaurantId}/menu`);
+        console.log("TODO add recipe to restaurant menu:" + menuNumber);
+      } else navigate("/recipes");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }

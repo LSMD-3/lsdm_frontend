@@ -7,7 +7,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import store, { userState, cartState, likeState } from "redux/store";
-import { MenuRecipe, Restaurant, Menu, Item, Order } from "types";
+import { MenuRecipe, Restaurant, Menu, Item, Order, RecipeOrder } from "types";
 import { TableApi, RestaurantApi, Neo4jApi } from "api";
 import { useSnackbar } from "notistack";
 import { ItemList } from "components";
@@ -23,22 +23,26 @@ export default function UserCart() {
   const likes = useSelector(likeState);
 
   useEffect(() => {
-    if (user.user?.joinedTable) {
-      const restaurantId = user.user?.joinedTable.restaurant._id;
-      const tableId = user.user?.joinedTable.tableNumber;
-      fetchRestaurant(restaurantId);
-      fetchPreviousOrders(restaurantId, tableId);
-    }
+    if (!user.user) return;
+    if (!user.user.joinedTable) return;
+
+    const restaurantId = user.user.joinedTable.restaurant._id;
+    const tableId = user.user.joinedTable.tableNumber;
+    fetchRestaurant(restaurantId);
+    fetchPreviousOrders(user.user.joinedTable.restaurant, tableId);
 
     return () => {};
   }, []);
 
-  const fetchPreviousOrders = async (restaurantId: string, tableId: string) => {
+  const fetchPreviousOrders = async (
+    restaurant: Restaurant,
+    tableId: string
+  ) => {
     try {
       const orders = await TableApi.get_all_user_orders(
-        restaurantId,
+        restaurant,
         tableId,
-        user.user!._id
+        user.user!
       );
       console.log(orders);
       setOrders(orders);
@@ -57,28 +61,32 @@ export default function UserCart() {
   };
 
   const submitOrder = async () => {
-    const order: Order = [];
+    const order: RecipeOrder[] = [];
     Object.keys(cart).forEach((id) => {
-      const row = {
-        _id: id,
-        qty: cart[id],
-        note: "",
-        status: "In preparation",
-      };
-      order.push(row);
+      const recipe = menu!.recipes.find((r) => r._id === id);
+      if (recipe) {
+        const row: RecipeOrder = {
+          _id: id,
+          ingredients: recipe.ingredients,
+          recipe_name: recipe.recipe_name,
+          qty: cart[id],
+          note: "",
+          status: "In preparation",
+        };
+        order.push(row);
+      }
     });
 
     try {
       await TableApi.submitOrder(
-        restaurant!._id,
+        restaurant!,
         String(user.user!.joinedTable!.tableNumber),
-        user.user!._id,
+        user.user!,
         order
       );
       enqueueSnackbar("Ordes submitted", { variant: "success" });
-      const restaurantId = user.user!.joinedTable!.restaurant._id;
       const tableId = user.user!.joinedTable!.tableNumber;
-      fetchPreviousOrders(restaurantId, tableId);
+      fetchPreviousOrders(restaurant!, tableId);
       store.dispatch({ type: "cart/init", payload: { cart: {} } });
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });

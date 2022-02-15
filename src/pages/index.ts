@@ -6,10 +6,6 @@ export { default as DevPage } from "./DevPage";
 
 export { default as Home } from "./homes/Home";
 export { default as NotFound } from "./NotFound";
-export { default as StoreCategorized } from "./StoreCategorized";
-
-export { default as ExamplesPage } from "./examples/ExamplesPage";
-export { default as SpingAnimations } from "./examples/SpringAnimationsExample";
 
 export { default as SimulatorHome } from "./simulator/SimulatorHome";
 

@@ -175,7 +175,7 @@ const TopNavigation = ({ toggleColorMode, colorMode }: TopNavigationProps) => {
             sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
             onClick={() => navigate("/")}
           >
-            React Boilerplate
+            Mea Menu
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (

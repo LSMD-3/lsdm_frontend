@@ -7,3 +7,4 @@ export { default as ResponsiveDialog } from "./ResponsiveDialog";
 export { default as SpringModal } from "./SpringModal";
 export { default as SearchUserModal } from "./SearchUserModal";
 export { default as SearchRecipeModal } from "./SearchRecipeModal";
+export { default as RecipeModal } from "./RecipeModal";

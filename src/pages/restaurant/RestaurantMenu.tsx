@@ -14,7 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { Category, Recipe, MenuRecipe, Restaurant } from "types";
 import { Box } from "@mui/system";
-import { CardItem, SearchRecipeModal } from "components";
+import { RecipeCard, RecipeModal, SearchRecipeModal } from "components";
 import MenuGenerator from "./MenuGenerator";
 
 export default function RestaurantMenu() {
@@ -177,6 +177,13 @@ export default function RestaurantMenu() {
                 <Button onClick={() => setrecipeModalOpened(true)}>
                   Add a Recipe
                 </Button>
+                <Button
+                  onClick={() =>
+                    navigate(`/recipe/create/${restaurantId}/${selectedMenu}`)
+                  }
+                >
+                  Add a new Recipe
+                </Button>
                 <Button onClick={() => seteditMenuInfoMode(true)}>
                   Edit Menu Informations
                 </Button>
@@ -218,16 +225,10 @@ export default function RestaurantMenu() {
               >
                 {filteredRecipes?.map((recipe, i) => (
                   <Grid key={recipe._id} item xs={8} sm={8} md={4}>
-                    <CardItem
-                      text={
-                        recipe.recipe_name +
-                        (restaurant.menus[selectedMenu].ayce
-                          ? ""
-                          : "\n" + recipe.price + "€")
-                      }
-                      image={recipe.image_url}
-                      onClick={() =>
-                        deleteRecipesMode ? removeRecipe(i) : undefined
+                    <RecipeCard
+                      recipe={recipe}
+                      onClick={
+                        deleteRecipesMode ? () => removeRecipe(i) : undefined
                       }
                     />
                   </Grid>

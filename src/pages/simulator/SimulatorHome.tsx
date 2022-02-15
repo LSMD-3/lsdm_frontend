@@ -21,24 +21,20 @@ const SIMULATOR_CONFIG = {
 
 // 30k
 const N = [
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200,
 
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200,
 
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, //2k
-
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+  200, 200, 200, 200, 200,
 ];
 
 interface RecipeGroup {
@@ -119,8 +115,8 @@ export default function SimulatorHome() {
   };
 
   const makeOrder = async (
-    userId: string,
-    restaurantId: string,
+    user: User,
+    restaurant: Restaurant,
     tableId: string,
     recipes: Recipe[]
   ) => {
@@ -131,6 +127,8 @@ export default function SimulatorHome() {
       const recipe = recipes[getRandomNumberInRange(0, recipes.length)];
       const row = {
         _id: recipe._id,
+        ingredients: recipe.ingredients,
+        recipe_name: recipe.recipe_name,
         qty: getRandomNumberInRange(1, SIMULATOR_CONFIG.MAX_QUANTITY_OF_RECIPE),
         status: "In preparation",
       };
@@ -138,7 +136,7 @@ export default function SimulatorHome() {
     }
 
     try {
-      await TableApi.submitOrder(restaurantId, tableId, userId, order);
+      await TableApi.submitOrder(restaurant, tableId, user, order);
       return true;
     } catch (error: any) {
       console.log(error);
@@ -156,14 +154,14 @@ export default function SimulatorHome() {
     const myTable = getRandomNumberInRange(0, 30);
 
     if (SIMULATOR_CONFIG.JOIN_TABLE)
-      await TableApi.joinTable(myRestaurant._id, "" + myTable, user._id);
+      await TableApi.joinTable(myRestaurant, "" + myTable, user);
 
     const orderCount = getRandomNumberInRange(
       1,
       SIMULATOR_CONFIG.MAX_QUANTITY_OF_ORDERS
     );
     for (let i = 0; i < orderCount; i++) {
-      await makeOrder(user._id, myRestaurant._id, "" + myTable, recipes);
+      await makeOrder(user, myRestaurant, "" + myTable, recipes);
     }
 
     return { table: "" + myTable, restaurant: myRestaurant._id, orderCount };
