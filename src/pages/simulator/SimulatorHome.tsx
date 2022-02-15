@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Container, Button, CssBaseline } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
-import { Category, Restaurant, User, Recipe, Order } from "types";
+import { Category, Restaurant, User, Recipe, RecipeOrder } from "types";
 import { SearchBar } from "components";
 import { RecipeApi, RestaurantApi, UserApi, TableApi } from "api";
 import { useSnackbar } from "notistack";
@@ -120,7 +120,7 @@ export default function SimulatorHome() {
     tableId: string,
     recipes: Recipe[]
   ) => {
-    const order: Order = [];
+    const order: RecipeOrder[] = [];
     const recipeCount = getRandomNumberInRange(1, 6);
 
     for (let i = 0; i < recipeCount; i++) {

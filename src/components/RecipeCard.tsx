@@ -7,6 +7,7 @@ import { useSpring, animated, config } from "react-spring";
 import { Recipe } from "types";
 import { RecipeModal } from "components";
 import { useState } from "react";
+import { SpaOutlined } from "@mui/icons-material";
 
 interface CardItemProps {
   recipe: Recipe;
@@ -51,8 +52,7 @@ export default function RecipeCard({
     <div>
       <animated.div
         style={{ borderRadius: BORDER_RADIUS, position: "relative", ...props }}
-        className="shadow clickable"
-        onClick={onClick ? onClick : () => setrecipeDetailModalOpened(true)}
+        className="shadow"
       >
         {image && (
           <LazyLoadImage
@@ -64,6 +64,8 @@ export default function RecipeCard({
               borderTopLeftRadius: BORDER_RADIUS,
               borderTopRightRadius: BORDER_RADIUS,
             }}
+            onClick={onClick ? onClick : () => setrecipeDetailModalOpened(true)}
+            className="clickable"
           />
         )}
 
@@ -79,6 +81,7 @@ export default function RecipeCard({
               whiteSpace: "pre-line",
             }}
           >
+            {!showButtons && quantity && <span>{quantity} X </span>}
             {text}
           </Typography>
         )}
@@ -93,16 +96,7 @@ export default function RecipeCard({
           </Typography>
         )}
         {children}
-        {!showButtons && quantity && (
-          <Typography
-            id="spring-modal-title"
-            variant="h5"
-            component="h2"
-            style={{ textAlign: "center", paddingTop: 10, paddingBottom: 10 }}
-          >
-            {quantity}
-          </Typography>
-        )}
+
         {showButtons && (
           <div
             style={{

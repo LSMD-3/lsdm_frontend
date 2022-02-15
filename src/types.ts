@@ -85,7 +85,7 @@ export type Order = RecipeOrder[];
 
 export type TableOrder = {
   tableId: string;
-  orders: Order[];
+  orders: RecipeOrder[];
 };
 
 export interface Item extends Recipe {

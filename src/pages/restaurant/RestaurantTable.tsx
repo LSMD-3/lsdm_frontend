@@ -1,15 +1,7 @@
 import { Neo4jApi, RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
-import {
-  Item,
-  Restaurant,
-  Menu,
-  Order,
-  UserType,
-  User,
-  RecipeOrder,
-} from "types";
+import { Item, Restaurant, Menu, UserType, User, RecipeOrder } from "types";
 import {
   Container,
   CssBaseline,
@@ -111,6 +103,7 @@ export default function RestaurantTable() {
           _id: id,
           ingredients: recipe.ingredients,
           recipe_name: recipe.recipe_name,
+          image_url: recipe.image_url,
           qty: cart[id],
           note: "",
           status: "In preparation",

@@ -44,7 +44,6 @@ export default function UserCart() {
         tableId,
         user.user!
       );
-      console.log(orders);
       setOrders(orders);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
@@ -69,6 +68,7 @@ export default function UserCart() {
           _id: id,
           ingredients: recipe.ingredients,
           recipe_name: recipe.recipe_name,
+          image_url: recipe.image_url,
           qty: cart[id],
           note: "",
           status: "In preparation",
