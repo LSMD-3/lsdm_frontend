@@ -14,8 +14,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { Category, Recipe, MenuRecipe, Restaurant } from "types";
 import { Box } from "@mui/system";
-import { RecipeCard, RecipeModal, SearchRecipeModal } from "components";
-import MenuGenerator from "./MenuGenerator";
+import { RecipeCard, SearchRecipeModal } from "components";
+import { userState } from "redux/store";
+import { useSelector } from "react-redux";
 
 export default function RestaurantMenu() {
   let { restaurantId } = useParams();
@@ -28,6 +29,7 @@ export default function RestaurantMenu() {
   const [newRecipes, setnewRecipes] = useState<MenuRecipe[]>();
   const [recipeModalOpened, setrecipeModalOpened] = useState(false);
   const [editMenuInfoMode, seteditMenuInfoMode] = useState(false);
+  const user = useSelector(userState);
 
   const [searchFilter, setsearchFilter] = useState<string>();
 
@@ -129,16 +131,62 @@ export default function RestaurantMenu() {
       : recipes;
   }
 
+  const renderEditorTools = () => {
+    return (
+      <div>
+        <h4>Actions</h4>
+        {deleteRecipesMode && (
+          <Button onClick={persistRecipesRemoved}>
+            Exit Delete Mode and Save
+          </Button>
+        )}
+        {!deleteRecipesMode && !editMenuInfoMode && (
+          <div>
+            <Button onClick={() => setrecipeModalOpened(true)}>
+              Add a Recipe
+            </Button>
+            <Button
+              onClick={() =>
+                navigate(`/recipe/create/${restaurantId}/${selectedMenu}`)
+              }
+            >
+              Add a new Recipe
+            </Button>
+            <Button onClick={() => seteditMenuInfoMode(true)}>
+              Edit Menu Informations
+            </Button>
+            <Button
+              onClick={() => {
+                setnewRecipes(restaurant.menus[selectedMenu].recipes);
+                setdeleteRecipesMode(true);
+              }}
+              color="error"
+            >
+              Remove Recipes
+            </Button>
+            <Button onClick={deleteCurrentMenu} color="error">
+              Delete Selected Menu
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const isAdmin =
+    user.user?.userType === "admin" || user.user?.userType === "super-admin";
   return (
     <div>
       <CssBaseline />
-      <Button
-        onClick={() => navigate(`/restaurant/${restaurantId}/menugenerator`)}
-        variant="contained"
-        style={{ margin: 20, float: "right" }}
-      >
-        Generate New Menu
-      </Button>
+      {isAdmin && (
+        <Button
+          onClick={() => navigate(`/restaurant/${restaurantId}/menugenerator`)}
+          variant="contained"
+          style={{ margin: 20, float: "right" }}
+        >
+          Generate New Menu
+        </Button>
+      )}
       <Container>
         {!hasMenus && (
           <div>
@@ -166,40 +214,14 @@ export default function RestaurantMenu() {
                   : " - A la carte"}
               </h4>
             )}
-            <h4>Actions</h4>
-            {deleteRecipesMode && (
-              <Button onClick={persistRecipesRemoved}>
-                Exit Delete Mode and Save
+            {isAdmin && renderEditorTools()}
+            {!isAdmin && (
+              <Button
+                variant="contained"
+                onClick={() => navigate("/restaurant/" + restaurantId)}
+              >
+                Open Restaurant
               </Button>
-            )}
-            {!deleteRecipesMode && !editMenuInfoMode && (
-              <div>
-                <Button onClick={() => setrecipeModalOpened(true)}>
-                  Add a Recipe
-                </Button>
-                <Button
-                  onClick={() =>
-                    navigate(`/recipe/create/${restaurantId}/${selectedMenu}`)
-                  }
-                >
-                  Add a new Recipe
-                </Button>
-                <Button onClick={() => seteditMenuInfoMode(true)}>
-                  Edit Menu Informations
-                </Button>
-                <Button
-                  onClick={() => {
-                    setnewRecipes(restaurant.menus[selectedMenu].recipes);
-                    setdeleteRecipesMode(true);
-                  }}
-                  color="error"
-                >
-                  Remove Recipes
-                </Button>
-                <Button onClick={deleteCurrentMenu} color="error">
-                  Delete Selected Menu
-                </Button>
-              </div>
             )}
             <div>
               <Autocomplete

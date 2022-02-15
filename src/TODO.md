@@ -1,6 +1,5 @@
 # Use Cases
 
-- [easy] browsing complesso ristoranti -> visualizzazione tabella (top rated per comune)
 - [easy] edit menu informations (name, set ayce flag, price of menu)
 - [easy] put restaurant, users and recipes in mongo
 
@@ -11,6 +10,7 @@
 
 - [da_integrare] create random relationships between nodes [Generator]
 - [da_integrare] generateRandomUserFollows, generateRandomRestaurantLike, generateRandomRecipeLike
+- [easy] top rated restaurants per te (considera il comune)
 
 # Statistics
 
