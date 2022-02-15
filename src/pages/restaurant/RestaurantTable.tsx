@@ -22,6 +22,7 @@ export default function RestaurantTable() {
   const user = useSelector(userState);
   const cart = useSelector(cartState);
   const liked = useSelector(likeState);
+  const selectedMenu = user.user?.joinedTable?.selectedMenu ?? 0;
 
   useEffect(() => {
     if (user.user?.joinedTable) {
@@ -46,7 +47,7 @@ export default function RestaurantTable() {
     try {
       const restaurant = await RestaurantApi.find(restaurantId);
       setrestaurant(restaurant);
-      setMenu(restaurant.menus[0]);
+      setMenu(restaurant.menus[selectedMenu]);
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });
     }

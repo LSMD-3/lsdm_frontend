@@ -71,6 +71,7 @@ export interface Menu {
 export interface VirtualTable {
   tableNumber: string;
   restaurant: Restaurant;
+  selectedMenu: number;
 }
 
 export type Cart = Record<string, number>;

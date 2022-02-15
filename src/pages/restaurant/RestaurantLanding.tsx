@@ -3,7 +3,13 @@ import { CardItem, DialogManager } from "components";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Restaurant, VirtualTable } from "types";
-import { Container, CssBaseline, Grid, IconButton } from "@mui/material";
+import {
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  IconButton,
+} from "@mui/material";
 import store, { likeState } from "redux/store";
 import { useSnackbar } from "notistack";
 import { Box } from "@mui/system";
@@ -17,6 +23,7 @@ export default function RestaurantLanding() {
   const [selectedTable, setselectedTable] = useState<number>(0);
   const [modalOpen, set_modalOpen] = useState(false);
   const likes = useSelector(likeState);
+  const [selectedMenu, setselectedMenu] = useState(0);
 
   const [isLiked, setIsLiked] = useState(
     likes.restaurantLikes.includes(restaurantId ?? "")
@@ -72,6 +79,21 @@ export default function RestaurantLanding() {
         </h1>
         <h4>Tipologia: {restaurant?.tipologia}</h4>
         <h4>Comune: {restaurant?.comune}</h4>
+
+        {restaurant && (
+          <div>
+            <h3>Please Select one of the menu above</h3>
+            {restaurant.menus.map((menu, idx) => (
+              <Button
+                variant={idx === selectedMenu ? "contained" : "outlined"}
+                onClick={() => setselectedMenu(idx)}
+                style={{ marginRight: 20 }}
+              >
+                {menu.name} {menu.ayce ? "AYCE: €" + menu.price : ""}
+              </Button>
+            ))}
+          </div>
+        )}
 
         <h2 style={{ textAlign: "center" }}>Select a table</h2>
         <Grid
@@ -129,6 +151,7 @@ export default function RestaurantLanding() {
             const joinedTable: VirtualTable = {
               restaurant,
               tableNumber: `${selectedTable + 1}`,
+              selectedMenu: selectedMenu,
             };
             console.log("USER:");
             console.log(user.user!._id);
@@ -140,6 +163,7 @@ export default function RestaurantLanding() {
             store.dispatch({
               type: "table/join",
               payload: joinedTable,
+              selectedMenu: selectedMenu,
             });
             navigate("/");
           },

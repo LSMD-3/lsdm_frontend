@@ -1,6 +1,5 @@
 # Use Cases
 
-- [easy] possibilità di scegliere il menu
 - [easy] browsing complesso ristoranti -> visualizzazione tabella (top rated per comune)
 - [easy] edit menu informations (name, set ayce flag, price of menu)
 - [easy] put restaurant, users and recipes in mongo
@@ -34,3 +33,7 @@
 
 - Talk about concistency used approach
 - Talk about concistency used approach
+
+# Simulation
+
+- generate a menu for all the restaurants
