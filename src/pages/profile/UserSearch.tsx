@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Restaurant, User } from "types";
 import { ItemList, SearchBar, DialogManager } from "components";
-import { RestaurantApi, UserApi, Neo4jApi } from "api";
+import { RestaurantApi, UserApi, Neo4jUserApi } from "api";
 import { useSnackbar } from "notistack";
 import { userState } from "redux/store";
 import { useSelector } from "react-redux";
@@ -41,7 +41,7 @@ export default function UserSearch(props: UserSearchProps) {
   const addFriend = async () => {
     if (!selectedUser) return;
     try {
-      await Neo4jApi.addFriend(user.user!._id, selectedUser._id);
+      await Neo4jUserApi.followUser(user.user!._id, selectedUser._id);
       onUserAdded && onUserAdded();
     } catch (error: any) {
       enqueueSnackbar("Cannot add this user to friends", { variant: "error" });

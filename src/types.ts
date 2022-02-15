@@ -96,3 +96,5 @@ export interface Item extends Recipe {
   invisible?: boolean;
   index?: number;
 }
+
+export type RestaurantNameId = { _id: string; nome: string };

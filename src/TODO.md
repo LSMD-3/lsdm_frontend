@@ -2,8 +2,6 @@
 
 - edit menu informations (set ayce flag, price of menu)
 - edit recipe in menu
-- shortcut to create and add a new recipe
-- when user click on the recipe, show poupop with details of it
 
 # Redis [jack]
 
@@ -12,7 +10,7 @@
 # Neo4j [mike]
 
 - [da_integrare] create random relationships between nodes [Generator]
-- [da_integrare]generateRandomUserFollows, generateRandomRestaurantLike, generateRandomRecipeLike
+- [da_integrare] generateRandomUserFollows, generateRandomRestaurantLike, generateRandomRecipeLike
 
 # Neo4j clarification
 

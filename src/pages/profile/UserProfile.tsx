@@ -7,15 +7,14 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Item, Recipe, Restaurant, User } from "types";
+import { Item, Recipe, Restaurant, RestaurantNameId, User } from "types";
 import { ItemList, SearchBar, DialogManager } from "components";
-import { RestaurantApi, UserApi, Neo4jApi, RecipeApi } from "api";
+import { RestaurantApi, UserApi, Neo4jUserApi, RecipeApi } from "api";
 import { useSnackbar } from "notistack";
 import store, { likeState, userState } from "redux/store";
 import { useSelector } from "react-redux";
 import { UserModal } from "./UserModal";
 import { UserEmail } from "api/UserApi";
-import { RestaurantNameId } from "api/Neo4jApi";
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -75,7 +74,7 @@ export default function UserProfile() {
 
   const unfollowFriend = async (userId: string) => {
     try {
-      await Neo4jApi.unfollowFriend(user.user!._id, userId);
+      await Neo4jUserApi.unfollowUser(user.user!._id, userId);
       fetchTotalFollows();
     } catch (error: any) {
       enqueueSnackbar("You cannot unfollow friend", { variant: "error" });
@@ -101,9 +100,9 @@ export default function UserProfile() {
   const toggleItemLike = (item: Item, liked: boolean) => {
     store.dispatch({ type: "recipe/toggleLike", payload: item._id });
     if (liked) {
-      Neo4jApi.likeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.likeRecipe(user.user!._id, item._id);
     } else {
-      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.unlikeRecipe(user.user!._id, item._id);
     }
   };
 
@@ -122,13 +121,13 @@ export default function UserProfile() {
             setFollowingOpen(true)
           )}
           {renderButton(<h4>Get Suggested friends</h4>, () =>
-            Neo4jApi.suggestFriends(user.user!._id)
+            Neo4jUserApi.suggestfriends(user.user!._id)
           )}
           {renderButton(<h4>Get Suggested restaurants</h4>, () =>
-            Neo4jApi.suggestrestaurants(user.user!._id)
+            Neo4jUserApi.suggestrestaurants(user.user!._id)
           )}
           {renderButton(<h4>Get Suggested recipes</h4>, () =>
-            Neo4jApi.suggestRecipes(user.user!._id)
+            Neo4jUserApi.suggestrecipes(user.user!._id)
           )}
 
           <br />

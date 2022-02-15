@@ -1,4 +1,4 @@
-import { Neo4jApi, RestaurantApi, TableApi } from "api";
+import { Neo4jUserApi, RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
 import { Item, Restaurant, Menu, UserType, User, RecipeOrder } from "types";
@@ -62,9 +62,9 @@ export default function RestaurantTable() {
   const toggleItemLike = (item: Item, liked: boolean) => {
     store.dispatch({ type: "recipe/toggleLike", payload: item._id });
     if (liked) {
-      Neo4jApi.likeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.likeRecipe(user.user!._id, item._id);
     } else {
-      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.unlikeRecipe(user.user!._id, item._id);
     }
   };
 

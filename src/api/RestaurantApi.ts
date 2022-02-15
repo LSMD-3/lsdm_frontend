@@ -1,8 +1,7 @@
 import { responseErrorCheck } from "./utils";
 import axios from "axios";
-import { Menu, Restaurant, UserType } from "types";
+import { Menu, Restaurant, RestaurantNameId, UserType } from "types";
 import { BaseResource } from "./BaseResource";
-import { RestaurantNameId } from "./Neo4jApi";
 
 export interface MenuCreationPreferences {
   totalRecipes: number;

@@ -3,7 +3,7 @@ import store from "redux/store";
 import { sleep } from "utils/helper";
 import { VirtualTable, User, Cart } from "types";
 import axios from "axios";
-import { Neo4jApi, RestaurantApi } from "api";
+import { Neo4jUserApi, RestaurantApi } from "api";
 import { LikesState } from "redux/likesReducer";
 
 class AppStore {
@@ -31,8 +31,16 @@ class AppStore {
   fetchCart = async () => {};
   fetchLikes = async () => {
     if (this.user) {
-      const restaurantLikes: string[] = []; //await Neo4jApi.likedRestaurant(this.user._id);
-      const recipeLikes: string[] = []; //await Neo4jApi.likedRecipe(this.user._id);
+      const restaurantLikes: string[] = [];
+
+      // await Neo4jUserApi.likedRestaurant(
+      //   this.user._id
+      // );
+      const recipeLikes: string[] = [];
+
+      // await Neo4jUserApi.likedRecipe(
+      //   this.user._id
+      // );
       this.likesState.recipesLikes = recipeLikes;
       this.likesState.restaurantLikes = restaurantLikes;
       this.setLikes(this.likesState);

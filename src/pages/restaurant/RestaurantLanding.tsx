@@ -1,4 +1,4 @@
-import { RestaurantApi, TableApi, Neo4jApi } from "api";
+import { RestaurantApi, TableApi, Neo4jUserApi } from "api";
 import { CardItem, DialogManager } from "components";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -34,10 +34,10 @@ export default function RestaurantLanding() {
     if (!user.user || !restaurant) return;
     setIsLiked(!isLiked);
     if (!isLiked) {
-      Neo4jApi.likeRestaurant(user.user._id, restaurant._id);
+      Neo4jUserApi.likeRestaurant(user.user._id, restaurant._id);
       enqueueSnackbar("Restaurant Liked", { variant: "success" });
     } else {
-      Neo4jApi.unlikeRestaurant(user.user._id, restaurant._id);
+      Neo4jUserApi.unlikeRestaurant(user.user._id, restaurant._id);
       enqueueSnackbar("Restaurant UnLiked", { variant: "error" });
     }
   };

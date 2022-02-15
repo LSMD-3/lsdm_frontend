@@ -8,7 +8,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import store, { userState, cartState, likeState } from "redux/store";
 import { MenuRecipe, Restaurant, Menu, Item, Order, RecipeOrder } from "types";
-import { TableApi, RestaurantApi, Neo4jApi } from "api";
+import { TableApi, RestaurantApi, Neo4jUserApi } from "api";
 import { useSnackbar } from "notistack";
 import { ItemList } from "components";
 import { extractItemsFromMenu } from "helpers";
@@ -111,9 +111,9 @@ export default function UserCart() {
   const toggleItemLike = (item: Item, liked: boolean) => {
     store.dispatch({ type: "recipe/toggleLike", payload: item._id });
     if (liked) {
-      Neo4jApi.likeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.likeRecipe(user.user!._id, item._id);
     } else {
-      Neo4jApi.unlikeRecipe(user.user!._id, item._id);
+      Neo4jUserApi.unlikeRecipe(user.user!._id, item._id);
     }
   };
   const increment = (item: Item) => {
