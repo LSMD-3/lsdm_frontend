@@ -3,6 +3,7 @@
 - put restaurant in neo4j
 - create a menu for all restaurant
 - conto finale utente
+- fix simulator
 
 - create random relationships between nodes [Generator]
 - top rated restaurants per te (considera il comune)

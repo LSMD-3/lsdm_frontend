@@ -46,7 +46,7 @@ const USER_PAGES: Pages = [
 const CHEF_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
 const WAITER_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
 const ADMIN_PAGES: Pages = [
-  { title: "Profile", url: "/profile" },
+  { title: "Recipes", url: "/recipes" },
   { title: "Dev", url: "/dev" },
 ];
 
