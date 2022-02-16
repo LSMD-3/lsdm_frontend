@@ -113,12 +113,12 @@ class TableApi extends BaseResource<Table> {
   }
 
   async get_table_users(
-    restaurant_id: string,
+    restaurant: Restaurant,
     table_id: string
   ): Promise<User[]> {
     return axios
       .post(this.endpoint + `/get_table_users`, {
-        restaurant_id,
+        restaurant,
         table_id,
       })
       .then(responseErrorCheck);

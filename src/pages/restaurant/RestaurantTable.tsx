@@ -37,7 +37,7 @@ export default function RestaurantTable() {
     if (user.user?.joinedTable == undefined) return;
 
     const partecipants = await TableApi.get_table_users(
-      user.user!.joinedTable.restaurant._id,
+      user.user!.joinedTable.restaurant,
       user.user.joinedTable.tableNumber
     );
     setpartecipants(partecipants);
