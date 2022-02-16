@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { RestaurantApi, RecipeApi } from "api";
+import { RestaurantApi, RecipeApi, MenuApi } from "api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { Category, Recipe, MenuRecipe, Restaurant } from "types";
@@ -17,6 +17,7 @@ import { Box } from "@mui/system";
 import { RecipeCard, SearchRecipeModal } from "components";
 import { userState } from "redux/store";
 import { useSelector } from "react-redux";
+import CreateMenuModal from "components/dialogs/CreateMenuModal";
 
 export default function RestaurantMenu() {
   let { restaurantId } = useParams();
@@ -26,9 +27,10 @@ export default function RestaurantMenu() {
   const [selectedMenu, setselectedMenu] = useState(0);
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const [deleteRecipesMode, setdeleteRecipesMode] = useState(false);
-  const [newRecipes, setnewRecipes] = useState<MenuRecipe[]>();
   const [recipeModalOpened, setrecipeModalOpened] = useState(false);
   const [editMenuInfoMode, seteditMenuInfoMode] = useState(false);
+  const [createMenuOpen, setcreateMenuOpen] = useState(false);
+  const [recipesToRemove, setrecipesToRemove] = useState<string[]>([]);
   const user = useSelector(userState);
 
   const [searchFilter, setsearchFilter] = useState<string>();
@@ -55,32 +57,29 @@ export default function RestaurantMenu() {
   };
 
   const addRecipeToMenu = async (recipe: MenuRecipe) => {
-    if (!restaurant) return;
-    restaurant.menus[selectedMenu].recipes.push(recipe);
-
+    if (!restaurantId) return;
     try {
-      await RestaurantApi.update(restaurant);
-      setrestaurant({ ...restaurant });
-      enqueueSnackbar("Recipes updated!", { variant: "success" });
+      await MenuApi.addRecipeToMenu(restaurantId, selectedMenu, recipe);
+      await fetchRestaurant();
+      enqueueSnackbar("Recipes added!", { variant: "success" });
     } catch (error: any) {
       enqueueSnackbar("Menu not found", { variant: "error" });
     }
     setrecipeModalOpened(false);
   };
 
-  const removeRecipe = (index: number) => {
-    if (!newRecipes) return;
-    newRecipes.splice(index, 1);
-
-    setnewRecipes([...newRecipes]);
-  };
-
   const persistRecipesRemoved = async () => {
-    if (!restaurant) return;
-    restaurant.menus[selectedMenu].recipes = newRecipes!;
+    if (!restaurantId || !restaurant) return;
 
+    restaurant.menus[selectedMenu].recipes = restaurant.menus[
+      selectedMenu
+    ].recipes.filter((r) => !recipesToRemove.includes(r._id));
     try {
-      await RestaurantApi.update(restaurant);
+      await MenuApi.removeRecipesFromMenu(
+        restaurantId,
+        selectedMenu,
+        recipesToRemove
+      );
       setrestaurant({ ...restaurant });
       enqueueSnackbar("Recipes updated!", { variant: "success" });
     } catch (error: any) {
@@ -90,16 +89,33 @@ export default function RestaurantMenu() {
   };
 
   const deleteCurrentMenu = async () => {
-    if (!restaurant) return;
-    restaurant.menus.splice(selectedMenu, 1);
+    if (!restaurantId) return;
     try {
-      await RestaurantApi.update(restaurant);
-      setrestaurant({ ...restaurant });
+      await MenuApi.deleteMenu(restaurantId, selectedMenu);
+      setselectedMenu(0);
+      await fetchRestaurant();
       enqueueSnackbar("Menu removed!", { variant: "success" });
     } catch (error: any) {
       enqueueSnackbar("Menu not found", { variant: "error" });
     }
     setdeleteRecipesMode(false);
+  };
+
+  const createNewMenu = async (name: string, ayce: boolean, price?: number) => {
+    if (!restaurantId) return;
+    try {
+      await MenuApi.createMenu(restaurantId, {
+        ayce,
+        name,
+        price,
+        recipes: [],
+      });
+      await fetchRestaurant();
+      enqueueSnackbar("Menu Created!", { variant: "success" });
+    } catch (error) {
+      enqueueSnackbar("Menu creation failed", { variant: "error" });
+    }
+    setcreateMenuOpen(false);
   };
 
   if (loading)
@@ -120,9 +136,9 @@ export default function RestaurantMenu() {
   const hasMenus = restaurant.menus.length > 0;
 
   if (hasMenus) {
-    const recipes = deleteRecipesMode
-      ? newRecipes!
-      : restaurant.menus[selectedMenu].recipes;
+    const recipes = restaurant.menus[selectedMenu].recipes.filter(
+      (r) => !recipesToRemove.includes(r._id)
+    );
 
     filteredRecipes = searchFilter
       ? recipes.filter(
@@ -152,12 +168,11 @@ export default function RestaurantMenu() {
             >
               Add a new Recipe
             </Button>
-            <Button onClick={() => seteditMenuInfoMode(true)}>
+            {/* <Button onClick={() => seteditMenuInfoMode(true)}>
               Edit Menu Informations
-            </Button>
+            </Button> */}
             <Button
               onClick={() => {
-                setnewRecipes(restaurant.menus[selectedMenu].recipes);
                 setdeleteRecipesMode(true);
               }}
               color="error"
@@ -179,13 +194,20 @@ export default function RestaurantMenu() {
     <div>
       <CssBaseline />
       {isAdmin && (
-        <Button
-          onClick={() => navigate(`/restaurant/${restaurantId}/menugenerator`)}
-          variant="contained"
-          style={{ margin: 20, float: "right" }}
-        >
-          Generate New Menu
-        </Button>
+        <div style={{ margin: 20, float: "right" }}>
+          <Button
+            onClick={() =>
+              navigate(`/restaurant/${restaurantId}/menugenerator`)
+            }
+            variant="contained"
+            style={{ marginRight: 20 }}
+          >
+            Generate New Menu
+          </Button>
+          <Button onClick={() => setcreateMenuOpen(true)} variant="contained">
+            Create a menu
+          </Button>
+        </div>
       )}
       <Container>
         {!hasMenus && (
@@ -250,7 +272,12 @@ export default function RestaurantMenu() {
                     <RecipeCard
                       recipe={recipe}
                       onClick={
-                        deleteRecipesMode ? () => removeRecipe(i) : undefined
+                        deleteRecipesMode
+                          ? () =>
+                              setrecipesToRemove(
+                                recipesToRemove.concat(recipe._id)
+                              )
+                          : undefined
                       }
                     />
                   </Grid>
@@ -265,6 +292,11 @@ export default function RestaurantMenu() {
           onRecipeAdded={addRecipeToMenu}
           title="Search a recipe to add"
         />
+        <CreateMenuModal
+          onConfirm={createNewMenu}
+          open={createMenuOpen}
+          handleClose={() => setcreateMenuOpen(false)}
+        ></CreateMenuModal>
       </Container>
     </div>
   );

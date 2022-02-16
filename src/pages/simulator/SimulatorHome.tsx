@@ -4,7 +4,7 @@ import { Container, Button, CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Category, Restaurant, User, Recipe, RecipeOrder } from "types";
 import { SearchBar } from "components";
-import { RecipeApi, RestaurantApi, UserApi, TableApi } from "api";
+import { RecipeApi, RestaurantApi, UserApi, TableApi, MenuApi } from "api";
 import { useSnackbar } from "notistack";
 
 const SIMULATOR_CONFIG = {
@@ -15,27 +15,25 @@ const SIMULATOR_CONFIG = {
   JOIN_TABLE: true,
 };
 
-// const N = [
-//   10, 25, 50, 100, 200, 300, 500, 650, 800, 1000, 1200, 1500, 1800, 2200, 2500,
-// ];
+const N = [5];
 
 // 30k
-const N = [
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
+// const N = [
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200,
 
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200,
 
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
-];
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
+//   200, 200, 200, 200, 200,
+// ];
 
 interface RecipeGroup {
   _id: string;
@@ -83,7 +81,7 @@ export default function SimulatorHome() {
     const endPrice = getRandomNumberInRange(11, 50);
 
     try {
-      await RestaurantApi.createMenu(restaurantId, {
+      await MenuApi.createRandomMenu(restaurantId, {
         totalRecipes,
         composition,
         startPrice,
@@ -181,9 +179,12 @@ export default function SimulatorHome() {
     const users = await UserApi.getNormalUsers(userCount);
     setmessage("simulation started...");
 
-    const promises = users.map((u: User) =>
-      joinRandomTableAndCreateOrders(u, restaurants, recipes)
-    );
+    const promises = users.map((u: User) => {
+      try {
+        return joinRandomTableAndCreateOrders(u, restaurants, recipes);
+      } catch (e) {}
+      return false;
+    });
 
     // send all orders
     let start = new Date();
@@ -202,9 +203,9 @@ export default function SimulatorHome() {
     console.log(`${totalOrders} orders issued in ${time / 1000} seconds`);
     setmessage(`${totalOrders} orders issued in ${time / 1000} seconds`);
     // close all the tables opened
-    const promises2 = tablesToClose.map((tc) =>
-      closeTable(tc.table, tc.restaurant)
-    );
+    const promises2 = tablesToClose.map((tc) => {
+      if (tc) closeTable(tc.table, tc.restaurant);
+    });
     start = new Date();
     await Promise.all(promises2);
     time = new Date().getTime() - start.getTime();

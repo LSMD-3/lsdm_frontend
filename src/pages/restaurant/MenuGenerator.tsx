@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { RestaurantApi, RecipeApi } from "api";
+import { RestaurantApi, RecipeApi, MenuApi } from "api";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import { Category, Menu } from "types";
@@ -97,7 +97,7 @@ export default function MenuGenerator() {
     if (!restaurantId || !totalRecipes) return;
 
     try {
-      const menu = await RestaurantApi.createMenu(restaurantId, {
+      const menu = await MenuApi.createRandomMenu(restaurantId, {
         totalRecipes,
         composition,
         startPrice: range[0],
