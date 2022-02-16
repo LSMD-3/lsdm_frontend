@@ -118,7 +118,7 @@ export default function RecipeCreate() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Edit Recipe
+          Create Recipe
         </Typography>
         <Box component="form" noValidate onSubmit={saveRecipe} sx={{ mt: 3 }}>
           <TextField
