@@ -7,13 +7,13 @@ import AppStore from "stores/AppStore";
 
 const userAccounts = [
   {
-    name: "User Mario Rossi",
-    email: "mario.rossi@gmail.com",
-    password: "Mariorossi1!",
+    name: "User Eliak Lakin",
+    email: "Elian_Lakin@gmail.com",
+    password: "Password1!",
   },
   {
-    name: "User C",
-    email: "c@c.com",
+    name: "User Marcos Reilly",
+    email: "Marcos58@gmail.com",
     password: "Password1!",
   },
   {

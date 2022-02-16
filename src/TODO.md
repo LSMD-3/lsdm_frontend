@@ -1,18 +1,13 @@
 # Use Cases
 
-- [easy] put restaurant, users and recipes in mongo
-- [easy] conto finale utente
+- put restaurant in neo4j
+- create a menu for all restaurant
+- conto finale utente
 
-- [da_integrare] create random relationships between nodes [Generator]
-- [da_integrare] generateRandomUserFollows, generateRandomRestaurantLike, generateRandomRecipeLike
-
-# TODO
-
-- [easy] top rated restaurants per te (considera il comune)
-- [mike] sul profilo utente -> suggerire 5 ristoranti più piaciuti dai followee
-- Ricette con più like e meno like
-
-# Statistics
+- create random relationships between nodes [Generator]
+- top rated restaurants per te (considera il comune)
+- suggerire 5 ristoranti più piaciuti dai followee
+- redis: fix get_table_users
 
 - 1.1 aggiungere comune al ristorante
 - 1.2 aggiungere nome al cliente
@@ -26,10 +21,6 @@
 - ricette più ordinate per ogni categoria
 - fatturato medio di ristoranti per comune
 
-## Neo4j
-
-- il piatto che ha più like
-
 ## Se avanza tempo
 
 - When we update a entity -> update the node in neo4j
@@ -42,7 +33,3 @@
 
 - Talk about concistency used approach
 - Talk about concistency used approach
-
-# Simulation
-
-- generate a menu for all the restaurants
