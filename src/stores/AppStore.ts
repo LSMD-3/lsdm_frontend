@@ -31,16 +31,12 @@ class AppStore {
   fetchCart = async () => {};
   fetchLikes = async () => {
     if (this.user) {
-      const restaurantLikes: string[] = [];
-
-      // await Neo4jUserApi.likedRestaurant(
-      //   this.user._id
-      // );
-      const recipeLikes: string[] = [];
-
-      // await Neo4jUserApi.likedRecipe(
-      //   this.user._id
-      // );
+      const restaurantLikes: string[] = await Neo4jUserApi.getLikedRestaurants(
+        this.user._id
+      );
+      const recipeLikes: string[] = await Neo4jUserApi.getLikedRecipes(
+        this.user._id
+      );
       this.likesState.recipesLikes = recipeLikes;
       this.likesState.restaurantLikes = restaurantLikes;
       this.setLikes(this.likesState);

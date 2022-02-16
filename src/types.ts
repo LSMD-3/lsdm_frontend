@@ -2,6 +2,7 @@ export type UserType = "user" | "admin" | "chef" | "waiter" | "super-admin";
 
 export interface User {
   _id: string;
+  id?: string;
   email: string;
   name: string;
   surname: string;

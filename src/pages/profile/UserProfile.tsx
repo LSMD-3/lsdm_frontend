@@ -14,7 +14,6 @@ import { useSnackbar } from "notistack";
 import store, { likeState, userState } from "redux/store";
 import { useSelector } from "react-redux";
 import { UserModal } from "./UserModal";
-import { UserEmail } from "api/UserApi";
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -25,8 +24,8 @@ export default function UserProfile() {
   const [totalFollows, setTotalFollows] = useState<number>();
   const [followingOpen, setFollowingOpen] = useState(false);
   const [followerOpen, setFollowerOpen] = useState(false);
-  const [followsEmails, setFollowsEmails] = useState<UserEmail[]>([]);
-  const [followerEmails, setFollowerEmails] = useState<UserEmail[]>([]);
+  const [follows, setfollows] = useState<User[]>([]);
+  const [followers, setfollowers] = useState<User[]>([]);
   const [favouriteRestaurants, setFavoriteRestaurants] = useState<
     RestaurantNameId[]
   >([]);
@@ -57,15 +56,15 @@ export default function UserProfile() {
   };
 
   const fetchTotalFollowers = async () => {
-    const followerEmails = await UserApi.getFollowerEmails(user.user!._id);
-    setTotalFollowers(followerEmails.length);
-    setFollowerEmails(followerEmails);
+    const followers = await Neo4jUserApi.getFollowers(user.user!._id);
+    setTotalFollowers(followers.length);
+    setfollowers(followers);
   };
 
   const fetchTotalFollows = async () => {
-    const followsEmails = await UserApi.getFollowsEmail(user.user!._id);
-    setTotalFollows(followsEmails.length);
-    setFollowsEmails(followsEmails);
+    const follows = await Neo4jUserApi.getFollows(user.user!._id);
+    setTotalFollows(follows.length);
+    setfollows(follows);
   };
 
   const onModalAction = (userId: string) => {
@@ -144,7 +143,7 @@ export default function UserProfile() {
               setFollowingOpen(false);
               setFollowerOpen(false);
             }}
-            emails={followingOpen ? followsEmails : followerEmails}
+            users={followingOpen ? follows : followers}
             onClick={onModalAction}
             onUserAdded={followingOpen ? fetchTotalFollows : undefined}
             title={followingOpen ? "Following Users" : "Your Followers"}

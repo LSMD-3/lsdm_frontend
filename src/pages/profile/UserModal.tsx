@@ -12,27 +12,26 @@ import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import Typography from "@mui/material/Typography";
 import { blue } from "@mui/material/colors";
-import { User } from "types";
 import UserSearch from "./UserSearch";
+import { User } from "types";
 
 interface UserModalProps {
   open: boolean;
   title: string;
   onClose: () => void;
-  emails: { _id: string; email: string }[];
+  users: User[];
   onClick: (userId: string) => void;
   onUserAdded?: () => void;
 }
 
 export function UserModal(props: UserModalProps) {
-  const { onClose, open, emails, onClick, onUserAdded, title } = props;
+  const { onClose, open, users, onClick, onUserAdded, title } = props;
 
   const handleClose = () => {
     onClose();
   };
 
   const handleListItemClick = (value: string) => {
-    console.log(value);
     onClick(value);
   };
 
@@ -40,18 +39,18 @@ export function UserModal(props: UserModalProps) {
     <Dialog onClose={handleClose} open={open}>
       <DialogTitle>{title}</DialogTitle>
       <List sx={{ pt: 0 }}>
-        {emails.map((email) => (
+        {users.map((user) => (
           <ListItem
             button
-            onClick={() => handleListItemClick(email._id)}
-            key={email._id}
+            onClick={() => handleListItemClick(user.id!)}
+            key={user.id!}
           >
             <ListItemAvatar>
               <Avatar sx={{ bgcolor: blue[100], color: blue[600] }}>
                 <PersonIcon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={email.email} />
+            <ListItemText primary={user.email} />
           </ListItem>
         ))}
         {onUserAdded && <UserSearch onUserAdded={onUserAdded} />}

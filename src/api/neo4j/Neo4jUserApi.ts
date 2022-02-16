@@ -5,14 +5,6 @@ import { responseErrorCheck } from "../utils";
 
 class Neo4jUserApi {
   endpoint = "neo4j/user";
-  async createUser(user: User) {
-    return axios
-      .post(this.endpoint + `/create`, {
-        _id: user._id,
-        email: user.email,
-      })
-      .then(responseErrorCheck);
-  }
 
   async followUser(follower: string, followee: string) {
     return axios
@@ -118,6 +110,18 @@ class Neo4jUserApi {
 
   async deleteAllNodes() {
     return axios.delete(this.endpoint + `/all`).then(responseErrorCheck);
+  }
+
+  async getLikedRestaurants(userId: string) {
+    return axios
+      .get(this.endpoint + `/likedRestaurant/${userId}`)
+      .then(responseErrorCheck);
+  }
+
+  async getLikedRecipes(userId: string) {
+    return axios
+      .get(this.endpoint + `/likedRecipes/${userId}`)
+      .then(responseErrorCheck);
   }
 }
 
