@@ -43,6 +43,7 @@ export interface Recipe {
   recipe_link?: string;
   image_url?: string;
   ingredients: string[];
+  price?: number;
 }
 
 export interface Category {
@@ -80,6 +81,7 @@ export interface RecipeOrder extends Recipe {
   qty: number;
   note?: string;
   status?: string;
+  price?: number;
 }
 
 export type Order = RecipeOrder[];

@@ -20,22 +20,7 @@ const SIMULATOR_CONFIG = {
 // ];
 
 // 30k
-const N = [
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
-
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
-
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200,
-  200, 200, 200, 200, 200,
-];
+const N = [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200];
 
 interface RecipeGroup {
   _id: string;
@@ -129,6 +114,7 @@ export default function SimulatorHome() {
         _id: recipe._id,
         ingredients: recipe.ingredients,
         recipe_name: recipe.recipe_name,
+        price: recipe.price,
         qty: getRandomNumberInRange(1, SIMULATOR_CONFIG.MAX_QUANTITY_OF_RECIPE),
         status: "In preparation",
       };
@@ -149,22 +135,36 @@ export default function SimulatorHome() {
     restaurants: Restaurant[],
     recipes: Recipe[]
   ) => {
+    //BBBBBBBBBBB
     const myRestaurant =
       restaurants[getRandomNumberInRange(0, restaurants.length)];
     const myTable = getRandomNumberInRange(0, 30);
-
+    console.log(myRestaurant);
+    let failed;
     if (SIMULATOR_CONFIG.JOIN_TABLE)
-      await TableApi.joinTable(myRestaurant, "" + myTable, user);
-
+      failed = await TableApi.joinTable(myRestaurant, "" + myTable, user);
     const orderCount = getRandomNumberInRange(
       1,
       SIMULATOR_CONFIG.MAX_QUANTITY_OF_ORDERS
     );
-    for (let i = 0; i < orderCount; i++) {
-      await makeOrder(user, myRestaurant, "" + myTable, recipes);
-    }
+    if (!failed) {
+      for (let i = 0; i < orderCount; i++) {
+        await makeOrder(user, myRestaurant, "" + myTable, recipes);
+      }
 
-    return { table: "" + myTable, restaurant: myRestaurant, orderCount };
+      return {
+        table: "" + myTable,
+        restaurant: myRestaurant,
+        orderCount,
+        status: "PASSED",
+      };
+    } else
+      return {
+        table: "" + myTable,
+        restaurant: myRestaurant,
+        orderCount,
+        status: "FAILED",
+      };
   };
 
   const closeTable = async (table: string, restaurant: Restaurant) => {
@@ -191,6 +191,7 @@ export default function SimulatorHome() {
       table: string;
       restaurant: Restaurant;
       orderCount: number;
+      status: string;
     }[] = await Promise.all(promises);
     let time = new Date().getTime() - start.getTime();
 
@@ -202,9 +203,10 @@ export default function SimulatorHome() {
     console.log(`${totalOrders} orders issued in ${time / 1000} seconds`);
     setmessage(`${totalOrders} orders issued in ${time / 1000} seconds`);
     // close all the tables opened
-    const promises2 = tablesToClose.map((tc) =>
-      closeTable(tc.table, tc.restaurant)
-    );
+    const promises2 = tablesToClose.map((tc) => {
+      console.log(tc.status);
+      if (tc.status === "PASSED") closeTable(tc.table, tc.restaurant);
+    });
     start = new Date();
     await Promise.all(promises2);
     time = new Date().getTime() - start.getTime();

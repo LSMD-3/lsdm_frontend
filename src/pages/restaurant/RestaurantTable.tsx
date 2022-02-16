@@ -99,6 +99,7 @@ export default function RestaurantTable() {
     const order: RecipeOrder[] = [];
     Object.keys(cart).forEach((id) => {
       const recipe = menu.recipes.find((r) => r._id === id);
+      console.log(recipe);
       if (recipe) {
         const row: RecipeOrder = {
           _id: id,
@@ -106,6 +107,7 @@ export default function RestaurantTable() {
           recipe_name: recipe.recipe_name,
           image_url: recipe.image_url,
           qty: cart[id],
+          price: recipe.price,
           note: "",
           status: "In preparation",
         };

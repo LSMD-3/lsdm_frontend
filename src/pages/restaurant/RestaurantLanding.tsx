@@ -155,6 +155,7 @@ export default function RestaurantLanding() {
             };
             console.log("USER:");
             console.log(user.user!._id);
+            console.log(restaurant);
             TableApi.joinTable(
               restaurant,
               String(selectedTable + 1),
