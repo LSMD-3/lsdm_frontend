@@ -6,6 +6,7 @@ export { default as DevPage } from "./DevPage";
 
 export { default as Home } from "./homes/Home";
 export { default as NotFound } from "./NotFound";
+export { default as UserOrderHistory } from "./homes/UserOrderHistory";
 
 export { default as SimulatorHome } from "./simulator/SimulatorHome";
 

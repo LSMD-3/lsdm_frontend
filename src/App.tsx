@@ -26,6 +26,7 @@ import {
   UserCreate,
   MenuGenerator,
   RestaurantView,
+  UserOrderHistory,
 } from "pages";
 import { TopNavigation } from "navigation";
 
@@ -113,6 +114,8 @@ function App() {
               path="restaurant/:restaurantId"
               element={<RestaurantLanding />}
             />
+
+            <Route path="history" element={<UserOrderHistory />} />
             <Route path="users" element={<UsersHome />} />
             <Route path="user/create" element={<UserCreate />} />
             <Route path="user/:userId/edit" element={<UserEdit />} />

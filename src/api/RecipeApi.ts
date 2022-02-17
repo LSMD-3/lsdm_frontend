@@ -22,6 +22,12 @@ class RecipeApi extends BaseResource<Recipe> {
       .then(responseErrorCheck);
   }
 
+  async getRecipeImage(recipeId: string): Promise<Recipe> {
+    return axios
+      .get(this.endpoint + "/image/" + recipeId)
+      .then(responseErrorCheck);
+  }
+
   async getRecipesByIngredient(ingredient: string): Promise<any> {
     return axios
       .get(this.endpoint + "/byIngredient/" + ingredient)

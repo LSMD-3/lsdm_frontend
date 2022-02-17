@@ -117,6 +117,7 @@ export default function SimulatorHome() {
         _id: recipe._id,
         ingredients: recipe.ingredients,
         recipe_name: recipe.recipe_name,
+        image_url: recipe.image_url,
         price: recipe.price,
         qty: getRandomNumberInRange(1, SIMULATOR_CONFIG.MAX_QUANTITY_OF_RECIPE),
         status: "In preparation",

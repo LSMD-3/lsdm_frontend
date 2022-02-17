@@ -39,6 +39,7 @@ const SUPER_ADMIN_PAGES: Pages = [
 
 const UNAUTHENTICATE_PAGES: Pages = [{ title: "Dev", url: "/dev" }];
 const USER_PAGES: Pages = [
+  { title: "My history", url: "/history" },
   { title: "Cart", url: "/cart" },
   { title: "Profile", url: "/profile" },
   { title: "Dev", url: "/dev" },

@@ -6,8 +6,9 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import { useSpring, animated, config } from "react-spring";
 import { Recipe } from "types";
 import { RecipeModal } from "components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SpaOutlined } from "@mui/icons-material";
+import { RecipeApi } from "api";
 
 interface CardItemProps {
   recipe: Recipe;
@@ -43,9 +44,20 @@ export default function RecipeCard({
     config: config.molasses,
   });
 
+  const [image, setimage] = useState(recipe.image_url);
   const [recipeDetailModalOpened, setrecipeDetailModalOpened] = useState(false);
 
-  const image = recipe.image_url;
+  const fetchImage = async () => {
+    const img = await RecipeApi.getRecipeImage(recipe._id);
+    setimage(img.image_url);
+  };
+
+  useEffect(() => {
+    if (!image) fetchImage();
+
+    return () => {};
+  }, []);
+
   const text = recipe.recipe_name;
 
   return (

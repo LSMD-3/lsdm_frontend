@@ -7,6 +7,7 @@ import {
   Restaurant,
   RecipeOrder,
   Order,
+  Recipe,
 } from "types";
 import { BaseResource } from "./BaseResource";
 import { responseErrorCheck } from "./utils";
@@ -19,6 +20,8 @@ const getUserDao = (user: User) => {
     surname: user.surname,
   };
 };
+
+export type RecipeHistory = { recipes: Recipe[]; restaurant: Restaurant };
 
 const getRestaurantDao = (restaurant: Restaurant) => {
   return {
@@ -201,6 +204,12 @@ class TableApi extends BaseResource<Table> {
   async getMostOrderedRecipeForComune(): Promise<any> {
     return axios
       .get(`/tableSession/getMostOrderedRecipeForComune/`)
+      .then(responseErrorCheck);
+  }
+
+  async getRecipesPokedex(userId: string): Promise<RecipeHistory[]> {
+    return axios
+      .get(`/tableSession/getRecipesPokedex/${userId}`)
       .then(responseErrorCheck);
   }
 }
