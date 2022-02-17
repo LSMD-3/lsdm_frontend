@@ -27,7 +27,6 @@ class AppStore {
     this.user = await Storage.load("@AppStore:user", this.user);
   };
 
-  // TODO CONNECT API
   fetchCart = async () => {};
   fetchLikes = async () => {
     if (this.user) {

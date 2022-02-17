@@ -107,7 +107,6 @@ export default function UserCart() {
     }
   };
 
-  // TODO NEO4J INTEGRATION
   const toggleItemLike = (item: Item, liked: boolean) => {
     store.dispatch({ type: "recipe/toggleLike", payload: item._id });
     if (liked) {

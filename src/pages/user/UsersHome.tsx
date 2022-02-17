@@ -46,7 +46,6 @@ export default function UserHome() {
   ];
 
   const generateUsers = async (count: number) => {
-    // TODO change this putting a singnir rather than a user add
     const users = FakerFactory.createUsers(count);
     const promises: any[] = [];
     users.forEach((user) => {

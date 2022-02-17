@@ -30,11 +30,6 @@ function updateItemQuantity(cartState: State, item: Item, increment: number) {
     const quantity = newCart[item._id] + increment;
     if (quantity > 0) newCart[item._id] = newCart[item._id] + increment;
     if (quantity <= 0) delete newCart[item._id];
-    // TODO API CALL HERE
-    sleep(100).then(() => {
-      //  se va tutto bene apposto
-      // altrimenti devo revertare lo stato
-    });
     AppStore.setCart(newCart).then(() => console.log(AppStore.cart));
     return { ...cartState, cart: newCart };
   }
@@ -75,7 +70,7 @@ export default function cartReducer(
 
     case "cart/itemNote": {
       const payload: { _id: string; note: string } = action.payload;
-      console.log("TODO");
+
       return state;
     }
 

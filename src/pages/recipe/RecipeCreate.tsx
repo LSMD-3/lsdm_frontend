@@ -80,7 +80,6 @@ export default function RecipeCreate() {
       enqueueSnackbar("Recipe Created", { variant: "success" });
       if (restaurantId) {
         navigate(`/restaurant/${restaurantId}/menu`);
-        console.log("TODO add recipe to restaurant menu:" + menuNumber);
       } else navigate("/recipes");
     } catch (error: any) {
       enqueueSnackbar(error, { variant: "error" });

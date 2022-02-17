@@ -35,6 +35,7 @@ export default function RestaurantTable() {
   const selectedMenu = user.user?.joinedTable?.selectedMenu ?? 0;
 
   const fetchSuggestedRecipes = async () => {
+    // TODO
     const suggestedRecipes = await Neo4jRecipeApi.getMostLikedRecipes(
       user.user!.joinedTable!.restaurant._id
     );
