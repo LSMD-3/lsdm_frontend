@@ -320,7 +320,7 @@ export default function SimulatorHome() {
           </b>
           <Button onClick={generateRandomRestaurantLikes}>Do it</Button>
         </li>
-        <li>
+        {/* <li>
           <b>Get Recipe Ranking</b>
           <Button
             onClick={async () => {
@@ -420,7 +420,7 @@ export default function SimulatorHome() {
           >
             Do it
           </Button>
-        </li>
+        </li> */}
       </ul>
       <h4 style={{ whiteSpace: "pre-line" }}>{message}</h4>
     </Container>
