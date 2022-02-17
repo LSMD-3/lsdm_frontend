@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Restaurant } from "types";
 import { Table } from "components";
-import { Neo4jRestaurantApi, RestaurantApi } from "api";
+import { Neo4jRestaurantApi, RestaurantApi, TableApi } from "api";
 import { MenuBook } from "@mui/icons-material";
 import { TableColumn } from "components/Table";
 export default function UserHome() {
@@ -18,6 +18,13 @@ export default function UserHome() {
   const [mostLikedRestaurant, setmostLikedRestaurant] = useState<Restaurant[]>(
     []
   );
+  const [result1, setresult1] = useState<any[]>([]);
+
+  const getTopRecipesOfTopVisitedRestaurants = async () => {
+    console.log("IN");
+    const result = await TableApi.getTopRecipesOfTopVisitedRestaurants();
+    setresult1(result);
+  };
 
   const fetchSuggestedRestaurants = async () => {
     const suggestedRestaurants =
@@ -31,6 +38,7 @@ export default function UserHome() {
 
   useEffect(() => {
     fetchSuggestedRestaurants();
+    getTopRecipesOfTopVisitedRestaurants();
     return () => {};
   }, []);
 

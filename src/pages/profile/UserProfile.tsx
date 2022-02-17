@@ -5,11 +5,18 @@ import {
   CssBaseline,
   Grid,
   Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Item, Recipe, Restaurant, RestaurantNameId, User } from "types";
 import { ItemList, SearchBar, DialogManager } from "components";
-import { RestaurantApi, UserApi, Neo4jUserApi, RecipeApi } from "api";
+import { RestaurantApi, UserApi, Neo4jUserApi, RecipeApi, TableApi } from "api";
 import { useSnackbar } from "notistack";
 import store, { likeState, userState } from "redux/store";
 import { AnyIfEmpty, useSelector } from "react-redux";
@@ -35,7 +42,7 @@ export default function UserProfile() {
     RestaurantNameId[]
   >([]);
   const [favouriteRecipes, setFavouriteRecipes] = useState<Item[]>([]);
-
+  const [result, setresult] = useState<any[]>([]);
   const fetchFavouritesRestaurants = async () => {
     const favouriteRestaurants = await RestaurantApi.findRestaurantByIds(
       likes.restaurantLikes
@@ -115,6 +122,11 @@ export default function UserProfile() {
       })
     );
   };
+  const getMostOrderedRecipeForUser = async (userId: string) => {
+    console.log("IN");
+    const result = await TableApi.getMostOrderedRecipeForUser(userId);
+    setresult(result);
+  };
 
   useEffect(() => {
     fetchTotalFollowers();
@@ -124,6 +136,7 @@ export default function UserProfile() {
     fetchSuggestedFriends();
     fetchSuggestedRestaurants();
     fetchSuggestedRecipes();
+    getMostOrderedRecipeForUser(user.user!._id);
     return () => {};
   }, []);
 
@@ -145,6 +158,42 @@ export default function UserProfile() {
   };
 
   const followsId = follows.map((f) => f._id);
+
+  const BasicTable = ({
+    columns,
+    rows,
+  }: {
+    columns: string[];
+    rows: any[];
+  }) => {
+    return (
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              {columns.map((c) => (
+                <TableCell>{c}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                {columns.map((c) => (
+                  <TableCell component="th" scope="row">
+                    {row[c]}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
 
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
@@ -186,6 +235,8 @@ export default function UserProfile() {
           likedItems={likes.recipesLikes}
           toggleItemLike={toggleItemLike}
         />
+        <h2>Your Top 10 Ordered Recepis</h2>
+        <BasicTable columns={["_id", "recipe_name", "count"]} rows={result} />
 
         <h2>People you could eat with</h2>
         {suggestedFriends

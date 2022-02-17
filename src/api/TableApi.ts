@@ -188,6 +188,21 @@ class TableApi extends BaseResource<Table> {
       .get(`/tableSession/getRestaurantRevenue/` + restaurantId)
       .then(responseErrorCheck);
   }
+  async getMostOrderedRecipes(restaurantId: string): Promise<any> {
+    return axios
+      .get(`/tableSession/getMostOrderedRecipesInARestaurant/` + restaurantId)
+      .then(responseErrorCheck);
+  }
+  async getMostOrderedRecipeForUser(userId: string): Promise<any> {
+    return axios
+      .get(`/tableSession/getMostOrderedRecipeForUser/` + userId)
+      .then(responseErrorCheck);
+  }
+  async getMostOrderedRecipeForComune(): Promise<any> {
+    return axios
+      .get(`/tableSession/getMostOrderedRecipeForComune/`)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new TableApi();

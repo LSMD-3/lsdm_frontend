@@ -16,10 +16,15 @@ export default function SuperAdminHome() {
   const [result3, setresult3] = useState<any[]>([]);
   const [result4, setresult4] = useState<any[]>([]);
   const [result5, setresult5] = useState<any[]>([]);
+  const [result6, setresult6] = useState<any[]>([]);
 
   const getTopRecipesOfTopVisitedRestaurants = async () => {
     const result = await TableApi.getTopRecipesOfTopVisitedRestaurants();
     setresult1(result);
+  };
+  const getMostOrderedRecipeForComune = async () => {
+    const result = await TableApi.getMostOrderedRecipeForComune();
+    setresult6(result);
   };
   const getMostVisitedRestaurant = async () => {
     const result = await TableApi.getMostVisitedRestaurant();
@@ -80,6 +85,7 @@ export default function SuperAdminHome() {
     getRestaurantWithMoreDistinctOrders();
     countUniqueRecipes();
     getRevenueByComune();
+    getMostOrderedRecipeForComune();
     return () => {};
   }, []);
 
@@ -113,6 +119,8 @@ export default function SuperAdminHome() {
         columns={["restaurant_name", "unique_recipes"]}
         rows={result4}
       />
+      <h2>Most Ordered Recipes For Comune</h2>
+      <BasicTable columns={["_id", "recipe_name", "count"]} rows={result6} />
 
       <h2>Most profitable Town</h2>
       <BasicTable columns={["comune", "comune_revenue"]} rows={result5} />
