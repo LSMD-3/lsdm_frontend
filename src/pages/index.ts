@@ -16,6 +16,7 @@ export { default as RestaurantMenu } from "./restaurant/RestaurantMenu";
 export { default as MenuGenerator } from "./restaurant/MenuGenerator";
 export { default as RestaurantLanding } from "./restaurant/RestaurantLanding";
 export { default as RestaurantTable } from "./restaurant/RestaurantTable";
+export { default as RestaurantView } from "./restaurant/RestaurantView";
 
 export { default as UserHome } from "./user/UsersHome";
 export { default as UserOperation } from "./user/UserOperation";

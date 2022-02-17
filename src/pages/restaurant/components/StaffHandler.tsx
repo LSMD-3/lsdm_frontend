@@ -21,12 +21,14 @@ interface StaffHandlerProps {
   staffType: "Chef" | "Admin" | "Waiter";
   users: User[];
   onUsersUpdate: (users: User[]) => void;
+  viewOnly?: boolean;
 }
 
 export default function StaffHandler({
   staffType,
   users,
   onUsersUpdate,
+  viewOnly,
 }: StaffHandlerProps) {
   const [open, setopen] = useState(false);
 
@@ -64,9 +66,11 @@ export default function StaffHandler({
           <Typography variant="h6" component="div">
             {staffType}s
           </Typography>
-          <Button variant="contained" onClick={openAddChef}>
-            Add {staffType}
-          </Button>
+          {!viewOnly && (
+            <Button variant="contained" onClick={openAddChef}>
+              Add {staffType}
+            </Button>
+          )}
         </div>
         <Demo>
           <List dense={true}>
@@ -75,13 +79,15 @@ export default function StaffHandler({
                 key={user._id}
                 secondaryAction={
                   <div>
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => deleteStaff(idx)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    {!viewOnly && (
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => deleteStaff(idx)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
                   </div>
                 }
               >

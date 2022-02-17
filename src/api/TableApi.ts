@@ -177,6 +177,17 @@ class TableApi extends BaseResource<Table> {
       .get(`/tableSession/countUniqueRecipes`)
       .then(responseErrorCheck);
   }
+
+  async getRevenueByComune(): Promise<any> {
+    return axios
+      .get(`/tableSession/getRevenueByComune`)
+      .then(responseErrorCheck);
+  }
+  async getRestaurantRevenue(restaurantId: string): Promise<any> {
+    return axios
+      .get(`/tableSession/getRestaurantRevenue/` + restaurantId)
+      .then(responseErrorCheck);
+  }
 }
 
 export default new TableApi();
