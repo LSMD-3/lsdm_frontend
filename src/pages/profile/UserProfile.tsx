@@ -188,15 +188,12 @@ export default function UserProfile() {
         />
 
         <h2>People you could eat with</h2>
-        {suggestedFriends
-          .filter((r) => !followsId.includes(r._id))
-          .slice(0, 6)
-          .map((user) => (
-            <span>
-              [{user.email}] {user.name} {user.surname}
-              <br />
-            </span>
-          ))}
+        {suggestedFriends.slice(0, 6).map((user) => (
+          <span>
+            [{user.email}] {user.name} {user.surname}
+            <br />
+          </span>
+        ))}
         <h2>Restaurants you may like</h2>
         {suggestedRestaurants
           .filter((r) => !likes.restaurantLikes.includes(r._id))
