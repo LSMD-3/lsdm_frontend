@@ -144,41 +144,42 @@ export default function UserProfile() {
     }
   };
 
+  const followsId = follows.map((f) => f._id);
+
   return (
     <Container component="main" maxWidth="xl" style={{ marginTop: 30 }}>
       <CssBaseline />
 
       <div>
-        <Grid item xs={7} sm={6} md={4}>
-          <h2>Friend List</h2>
+        <h2>Friend List</h2>
 
-          {renderButton(<h4>Followers 👨: {totalFollowers ?? 0}</h4>, () =>
-            setFollowerOpen(true)
-          )}
-          {renderButton(<h4>Following 👨: {totalFollows ?? 0}</h4>, () =>
-            setFollowingOpen(true)
-          )}
+        {renderButton(<h4>Followers 👨: {totalFollowers ?? 0}</h4>, () =>
+          setFollowerOpen(true)
+        )}
+        {renderButton(<h4>Following 👨: {totalFollows ?? 0}</h4>, () =>
+          setFollowingOpen(true)
+        )}
 
-          <br />
-          <h2>Your Favourite Restaurants</h2>
-          {favouriteRestaurants.map((rest) =>
-            renderButton(<h4>{rest.nome}</h4>, () =>
-              navigate("/restaurant/" + rest._id)
-            )
-          )}
+        <br />
+        <h2>Your Favourite Restaurants</h2>
+        {favouriteRestaurants.map((rest) =>
+          renderButton(<h4>{rest.nome}</h4>, () =>
+            navigate("/restaurant/" + rest._id)
+          )
+        )}
 
-          <UserModal
-            open={followingOpen || followerOpen}
-            onClose={() => {
-              setFollowingOpen(false);
-              setFollowerOpen(false);
-            }}
-            users={followingOpen ? follows : followers}
-            onClick={onModalAction}
-            onUserAdded={followingOpen ? fetchTotalFollows : undefined}
-            title={followingOpen ? "Following Users" : "Your Followers"}
-          />
-        </Grid>
+        <UserModal
+          open={followingOpen || followerOpen}
+          onClose={() => {
+            setFollowingOpen(false);
+            setFollowerOpen(false);
+          }}
+          users={followingOpen ? follows : followers}
+          onClick={onModalAction}
+          onUserAdded={followingOpen ? fetchTotalFollows : undefined}
+          title={followingOpen ? "Following Users" : "Your Followers"}
+        />
+
         <h2>Your Favourite Recepis</h2>
         <ItemList
           items={favouriteRecipes}
@@ -187,22 +188,30 @@ export default function UserProfile() {
         />
 
         <h2>People you could eat with</h2>
-        {suggestedFriends.map((user) => (
-          <span>
-            [{user.email}] {user.name} {user.surname}
-            <br />
-          </span>
-        ))}
+        {suggestedFriends
+          .filter((r) => !followsId.includes(r._id))
+          .slice(0, 6)
+          .map((user) => (
+            <span>
+              [{user.email}] {user.name} {user.surname}
+              <br />
+            </span>
+          ))}
         <h2>Restaurants you may like</h2>
-        {suggestedRestaurants.map((rest) =>
-          renderButton(<h4>{rest.nome}</h4>, () =>
-            navigate("/restaurant/" + rest._id)
-          )
-        )}
+        {suggestedRestaurants
+          .filter((r) => !likes.restaurantLikes.includes(r._id))
+          .slice(0, 6)
+          .map((rest) =>
+            renderButton(<h4>{rest.nome}</h4>, () =>
+              navigate("/restaurant/" + rest._id)
+            )
+          )}
 
         <h2>Recipes you may like</h2>
         <ItemList
-          items={suggestedRecipes}
+          items={suggestedRecipes
+            .filter((r) => !likes.recipesLikes.includes(r._id))
+            .slice(0, 6)}
           likedItems={likes.recipesLikes}
           toggleItemLike={toggleItemLike}
         />
