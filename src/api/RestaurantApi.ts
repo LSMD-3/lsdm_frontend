@@ -25,6 +25,12 @@ class RestaurantApi extends BaseResource<Restaurant> {
       .then(responseErrorCheck);
   }
 
+  async getLimited(limit: number): Promise<Restaurant[]> {
+    return axios
+      .get(this.endpoint + "/limit/" + limit)
+      .then(responseErrorCheck);
+  }
+
   async findRestaurantByIds(
     restaurantIds: string[]
   ): Promise<RestaurantNameId[]> {

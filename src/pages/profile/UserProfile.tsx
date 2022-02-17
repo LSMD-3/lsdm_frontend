@@ -12,7 +12,7 @@ import { ItemList, SearchBar, DialogManager } from "components";
 import { RestaurantApi, UserApi, Neo4jUserApi, RecipeApi } from "api";
 import { useSnackbar } from "notistack";
 import store, { likeState, userState } from "redux/store";
-import { useSelector } from "react-redux";
+import { AnyIfEmpty, useSelector } from "react-redux";
 import { UserModal } from "./UserModal";
 
 export default function UserProfile() {
@@ -26,6 +26,11 @@ export default function UserProfile() {
   const [followerOpen, setFollowerOpen] = useState(false);
   const [follows, setfollows] = useState<User[]>([]);
   const [followers, setfollowers] = useState<User[]>([]);
+  const [suggestedFriends, setsuggestedFriends] = useState<User[]>([]);
+  const [suggestedRecipes, setsuggestedRecipes] = useState<Recipe[]>([]);
+  const [suggestedRestaurants, setsuggestedRestaurants] = useState<
+    Restaurant[]
+  >([]);
   const [favouriteRestaurants, setFavoriteRestaurants] = useState<
     RestaurantNameId[]
   >([]);
@@ -80,11 +85,45 @@ export default function UserProfile() {
     }
   };
 
+  const fetchSuggestedFriends = async () => {
+    const suggestedFriends = await Neo4jUserApi.suggestfriends(user.user!._id);
+    setsuggestedFriends(suggestedFriends.map((f: any) => f));
+  };
+
+  const fetchSuggestedRecipes = async () => {
+    const suggestedRecipes = await Neo4jUserApi.suggestrecipes(user.user!._id);
+    setsuggestedRecipes(
+      suggestedRecipes.map((f: any) => {
+        return {
+          category: f.category,
+          _id: f.id,
+          recipe_name: f.name,
+          image_url: f.image,
+          ingredients: f.ingredients.split(","),
+        };
+      })
+    );
+  };
+
+  const fetchSuggestedRestaurants = async () => {
+    const suggestedRestaurants = await Neo4jUserApi.suggestrestaurants(
+      user.user!._id
+    );
+    setsuggestedRestaurants(
+      suggestedRestaurants.map((f: any) => {
+        return { _id: f.id, nome: f.name };
+      })
+    );
+  };
+
   useEffect(() => {
     fetchTotalFollowers();
     fetchFavouritesRestaurants();
     fetchFavouritesRecipes();
     fetchTotalFollows();
+    fetchSuggestedFriends();
+    fetchSuggestedRestaurants();
+    fetchSuggestedRecipes();
     return () => {};
   }, []);
 
@@ -119,15 +158,6 @@ export default function UserProfile() {
           {renderButton(<h4>Following 👨: {totalFollows ?? 0}</h4>, () =>
             setFollowingOpen(true)
           )}
-          {renderButton(<h4>Get Suggested friends</h4>, () =>
-            Neo4jUserApi.suggestfriends(user.user!._id)
-          )}
-          {renderButton(<h4>Get Suggested restaurants</h4>, () =>
-            Neo4jUserApi.suggestrestaurants(user.user!._id)
-          )}
-          {renderButton(<h4>Get Suggested recipes</h4>, () =>
-            Neo4jUserApi.suggestrecipes(user.user!._id)
-          )}
 
           <br />
           <h2>Your Favourite Restaurants</h2>
@@ -149,9 +179,30 @@ export default function UserProfile() {
             title={followingOpen ? "Following Users" : "Your Followers"}
           />
         </Grid>
-        <h2>Your Favourite Recepies</h2>
+        <h2>Your Favourite Recepis</h2>
         <ItemList
           items={favouriteRecipes}
+          likedItems={likes.recipesLikes}
+          toggleItemLike={toggleItemLike}
+        />
+
+        <h2>People you could eat with</h2>
+        {suggestedFriends.map((user) => (
+          <span>
+            [{user.email}] {user.name} {user.surname}
+            <br />
+          </span>
+        ))}
+        <h2>Restaurants you may like</h2>
+        {suggestedRestaurants.map((rest) =>
+          renderButton(<h4>{rest.nome}</h4>, () =>
+            navigate("/restaurant/" + rest._id)
+          )
+        )}
+
+        <h2>Recipes you may like</h2>
+        <ItemList
+          items={suggestedRecipes}
           likedItems={likes.recipesLikes}
           toggleItemLike={toggleItemLike}
         />

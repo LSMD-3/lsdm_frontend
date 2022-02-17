@@ -4,7 +4,14 @@ import { Container, Button, CssBaseline } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Category, Restaurant, User, Recipe, RecipeOrder } from "types";
 import { SearchBar } from "components";
-import { RecipeApi, RestaurantApi, UserApi, TableApi, MenuApi } from "api";
+import {
+  RecipeApi,
+  RestaurantApi,
+  UserApi,
+  TableApi,
+  MenuApi,
+  UserGeneratorApi,
+} from "api";
 import { useSnackbar } from "notistack";
 
 const SIMULATOR_CONFIG = {
@@ -16,7 +23,7 @@ const SIMULATOR_CONFIG = {
 };
 
 // 30k
-const N = [200, 200, 200, 200, 200, 200, 200, 200, 200, 200, 200];
+const N = [200, 200, 200, 200, 200, 200, 200, 200, 200, 200];
 
 interface RecipeGroup {
   _id: string;
@@ -128,8 +135,7 @@ export default function SimulatorHome() {
 
   const joinRandomTableAndCreateOrders = async (
     user: User,
-    restaurants: Restaurant[],
-    recipes: Recipe[]
+    restaurants: Restaurant[]
   ) => {
     //BBBBBBBBBBB
     const myRestaurant =
@@ -145,7 +151,12 @@ export default function SimulatorHome() {
     );
     if (!failed) {
       for (let i = 0; i < orderCount; i++) {
-        await makeOrder(user, myRestaurant, "" + myTable, recipes);
+        await makeOrder(
+          user,
+          myRestaurant,
+          "" + myTable,
+          myRestaurant.menus[0].recipes
+        );
       }
 
       return {
@@ -170,7 +181,6 @@ export default function SimulatorHome() {
 
   const fetchDatasForOrderGeneration = async (
     restaurants: Restaurant[],
-    recipes: Recipe[],
     userCount: number
   ) => {
     // fetch a set of restaurant
@@ -179,7 +189,7 @@ export default function SimulatorHome() {
 
     const promises = users.map((u: User) => {
       try {
-        return joinRandomTableAndCreateOrders(u, restaurants, recipes);
+        return joinRandomTableAndCreateOrders(u, restaurants);
       } catch (e) {}
       return false;
     });
@@ -219,16 +229,42 @@ export default function SimulatorHome() {
   const startSimulation = async () => {
     // fetch a set of restaurant
     setmessage("fetching required datas...");
-    const restaurants = await RestaurantApi.withMenuRestaurant(100);
-    // fetch all "normal" users
-    // fetch a set of recipes
-    const recipes = await RecipeApi.sample(SIMULATOR_CONFIG.RECIPES);
+    const restaurants = await RestaurantApi.getLimited(200);
 
     for (let i = 0; i < N.length; i++) {
-      await fetchDatasForOrderGeneration(restaurants, recipes, N[i]);
+      await fetchDatasForOrderGeneration(restaurants, N[i]);
     }
   };
 
+  const generateRandomFollows = async () => {
+    const users = await UserApi.getNormalUsers(1000);
+    users.forEach((user: User) => {
+      UserGeneratorApi.generateRandomFollows(
+        user._id,
+        getRandomNumberInRange(0, 30)
+      );
+    });
+  };
+
+  const generateRandomRecipeLikes = async () => {
+    const users = await UserApi.getNormalUsers(1000);
+    users.forEach((user: User) => {
+      UserGeneratorApi.generateRandomRecipeLikes(
+        user._id,
+        getRandomNumberInRange(0, 20)
+      );
+    });
+  };
+
+  const generateRandomRestaurantLikes = async () => {
+    const users = await UserApi.getNormalUsers(1000);
+    users.forEach((user: User) => {
+      UserGeneratorApi.generateRandomRestaurantLikes(
+        user._id,
+        getRandomNumberInRange(0, 10)
+      );
+    });
+  };
   // store datas in mongo
 
   return (
@@ -269,6 +305,20 @@ export default function SimulatorHome() {
           >
             Do it
           </Button>
+        </li>
+        <li>
+          <b>Generate a random number of random follows for 1000 users</b>
+          <Button onClick={generateRandomFollows}>Do it</Button>
+        </li>
+        <li>
+          <b>Generate a random number of random recipe like for 1000 users</b>
+          <Button onClick={generateRandomRecipeLikes}>Do it</Button>
+        </li>
+        <li>
+          <b>
+            Generate a random number of random restaurant like for 1000 users
+          </b>
+          <Button onClick={generateRandomRestaurantLikes}>Do it</Button>
         </li>
         <li>
           <b>Get Recipe Ranking</b>

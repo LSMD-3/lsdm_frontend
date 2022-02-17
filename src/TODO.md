@@ -1,12 +1,6 @@
 # Use Cases
 
-- fix simulator
-- add random relations creator in the simulator
-- 1.4 droppare tablesession e rifare tante simulazioni
-
-# neo recommendations
-
-- suggerire 5 ristoranti più piaciuti dai followee
+- visualizzare statistiche
 
 # statistics
 

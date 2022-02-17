@@ -5,3 +5,4 @@ export { default as UserApi } from "./UserApi";
 export { default as Neo4jUserApi } from "./neo4j/Neo4jUserApi";
 export { default as TableApi } from "./TableApi";
 export { default as MenuApi } from "./MenuApi";
+export { default as UserGeneratorApi } from "./UserGeneratorApi";
