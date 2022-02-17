@@ -1,7 +1,3 @@
-# Use Cases
-
-- visualizzare statistiche
-
 # statistics
 
 - piatto più ordinato in base ad una posizione [add comune]
