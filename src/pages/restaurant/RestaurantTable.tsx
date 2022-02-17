@@ -1,7 +1,15 @@
-import { Neo4jUserApi, RestaurantApi, TableApi } from "api";
+import { Neo4jRecipeApi, Neo4jUserApi, RestaurantApi, TableApi } from "api";
 
 import { useEffect, useState } from "react";
-import { Item, Restaurant, Menu, UserType, User, RecipeOrder } from "types";
+import {
+  Item,
+  Restaurant,
+  Menu,
+  UserType,
+  User,
+  RecipeOrder,
+  Recipe,
+} from "types";
 import {
   Container,
   CssBaseline,
@@ -18,16 +26,36 @@ export default function RestaurantTable() {
   const [restaurant, setrestaurant] = useState<Restaurant>();
   const [menu, setMenu] = useState<Menu>();
   const [partecipants, setpartecipants] = useState<User[]>([]);
+  const [suggestedRecipes, setsuggestedRecipes] = useState<Recipe[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const user = useSelector(userState);
   const cart = useSelector(cartState);
   const liked = useSelector(likeState);
+
   const selectedMenu = user.user?.joinedTable?.selectedMenu ?? 0;
+
+  const fetchSuggestedRecipes = async () => {
+    const suggestedRecipes = await Neo4jRecipeApi.getMostLikedRecipes(
+      user.user!.joinedTable!.restaurant._id
+    );
+    setsuggestedRecipes(
+      suggestedRecipes.map((f: any) => {
+        return {
+          category: f.category,
+          _id: f.id,
+          recipe_name: f.name,
+          image_url: f.image,
+          ingredients: f.ingredients.split(","),
+        };
+      })
+    );
+  };
 
   useEffect(() => {
     if (user.user?.joinedTable) {
       fetchRestaurant(user.user?.joinedTable.restaurant._id);
       fetchTablePartecipants();
+      fetchSuggestedRecipes();
     }
 
     return () => {};
@@ -136,7 +164,7 @@ export default function RestaurantTable() {
   });
 
   return (
-    <Container>
+    <div style={{ margin: 30 }}>
       <CssBaseline />
       <h2 onClick={() => RestaurantApi.addOrder()} className="clickable">
         {" Table " + user.user?.joinedTable.tableNumber}
@@ -159,6 +187,6 @@ export default function RestaurantTable() {
         decrement={decrement}
         likedItems={liked.recipesLikes}
       />
-    </Container>
+    </div>
   );
 }
