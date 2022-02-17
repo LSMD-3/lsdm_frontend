@@ -237,32 +237,42 @@ export default function UserProfile() {
         />
         <h2>Your Top 10 Ordered Recepis</h2>
         <BasicTable columns={["_id", "recipe_name", "count"]} rows={result} />
-
-        <h2>People you could eat with</h2>
-        {suggestedFriends.slice(0, 6).map((user) => (
-          <span>
-            [{user.email}] {user.name} {user.surname}
-            <br />
-          </span>
-        ))}
-        <h2>Restaurants you may like</h2>
-        {suggestedRestaurants
-          .filter((r) => !likes.restaurantLikes.includes(r._id))
-          .slice(0, 6)
-          .map((rest) =>
-            renderButton(<h4>{rest.nome}</h4>, () =>
-              navigate("/restaurant/" + rest._id)
-            )
-          )}
-
-        <h2>Recipes you may like</h2>
-        <ItemList
-          items={suggestedRecipes
-            .filter((r) => !likes.recipesLikes.includes(r._id))
-            .slice(0, 6)}
-          likedItems={likes.recipesLikes}
-          toggleItemLike={toggleItemLike}
-        />
+        {follows.length > 0 && (
+          <div>
+            <h2>People you could eat with</h2>
+            {suggestedFriends.slice(0, 6).map((user) => (
+              <span>
+                [{user.email}] {user.name} {user.surname}
+                <br />
+              </span>
+            ))}
+          </div>
+        )}
+        {likes.restaurantLikes.length > 0 && (
+          <div>
+            <h2>Restaurants you may like</h2>
+            {suggestedRestaurants
+              .filter((r) => !likes.restaurantLikes.includes(r._id))
+              .slice(0, 6)
+              .map((rest) =>
+                renderButton(<h4>{rest.nome}</h4>, () =>
+                  navigate("/restaurant/" + rest._id)
+                )
+              )}
+          </div>
+        )}
+        {likes.recipesLikes.length > 0 && (
+          <div>
+            <h2>Recipes you may like</h2>
+            <ItemList
+              items={suggestedRecipes
+                .filter((r) => !likes.recipesLikes.includes(r._id))
+                .slice(0, 6)}
+              likedItems={likes.recipesLikes}
+              toggleItemLike={toggleItemLike}
+            />
+          </div>
+        )}
       </div>
       <div></div>
     </Container>
