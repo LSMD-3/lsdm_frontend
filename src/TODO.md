@@ -1,3 +1,11 @@
+# to define
+
+- a lot of simulations
+- concistency tra db-> strinct?
+- grou by category of recipes in menu
+- Adding API for other recipes within the categories where the user has liked one before
+- history of orders for user
+
 # statistics
 
 - piatto più ordinato in base ad una posizione [add comune]

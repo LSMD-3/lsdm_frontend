@@ -156,25 +156,25 @@ class TableApi extends BaseResource<Table> {
 
   async getTopRecipesOfTopVisitedRestaurants(): Promise<any> {
     return axios
-      .get(this.endpoint + `/getTopRecipesOfTopVisitedRestaurants`)
+      .get(`/tableSession/getTopRecipesOfTopVisitedRestaurants`)
       .then(responseErrorCheck);
   }
 
   async getMostVisitedRestaurant(): Promise<any> {
     return axios
-      .get(this.endpoint + `/getMostVisitedRestaurant`)
+      .get(`/tableSession/getMostVisitedRestaurant`)
       .then(responseErrorCheck);
   }
 
   async getRestaurantWithMoreDistinctOrders(): Promise<any> {
     return axios
-      .get(this.endpoint + `/getRestaurantWithMoreDistinctOrders`)
+      .get(`/tableSession/getRestaurantWithMoreDistinctOrders`)
       .then(responseErrorCheck);
   }
 
   async countUniqueRecipes(): Promise<any> {
     return axios
-      .get(this.endpoint + `/countUniqueRecipes`)
+      .get(`/tableSession/countUniqueRecipes`)
       .then(responseErrorCheck);
   }
 }
